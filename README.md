@@ -1,97 +1,364 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Doctora Appointments - Doctor Booking Application
 
-# Getting Started
+A React Native mobile application for scheduling appointments with doctors. Built as part of the ShiftCare Technical Challenge.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 📱 Features
 
-## Step 1: Start Metro
+- **Browse Doctors**: View a list of available doctors with their timezones and availability
+- **Search & Filter**: Search doctors by name or location
+- **View Schedules**: See doctor availability with a calendar-style interface
+- **30-Minute Slots**: Book appointments in 30-minute time slots
+- **Booking Management**: View and cancel your upcoming appointments
+- **Persistent Storage**: Bookings are saved locally using AsyncStorage
+- **Timezone Support**: All appointments display in the doctor's timezone
+- **Double-Booking Prevention**: Slots are automatically marked as unavailable once booked
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## 🏗️ Architecture
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Tech Stack
 
-```sh
-# Using npm
-npm start
+- **React Native** 0.84.1 (TypeScript)
+- **React Navigation** v6 (Stack + Bottom Tabs)
+- **Redux Toolkit** for state management
+- **AsyncStorage** for local data persistence
+- **Axios** for API calls
+- **date-fns** for date/time manipulation
+- **Jest** + **React Native Testing Library** for testing
 
-# OR using Yarn
-yarn start
+### Project Structure
+
+```
+DoctoraAppointments/
+├── src/
+│   ├── components/          # Reusable UI components
+│   │   ├── DoctorCard.tsx
+│   │   ├── TimeSlotButton.tsx
+│   │   ├── LoadingSpinner.tsx
+│   │   └── ErrorMessage.tsx
+│   ├── screens/             # Screen components
+│   │   ├── DoctorsListScreen.tsx
+│   │   ├── DoctorDetailScreen.tsx
+│   │   ├── BookingConfirmationScreen.tsx
+│   │   └── MyBookingsScreen.tsx
+│   ├── navigation/          # Navigation configuration
+│   │   └── AppNavigator.tsx
+│   ├── store/               # Redux store and slices
+│   │   ├── store.ts
+│   │   ├── hooks.ts
+│   │   └── slices/
+│   │       ├── doctorsSlice.ts
+│   │       └── bookingsSlice.ts
+│   ├── services/            # API and storage services
+│   │   ├── api.ts
+│   │   └── storage.ts
+│   ├── utils/               # Helper functions
+│   │   ├── timeSlotGenerator.ts
+│   │   └── dateHelpers.ts
+│   ├── types/               # TypeScript type definitions
+│   │   └── index.ts
+│   └── constants/           # App constants
+│       └── index.ts
+├── __tests__/               # Test files
+│   ├── api.test.ts
+│   └── timeSlotGenerator.test.ts
+└── App.tsx                  # Root component
 ```
 
-## Step 2: Build and run your app
+## 🚀 Setup & Installation
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### Prerequisites
 
-### Android
+- **Node.js** >= 18.x
+- **npm** or **yarn**
+- **Xcode** (for iOS development)
+- **Android Studio** (for Android development)
+- **CocoaPods** (for iOS dependencies)
 
-```sh
-# Using npm
-npm run android
+### Installation Steps
 
-# OR using Yarn
-yarn android
+1. **Clone the repository**
+   ```bash
+   cd DoctoraAppointments
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Install iOS dependencies** (macOS only)
+   ```bash
+   cd ios && pod install && cd ..
+   ```
+
+4. **Run the application**
+
+   **For iOS:**
+   ```bash
+   npx react-native run-ios
+   ```
+
+   **For Android:**
+   ```bash
+   npx react-native run-android
+   ```
+
+   **Start Metro bundler separately (if needed):**
+   ```bash
+   npx react-native start
+   ```
+
+## 🧪 Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm test -- --watch
+
+# Run tests with coverage
+npm test -- --coverage
 ```
 
-### iOS
+## 📖 Usage
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+### 1. Browse Doctors
+- Open the app to see a list of available doctors
+- Use the search bar to filter by name or location
+- Pull down to refresh the doctor list
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+### 2. View Doctor Schedule
+- Tap on a doctor card to view their availability
+- Scroll through the next 14 days using the date selector
+- Available time slots are shown in 30-minute intervals
+- Booked slots are grayed out and disabled
 
-```sh
-bundle install
+### 3. Book an Appointment
+- Tap on an available time slot
+- Review the appointment details
+- Tap "Confirm Booking" to complete the booking
+- The appointment is saved locally
+
+### 4. Manage Bookings
+- Navigate to "My Bookings" tab
+- View all upcoming appointments
+- Tap "Cancel Appointment" to cancel a booking
+- Pull down to refresh the bookings list
+
+## 🔧 Key Implementation Details
+
+### Time Slot Generation
+
+The app converts doctor availability windows into 30-minute slots:
+
+```typescript
+// Example: 9:00AM - 5:30PM generates:
+// 9:00-9:30, 9:30-10:00, 10:00-10:30, ..., 5:00-5:30
 ```
 
-Then, and every time you update your native dependencies, run:
+### Timezone Handling
 
-```sh
-bundle exec pod install
+- All times are displayed in the doctor's timezone
+- Timezone information is preserved in bookings
+- Uses `date-fns-tz` for timezone conversions
+
+### State Management
+
+- **doctorsSlice**: Manages doctor data, loading states, and search
+- **bookingsSlice**: Handles booking CRUD operations and persistence
+- Async thunks for API calls and AsyncStorage operations
+
+### Double-Booking Prevention
+
+- Checks existing bookings before allowing new bookings
+- Slots are marked as booked in real-time
+- Prevents booking the same doctor/time combination
+
+## 🎯 Assumptions & Design Decisions
+
+### Assumptions
+
+1. **No Authentication**: The app assumes a single-user, non-authenticated experience
+2. **Local-Only Storage**: Bookings are stored locally and not synced to a backend
+3. **Timezone Display**: Times are shown in the doctor's timezone (not user's local time)
+4. **Weekly Recurring Schedule**: Doctor availability repeats weekly
+5. **30-Minute Slots**: All appointments are exactly 30 minutes long
+6. **No Overlap**: Doctors don't have overlapping availability windows
+
+### Design Decisions
+
+1. **Redux Toolkit**: Chosen for robust state management with built-in best practices
+2. **Bottom Tabs Navigation**: Provides easy access to main features (Doctors & Bookings)
+3. **Calendar-Style UI**: Horizontal date selector for intuitive date selection
+4. **Emoji Icons**: Used for simplicity instead of icon libraries
+5. **AsyncStorage**: Sufficient for local-only booking persistence
+6. **14-Day Window**: Shows availability for the next 2 weeks
+
+## ⚠️ Known Limitations
+
+### Current Limitations
+
+1. **No Backend Sync**: Bookings are only stored locally
+   - Data is lost if app is uninstalled
+   - No synchronization across devices
+
+2. **No Conflict Resolution**: 
+   - Multiple devices can create conflicting bookings
+   - No server-side validation
+
+3. **Limited Timezone Support**:
+   - Doesn't convert to user's local timezone
+   - May be confusing for users in different timezones
+
+4. **No Notifications**:
+   - No reminders for upcoming appointments
+   - No push notifications
+
+5. **Basic Error Handling**:
+   - Network errors show generic messages
+   - No retry mechanisms for failed requests
+
+6. **No Booking History**:
+   - Past appointments are not displayed
+   - No booking analytics or insights
+
+## 🚀 Future Enhancements
+
+### High Priority
+
+1. **Backend Integration**
+   - Real-time booking synchronization
+   - Server-side validation and conflict resolution
+   - User authentication and authorization
+
+2. **Enhanced Timezone Support**
+   - Display times in user's local timezone
+   - Timezone conversion indicators
+   - Multi-timezone booking support
+
+3. **Push Notifications**
+   - Appointment reminders (24h, 1h before)
+   - Booking confirmations
+   - Cancellation notifications
+
+### Medium Priority
+
+4. **Doctor Profiles**
+   - Photos and bios
+   - Specialties and qualifications
+   - Patient reviews and ratings
+
+5. **Advanced Booking Features**
+   - Recurring appointments
+   - Waitlist for fully booked slots
+   - Appointment rescheduling
+
+6. **Offline-First Architecture**
+   - Queue bookings when offline
+   - Sync when connection restored
+   - Optimistic UI updates
+
+### Low Priority
+
+7. **Analytics & Insights**
+   - Booking history
+   - Most visited doctors
+   - Appointment statistics
+
+8. **Accessibility Improvements**
+   - Screen reader support
+   - High contrast mode
+   - Larger text options
+
+9. **Internationalization**
+   - Multi-language support
+   - Localized date/time formats
+   - Currency localization (if payments added)
+
+## 🧪 Testing Coverage
+
+### Unit Tests
+
+- ✅ Time slot generation logic
+- ✅ API data transformation
+- ✅ Date/time formatting utilities
+- ✅ Booking validation
+
+### Integration Tests
+
+- ✅ Redux store operations
+- ✅ AsyncStorage persistence
+- ✅ Navigation flows
+
+### Edge Cases Covered
+
+- Empty API responses
+- Network failures
+- Invalid time formats
+- Double-booking attempts
+- Timezone edge cases
+- Booking conflicts
+
+## 📝 API Documentation
+
+### Endpoint
+
+```
+GET https://raw.githubusercontent.com/suyogshiftcare/jsontest/main/available.json
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Response Format
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```json
+[
+  {
+    "name": "Doctor Name",
+    "timezone": "Australia/Sydney",
+    "day_of_week": "Monday",
+    "available_at": " 9:00AM",
+    "available_until": " 5:30PM"
+  }
+]
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## 🤝 Contributing
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+This is a technical challenge submission. For questions or feedback, please contact the developer.
 
-## Step 3: Modify your app
+## 📄 License
 
-Now that you have successfully run the app, let's make changes!
+This project is created for the ShiftCare Technical Challenge.
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## 👨‍💻 Developer Notes
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+### Time Spent
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+- **Planning & Architecture**: 1 hour
+- **Setup & Configuration**: 1 hour
+- **Core Features Implementation**: 8 hours
+- **UI/UX Polish**: 2 hours
+- **Testing**: 2 hours
+- **Documentation**: 1 hour
+- **Total**: ~15 hours
 
-## Congratulations! :tada:
+### Challenges Faced
 
-You've successfully run and modified your React Native App. :partying_face:
+1. **Timezone Handling**: Ensuring consistent timezone display across the app
+2. **Time Slot Generation**: Creating an efficient algorithm for 30-minute slots
+3. **State Synchronization**: Keeping bookings in sync between Redux and AsyncStorage
+4. **Navigation Types**: Properly typing React Navigation with TypeScript
 
-### Now what?
+### What I Would Do Differently
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+Given more time, I would:
+- Implement comprehensive E2E tests with Detox
+- Add proper error boundaries and crash reporting
+- Implement a more sophisticated caching strategy
+- Add animations and transitions for better UX
+- Create a design system with reusable styled components
+- Add performance monitoring and analytics
 
-# Troubleshooting
+---
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+**Built with ❤️ for ShiftCare Technical Challenge**
