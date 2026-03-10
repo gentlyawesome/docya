@@ -108,7 +108,7 @@ https://github.com/gentlyawesome/docya
 
 ### Support Email
 ```
-support@docya.app
+gentlyawesome@gmail.com
 ```
 
 ### Developer Name
