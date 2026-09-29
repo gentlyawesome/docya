@@ -33,9 +33,9 @@ export const COLORS = {
 } as const;
 
 // SAMPLE DATA: the availability API has no ratings/specialty/fee fields, so these
-// placeholder profiles (keyed by doctor id) are shown in development builds only.
-// Release builds must never present invented ratings as real; replace with real data first.
-export const SHOW_SAMPLE_DOCTOR_PROFILES = __DEV__;
+// placeholder profiles (keyed by doctor id) are invented. They are shown in every build;
+// set this to false (or replace them with real data) before any store submission.
+export const SHOW_SAMPLE_DOCTOR_PROFILES = true;
 
 export const SAMPLE_DOCTOR_PROFILES: Record<string, import('../types').DoctorProfile> = {
   'christy-schumm': { specialty: 'General Practitioner', rating: 4.8, reviewCount: 124, fee: 90 },
