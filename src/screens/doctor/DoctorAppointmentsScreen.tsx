@@ -170,10 +170,12 @@ export const DoctorAppointmentsScreen: React.FC = () => {
         <Text style={styles.title} accessibilityRole="header">
           Appointments
         </Text>
-        <Button
-          title="New appointment"
-          onPress={() => navigation.navigate('DoctorNewAppointment')}
-        />
+        <View style={styles.newButton}>
+          <Button
+            title="New appointment"
+            onPress={() => navigation.navigate('DoctorNewAppointment')}
+          />
+        </View>
         <View style={styles.chips}>
           {(['upcoming', 'past'] as const).map(key => (
             <FilterChip
@@ -229,7 +231,8 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     marginBottom: 12,
   },
-  chips: { flexDirection: 'row', flexWrap: 'wrap' },
+  newButton: { marginBottom: 16 },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', paddingBottom: 4 },
   error: { color: COLORS.danger, marginTop: 8 },
   list: { padding: 16 },
   card: {
