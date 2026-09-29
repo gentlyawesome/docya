@@ -81,3 +81,6 @@ memory-bank
 supabase/.temp/
 supabase/.branches/
 supabase/.env
+
+# Extra Xcode build outputs (release/device builds)
+ios/build-*/
