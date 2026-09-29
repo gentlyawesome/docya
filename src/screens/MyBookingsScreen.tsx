@@ -22,6 +22,7 @@ import { formatDateWithDay, formatTimezone } from '../utils/dateHelpers';
 import { formatTime12Hour } from '../utils/timeSlotGenerator';
 import { COLORS } from '../constants';
 import { describeLead } from '../services/reminders';
+import { addToCalendar } from '../services/calendarExport';
 import { getBookingPhase, partitionBookings } from '../utils/bookingPhases';
 
 export const MyBookingsScreen: React.FC = () => {
@@ -79,6 +80,15 @@ export const MyBookingsScreen: React.FC = () => {
         },
       ],
     );
+  };
+
+  const handleAddToCalendar = async (booking: Booking) => {
+    if ((await addToCalendar(booking)) === 'error') {
+      Alert.alert(
+        'Error',
+        "Couldn't open the share sheet to add this appointment to your calendar.",
+      );
+    }
   };
 
   const renderBookingCard = ({ item }: { item: Booking }) => {
@@ -142,6 +152,19 @@ export const MyBookingsScreen: React.FC = () => {
           <Text style={styles.reminderText}>
             🔔 Reminder {describeLead(item.reminderLeadMinutes)}
           </Text>
+        )}
+
+        {phase === 'upcoming' && (
+          <TouchableOpacity
+            style={styles.calendarButton}
+            onPress={() => handleAddToCalendar(item)}
+            accessibilityRole="button"
+            accessibilityLabel={`Add appointment with ${
+              item.doctorName
+            } on ${formatDateWithDay(item.date)} to your calendar`}
+          >
+            <Text style={styles.calendarButtonText}>Add to Calendar</Text>
+          </TouchableOpacity>
         )}
 
         {phase === 'upcoming' && (
@@ -225,6 +248,19 @@ export const MyBookingsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  calendarButton: {
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  calendarButtonText: {
+    color: COLORS.primary,
+    fontSize: 16,
+    fontWeight: '600',
+  },
   reminderText: {
     fontSize: 14,
     color: COLORS.textSecondary,

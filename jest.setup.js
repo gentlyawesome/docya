@@ -22,6 +22,8 @@ jest.mock('@react-navigation/native', () => {
 
 jest.mock('@notifee/react-native', () => require('@notifee/react-native/jest-mock'));
 
+jest.mock('react-native-share', () => ({ __esModule: true, default: { open: jest.fn() } }));
+
 jest.mock('react-native-haptic-feedback', () => ({
   __esModule: true,
   default: { trigger: jest.fn() },
