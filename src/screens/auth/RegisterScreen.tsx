@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Linking,
@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -19,7 +20,6 @@ import {
   registerUser,
   selectAuthError,
   selectAuthLoading,
-  selectAuthNotice,
 } from '../../store/slices/authSlice';
 import { Button } from '../../components/Button';
 import { FormField } from '../../components/FormField';
@@ -56,7 +56,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectAuthLoading);
   const serverError = useAppSelector(selectAuthError);
-  const notice = useAppSelector(selectAuthNotice);
 
   const lastRef = useRef<TextInput>(null);
   const emailRef = useRef<TextInput>(null);
@@ -74,11 +73,14 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const [specialization, setSpecialization] = useState('');
   const [errors, setErrors] = useState<Errors>({});
 
-  useEffect(() => {
-    dispatch(clearAuthMessages());
-  }, [dispatch]);
+  // Start each visit without another screen's error
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(clearAuthMessages());
+    }, [dispatch]),
+  );
 
-  const submit = () => {
+  const submit = async () => {
     const next: Errors = {};
     if (!firstName.trim()) next.firstName = 'Enter your first name';
     if (!lastName.trim()) next.lastName = 'Enter your last name';
@@ -94,7 +96,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     if (Object.keys(next).length > 0) {
       return;
     }
-    dispatch(
+    const result = await dispatch(
       registerUser({
         email,
         password,
@@ -104,6 +106,13 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         specialization,
       }),
     );
+    // The project asks for the emailed code before the account can be used
+    if (
+      registerUser.fulfilled.match(result) &&
+      result.payload.status === 'confirm_email'
+    ) {
+      navigation.navigate('ConfirmEmail', { email: email.trim() });
+    }
   };
 
   return (
@@ -117,11 +126,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           keyboardShouldPersistTaps="handled"
           automaticallyAdjustKeyboardInsets
         >
-          {notice ? (
-            <View style={styles.notice} accessibilityRole="alert">
-              <Text style={styles.noticeText}>{notice}</Text>
-            </View>
-          ) : null}
           {serverError ? (
             <View style={styles.errorBox} accessibilityRole="alert">
               <Text style={styles.errorText}>{serverError}</Text>
@@ -245,13 +249,6 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     marginBottom: 8,
   },
-  notice: {
-    backgroundColor: '#E5F1FF',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 16,
-  },
-  noticeText: { color: COLORS.primary, fontSize: 14 },
   errorBox: {
     backgroundColor: '#FFEBEE',
     borderRadius: 10,

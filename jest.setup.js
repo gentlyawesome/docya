@@ -17,6 +17,8 @@ jest.mock('@react-navigation/native', () => {
     useRoute: () => ({
       params: {},
     }),
+    // Runs once on mount, so screens can be rendered without a NavigationContainer
+    useFocusEffect: cb => require('react').useEffect(cb, []),
   };
 });
 
@@ -29,6 +31,10 @@ jest.mock('./src/config/supabase', () => ({
       signUp: jest.fn(),
       signInWithPassword: jest.fn(),
       signOut: jest.fn(),
+      verifyOtp: jest.fn(),
+      resetPasswordForEmail: jest.fn(),
+      resend: jest.fn(),
+      updateUser: jest.fn(),
       getSession: jest.fn(),
       startAutoRefresh: jest.fn(),
       stopAutoRefresh: jest.fn(),

@@ -82,6 +82,9 @@ export interface AvailabilityWindow {
 export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
+  ForgotPassword: undefined;
+  ResetPassword: { email: string };
+  ConfirmEmail: { email: string };
 };
 
 export type DoctorStackParamList = {

@@ -29,6 +29,10 @@ npm run ios
 
 Seed accounts (local only, password `Password123!`): doctors `maria.santos@`, `juan.delacruz@`, `angela.reyes@doctora.test`.
 
+## Going online
+
+See [docs/HOSTING.md](docs/HOSTING.md) for putting the backend on a hosted Supabase project, the email templates and SMTP it needs, and how release builds pick up `.env.production`.
+
 ## Project layout
 
 ```
@@ -66,8 +70,8 @@ E2E flows: sign in/out, schedule a patient and cancel, slot availability, calend
 
 ## Known limitations
 
-- Production needs a hosted Supabase project, its keys, and email-confirmation settings configured.
-- Anyone can register as a doctor; there is no verification step.
+- Production needs a hosted Supabase project with custom SMTP and the two email templates (docs/HOSTING.md).
+- Anyone can register as a doctor; there is no verification step. Sign-up and password reset use a 6-digit code sent by email.
 - Patients get no notification or copy of their appointment; the doctor tells them. There are no reminders yet.
 - Times are shown in the doctor's time zone.
 - Android is not supported; no CI yet.

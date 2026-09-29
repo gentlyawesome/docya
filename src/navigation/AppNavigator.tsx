@@ -17,6 +17,9 @@ import {
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { LoginScreen } from '../screens/auth/LoginScreen';
 import { RegisterScreen } from '../screens/auth/RegisterScreen';
+import { ForgotPasswordScreen } from '../screens/auth/ForgotPasswordScreen';
+import { ResetPasswordScreen } from '../screens/auth/ResetPasswordScreen';
+import { ConfirmEmailScreen } from '../screens/auth/ConfirmEmailScreen';
 import { DoctorProfileScreen } from '../screens/profile/DoctorProfileScreen';
 import { DoctorDashboardScreen } from '../screens/doctor/DoctorDashboardScreen';
 import { DoctorAppointmentsScreen } from '../screens/doctor/DoctorAppointmentsScreen';
@@ -110,7 +113,22 @@ const AuthNavigator = () => (
     <AuthStack.Screen
       name="Register"
       component={RegisterScreen}
-      options={{ title: 'New account' }}
+      options={{ title: 'New account', headerBackTitle: 'Back' }}
+    />
+    <AuthStack.Screen
+      name="ForgotPassword"
+      component={ForgotPasswordScreen}
+      options={{ title: 'Forgot password', headerBackTitle: 'Back' }}
+    />
+    <AuthStack.Screen
+      name="ResetPassword"
+      component={ResetPasswordScreen}
+      options={{ title: 'New password', headerBackTitle: 'Back' }}
+    />
+    <AuthStack.Screen
+      name="ConfirmEmail"
+      component={ConfirmEmailScreen}
+      options={{ title: 'Confirm your email', headerBackTitle: 'Back' }}
     />
   </AuthStack.Navigator>
 );
