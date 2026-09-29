@@ -10,10 +10,22 @@ interface ErrorMessageProps {
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.errorIcon}>⚠️</Text>
-      <Text style={styles.message}>{message}</Text>
+      <Text style={styles.errorIcon} accessibilityElementsHidden importantForAccessibility="no">
+        ⚠️
+      </Text>
+      <Text style={styles.title} accessibilityRole="header">
+        Something went wrong
+      </Text>
+      <Text style={styles.message} accessibilityRole="alert">
+        {message}
+      </Text>
       {onRetry && (
-        <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={onRetry}
+          accessibilityRole="button"
+          accessibilityLabel="Retry"
+        >
           <Text style={styles.retryText}>Retry</Text>
         </TouchableOpacity>
       )}
@@ -32,6 +44,12 @@ const styles = StyleSheet.create({
   errorIcon: {
     fontSize: 48,
     marginBottom: 16,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: COLORS.text,
+    marginBottom: 8,
   },
   message: {
     fontSize: 16,

@@ -1,36 +1,55 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   Alert,
   RefreshControl,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   loadBookingsFromStorage,
   cancelBooking,
-  selectUpcomingBookings,
+  selectAllBookings,
   selectBookingsLoading,
 } from '../store/slices/bookingsSlice';
 import { Booking } from '../types';
 import { formatDateWithDay, formatTimezone } from '../utils/dateHelpers';
 import { formatTime12Hour } from '../utils/timeSlotGenerator';
 import { COLORS } from '../constants';
+import { describeLead } from '../services/reminders';
+import { getBookingPhase, partitionBookings } from '../utils/bookingPhases';
 
 export const MyBookingsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
-  const bookings = useAppSelector(selectUpcomingBookings);
+  const allBookings = useAppSelector(selectAllBookings);
   const loading = useAppSelector(selectBookingsLoading);
+  const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [now, setNow] = useState(() => Date.now());
+
+  // Appointments move from Upcoming to Past as time passes, so re-check on focus
+  useFocusEffect(
+    useCallback(() => {
+      setNow(Date.now());
+    }, []),
+  );
+
+  const { upcoming, past } = useMemo(
+    () => partitionBookings(allBookings, now),
+    [allBookings, now],
+  );
+  const bookings = tab === 'upcoming' ? upcoming : past;
 
   useEffect(() => {
     dispatch(loadBookingsFromStorage());
   }, [dispatch]);
 
   const handleRefresh = () => {
+    setNow(Date.now());
     dispatch(loadBookingsFromStorage());
   };
 
@@ -51,65 +70,131 @@ export const MyBookingsScreen: React.FC = () => {
               await dispatch(cancelBooking(booking.id)).unwrap();
               Alert.alert('Cancelled', 'Your appointment has been cancelled.');
             } catch (error) {
-              Alert.alert('Error', 'Failed to cancel appointment. Please try again.');
+              Alert.alert(
+                'Error',
+                'Failed to cancel appointment. Please try again.',
+              );
             }
           },
         },
-      ]
+      ],
     );
   };
 
-  const renderBookingCard = ({ item }: { item: Booking }) => (
-    <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {item.doctorName.split(' ').map(n => n[0]).join('').substring(0, 2)}
+  const renderBookingCard = ({ item }: { item: Booking }) => {
+    const phase = getBookingPhase(item, now);
+    return (
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <View
+            style={styles.avatar}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
+            <Text style={styles.avatarText}>
+              {item.doctorName
+                .split(' ')
+                .map(n => n[0])
+                .join('')
+                .substring(0, 2)}
+            </Text>
+          </View>
+          <View style={styles.cardInfo}>
+            <Text style={styles.doctorName}>{item.doctorName}</Text>
+            <Text style={styles.timezone}>
+              📍 {formatTimezone(item.timezone)}
+            </Text>
+          </View>
+          {phase !== 'upcoming' && (
+            <View
+              style={[
+                styles.badge,
+                phase === 'cancelled'
+                  ? styles.badgeCancelled
+                  : styles.badgeCompleted,
+              ]}
+            >
+              <Text style={styles.badgeText}>
+                {phase === 'cancelled' ? 'Cancelled' : 'Completed'}
+              </Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.divider} />
+
+        <View style={styles.cardBody}>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>📅 Date</Text>
+            <Text style={styles.infoValue}>{formatDateWithDay(item.date)}</Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>🕐 Time</Text>
+            <Text style={styles.infoValue}>
+              {formatTime12Hour(item.startTime)} -{' '}
+              {formatTime12Hour(item.endTime)}
+            </Text>
+          </View>
+        </View>
+
+        {phase === 'upcoming' && item.reminderLeadMinutes !== undefined && (
+          <Text style={styles.reminderText}>
+            🔔 Reminder {describeLead(item.reminderLeadMinutes)}
           </Text>
-        </View>
-        <View style={styles.cardInfo}>
-          <Text style={styles.doctorName}>{item.doctorName}</Text>
-          <Text style={styles.timezone}>📍 {formatTimezone(item.timezone)}</Text>
-        </View>
+        )}
+
+        {phase === 'upcoming' && (
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => handleCancelBooking(item)}
+            accessibilityRole="button"
+            accessibilityLabel={`Cancel appointment with ${
+              item.doctorName
+            } on ${formatDateWithDay(item.date)}`}
+          >
+            <Text style={styles.cancelButtonText}>Cancel Appointment</Text>
+          </TouchableOpacity>
+        )}
       </View>
-
-      <View style={styles.divider} />
-
-      <View style={styles.cardBody}>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>📅 Date</Text>
-          <Text style={styles.infoValue}>{formatDateWithDay(item.date)}</Text>
-        </View>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>🕐 Time</Text>
-          <Text style={styles.infoValue}>
-            {formatTime12Hour(item.startTime)} - {formatTime12Hour(item.endTime)}
-          </Text>
-        </View>
-      </View>
-
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => handleCancelBooking(item)}
-      >
-        <Text style={styles.cancelButtonText}>Cancel Appointment</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
-        <Text style={styles.title}>My Appointments</Text>
-        <Text style={styles.subtitle}>
-          {bookings.length} upcoming appointment{bookings.length !== 1 ? 's' : ''}
+        <Text style={styles.title} accessibilityRole="header">
+          My Appointments
         </Text>
+        <View style={styles.tabs} accessibilityRole="tablist">
+          {(['upcoming', 'past'] as const).map(key => {
+            const count = key === 'upcoming' ? upcoming.length : past.length;
+            const selected = tab === key;
+            return (
+              <TouchableOpacity
+                key={key}
+                style={[styles.tab, selected && styles.tabSelected]}
+                onPress={() => setTab(key)}
+                accessibilityRole="tab"
+                accessibilityState={{ selected }}
+                accessibilityLabel={`${
+                  key === 'upcoming' ? 'Upcoming' : 'Past'
+                }, ${count}`}
+              >
+                <Text
+                  style={[styles.tabText, selected && styles.tabTextSelected]}
+                >
+                  {key === 'upcoming' ? 'Upcoming' : 'Past'} ({count})
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
 
       <FlatList
         data={bookings}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         renderItem={renderBookingCard}
         contentContainerStyle={styles.listContent}
         refreshControl={
@@ -122,10 +207,15 @@ export const MyBookingsScreen: React.FC = () => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyIcon}>📅</Text>
-            <Text style={styles.emptyTitle}>No Appointments</Text>
+            <Text style={styles.emptyTitle}>
+              {tab === 'upcoming'
+                ? 'No Upcoming Appointments'
+                : 'No Past Appointments'}
+            </Text>
             <Text style={styles.emptyText}>
-              You don't have any upcoming appointments.{'\n'}
-              Book an appointment with a doctor to get started.
+              {tab === 'upcoming'
+                ? "You don't have any upcoming appointments.\nBook an appointment with a doctor to get started."
+                : 'Completed and cancelled appointments will appear here.'}
             </Text>
           </View>
         }
@@ -135,6 +225,55 @@ export const MyBookingsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  reminderText: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    marginTop: 4,
+    marginBottom: 12,
+  },
+  tabs: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.background,
+    borderRadius: 10,
+    padding: 3,
+    marginTop: 12,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: 'center',
+    minHeight: 36,
+    justifyContent: 'center',
+  },
+  tabSelected: {
+    backgroundColor: COLORS.card,
+  },
+  tabText: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    fontWeight: '500',
+  },
+  tabTextSelected: {
+    color: COLORS.text,
+    fontWeight: '600',
+  },
+  badge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  badgeCancelled: {
+    backgroundColor: COLORS.danger,
+  },
+  badgeCompleted: {
+    backgroundColor: COLORS.textSecondary,
+  },
+  badgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
   container: {
     flex: 1,
     backgroundColor: COLORS.background,

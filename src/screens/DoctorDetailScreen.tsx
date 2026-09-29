@@ -4,18 +4,19 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { format } from 'date-fns';
 import { RootStackParamList, TimeSlot } from '../types';
 import { useAppSelector } from '../store/hooks';
-import { selectAllBookings } from '../store/slices/bookingsSlice';
-import { generateDoctorTimeSlots } from '../utils/timeSlotGenerator';
-import { formatTimezone, getNextDays } from '../utils/dateHelpers';
+import { selectActiveBookings } from '../store/slices/bookingsSlice';
+import { filterFutureSlots, generateDoctorTimeSlots } from '../utils/timeSlotGenerator';
+import { formatTimezone } from '../utils/dateHelpers';
 import { TimeSlotButton } from '../components/TimeSlotButton';
+import { DoctorCalendar } from '../components/DoctorCalendar';
+import { RatingBadge } from '../components/RatingBadge';
 import { COLORS } from '../constants';
 
 type DoctorDetailScreenNavigationProp = NativeStackNavigationProp<
@@ -35,23 +36,30 @@ export const DoctorDetailScreen: React.FC<DoctorDetailScreenProps> = ({
   route,
 }) => {
   const { doctor } = route.params;
-  const bookings = useAppSelector(selectAllBookings);
-  const [selectedDate, setSelectedDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
-
-  // Generate next 14 days
-  const dates = useMemo(() => getNextDays(14), []);
-
+  const bookings = useAppSelector(selectActiveBookings);
   // Generate time slots for the doctor
   const allSlots = useMemo(() => {
-    return generateDoctorTimeSlots(
-      doctor.id,
-      doctor.name,
-      doctor.availabilities,
-      new Date(),
-      14,
-      bookings
+    return filterFutureSlots(
+      generateDoctorTimeSlots(
+        doctor.id,
+        doctor.name,
+        doctor.availabilities,
+        new Date(),
+        14,
+        bookings
+      )
     );
   }, [doctor, bookings]);
+
+  const availableDates = useMemo(
+    () => [...new Set(allSlots.filter(slot => !slot.isBooked).map(slot => slot.date))],
+    [allSlots]
+  );
+
+  // Open on the first day that actually has an open slot, not simply today
+  const [selectedDate, setSelectedDate] = useState<string>(
+    () => availableDates[0] ?? format(new Date(), 'yyyy-MM-dd')
+  );
 
   // Filter slots by selected date
   const slotsForSelectedDate = useMemo(() => {
@@ -64,61 +72,44 @@ export const DoctorDetailScreen: React.FC<DoctorDetailScreenProps> = ({
     }
   };
 
-  const handleDatePress = (date: Date) => {
-    setSelectedDate(format(date, 'yyyy-MM-dd'));
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
       <ScrollView>
         {/* Doctor Info */}
         <View style={styles.doctorInfo}>
-          <View style={styles.avatar}>
+          <View
+            style={styles.avatar}
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+          >
             <Text style={styles.avatarText}>
               {doctor.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
             </Text>
           </View>
           <Text style={styles.doctorName}>{doctor.name}</Text>
+          {doctor.specialty && <Text style={styles.specialty}>{doctor.specialty}</Text>}
+          <RatingBadge rating={doctor.rating} reviewCount={doctor.reviewCount} />
+          {doctor.fee !== undefined && <Text style={styles.fee}>Consultation ${doctor.fee}</Text>}
           <Text style={styles.timezone}>📍 {formatTimezone(doctor.timezone)}</Text>
         </View>
 
         {/* Date Selector */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Select Date</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.dateList}>
-              {dates.map((date) => {
-                const dateStr = format(date, 'yyyy-MM-dd');
-                const isSelected = dateStr === selectedDate;
-                const dayName = format(date, 'EEE');
-                const dayNum = format(date, 'd');
-                const monthName = format(date, 'MMM');
-
-                return (
-                  <TouchableOpacity
-                    key={dateStr}
-                    style={[styles.dateCard, isSelected && styles.dateCardSelected]}
-                    onPress={() => handleDatePress(date)}
-                  >
-                    <Text style={[styles.dayName, isSelected && styles.dayNameSelected]}>
-                      {dayName}
-                    </Text>
-                    <Text style={[styles.dayNum, isSelected && styles.dayNumSelected]}>
-                      {dayNum}
-                    </Text>
-                    <Text style={[styles.monthName, isSelected && styles.monthNameSelected]}>
-                      {monthName}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </ScrollView>
+          <Text style={styles.sectionTitle} accessibilityRole="header">
+            Select Date
+          </Text>
+          <DoctorCalendar
+            selectedDate={selectedDate}
+            onDateSelect={setSelectedDate}
+            availableDates={availableDates}
+          />
         </View>
 
         {/* Time Slots */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Available Time Slots</Text>
+          <Text style={styles.sectionTitle} accessibilityRole="header">
+            Available Time Slots
+          </Text>
           {slotsForSelectedDate.length > 0 ? (
             <View style={styles.slotsContainer}>
               {slotsForSelectedDate.map((slot) => (
@@ -185,46 +176,17 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     marginBottom: 12,
   },
-  dateList: {
-    flexDirection: 'row',
-  },
-  dateCard: {
-    backgroundColor: COLORS.card,
-    borderRadius: 12,
-    padding: 12,
-    marginRight: 8,
-    minWidth: 70,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: COLORS.border,
-  },
-  dateCardSelected: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
-  },
-  dayName: {
-    fontSize: 12,
+  specialty: {
+    fontSize: 16,
     color: COLORS.textSecondary,
-    fontWeight: '500',
+    marginBottom: 6,
   },
-  dayNameSelected: {
-    color: '#FFFFFF',
-  },
-  dayNum: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  fee: {
+    fontSize: 14,
     color: COLORS.text,
-    marginVertical: 4,
-  },
-  dayNumSelected: {
-    color: '#FFFFFF',
-  },
-  monthName: {
-    fontSize: 12,
-    color: COLORS.textSecondary,
-  },
-  monthNameSelected: {
-    color: '#FFFFFF',
+    fontWeight: '500',
+    marginTop: 6,
+    marginBottom: 6,
   },
   slotsContainer: {
     flexDirection: 'row',

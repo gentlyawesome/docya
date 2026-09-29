@@ -3,6 +3,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { TimeSlot } from '../types';
 import { COLORS } from '../constants';
 import { formatTime12Hour } from '../utils/timeSlotGenerator';
+import { haptics } from '../utils/haptics';
 
 interface TimeSlotButtonProps {
   slot: TimeSlot;
@@ -11,16 +12,24 @@ interface TimeSlotButtonProps {
 
 export const TimeSlotButton: React.FC<TimeSlotButtonProps> = ({ slot, onPress }) => {
   const isBooked = slot.isBooked;
-  
+
+  const handlePress = () => {
+    haptics.selection();
+    onPress();
+  };
+
   return (
     <TouchableOpacity
       style={[
         styles.button,
         isBooked && styles.buttonBooked,
       ]}
-      onPress={onPress}
+      onPress={handlePress}
       disabled={isBooked}
       activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel={`${formatTime12Hour(slot.startTime)}${isBooked ? ', booked' : ', available'}`}
+      accessibilityState={{ disabled: isBooked }}
     >
       <Text style={[styles.time, isBooked && styles.timeBooked]}>
         {formatTime12Hour(slot.startTime)}

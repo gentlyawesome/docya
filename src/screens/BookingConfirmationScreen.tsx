@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TouchableOpacity,
   Alert,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types';
@@ -15,7 +15,11 @@ import { useAppDispatch } from '../store/hooks';
 import { createBooking } from '../store/slices/bookingsSlice';
 import { formatDateWithDay, formatTimezone } from '../utils/dateHelpers';
 import { formatTime12Hour } from '../utils/timeSlotGenerator';
-import { COLORS } from '../constants';
+import { COLORS, DEFAULT_REMINDER_MINUTES, REMINDER_OPTIONS } from '../constants';
+import { FilterChip } from '../components/FilterChip';
+import { describeLead, ReminderResult } from '../services/reminders';
+import { getReminderTime } from '../utils/bookingPhases';
+import { haptics } from '../utils/haptics';
 
 type BookingConfirmationScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -40,14 +44,47 @@ export const BookingConfirmationScreen: React.FC<BookingConfirmationScreenProps>
   const dispatch = useAppDispatch();
   const [isBooking, setIsBooking] = useState(false);
 
+  // Only offer reminder times that are still in the future
+  const reminderOptions = useMemo(
+    () =>
+      REMINDER_OPTIONS.filter(
+        option =>
+          option.minutes === null ||
+          getReminderTime(timeSlot.date, timeSlot.startTime, timeSlot.timezone, option.minutes) !==
+            null
+      ),
+    [timeSlot]
+  );
+  const [reminderMinutes, setReminderMinutes] = useState<number | null>(() =>
+    reminderOptions.some(o => o.minutes === DEFAULT_REMINDER_MINUTES)
+      ? DEFAULT_REMINDER_MINUTES
+      : null
+  );
+
+  const reminderNote = (reminder: ReminderResult | null): string => {
+    switch (reminder?.status) {
+      case 'scheduled':
+        return `\n\nWe'll remind you ${describeLead(reminder.leadMinutes)}.`;
+      case 'denied':
+        return '\n\nNo reminder was set because notifications are turned off for this app. You can enable them in Settings.';
+      case 'error':
+        return "\n\nWe couldn't set a reminder for this appointment.";
+      default:
+        return '';
+    }
+  };
+
   const handleConfirmBooking = async () => {
     setIsBooking(true);
     try {
-      await dispatch(createBooking(timeSlot)).unwrap();
+      const { reminder } = await dispatch(
+        createBooking({ timeSlot, reminderLeadMinutes: reminderMinutes })
+      ).unwrap();
+      haptics.success();
       
       Alert.alert(
         'Booking Confirmed! ✅',
-        `Your appointment with ${doctor.name} has been booked successfully.`,
+        `Your appointment with ${doctor.name} has been booked successfully.${reminderNote(reminder)}`,
         [
           {
             text: 'View My Bookings',
@@ -66,6 +103,7 @@ export const BookingConfirmationScreen: React.FC<BookingConfirmationScreenProps>
         ]
       );
     } catch (error: any) {
+      haptics.error();
       Alert.alert(
         'Booking Failed',
         error || 'Unable to book this appointment. Please try again.',
@@ -81,11 +119,13 @@ export const BookingConfirmationScreen: React.FC<BookingConfirmationScreenProps>
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
           <Text style={styles.headerIcon}>📅</Text>
-          <Text style={styles.headerTitle}>Confirm Appointment</Text>
+          <Text style={styles.headerTitle} accessibilityRole="header">
+            Confirm Appointment
+          </Text>
           <Text style={styles.headerSubtitle}>
             Please review your appointment details
           </Text>
@@ -95,7 +135,11 @@ export const BookingConfirmationScreen: React.FC<BookingConfirmationScreenProps>
           <View style={styles.section}>
             <Text style={styles.label}>Doctor</Text>
             <View style={styles.doctorInfo}>
-              <View style={styles.avatar}>
+              <View
+                style={styles.avatar}
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants"
+              >
                 <Text style={styles.avatarText}>
                   {doctor.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
                 </Text>
@@ -126,6 +170,24 @@ export const BookingConfirmationScreen: React.FC<BookingConfirmationScreenProps>
           </View>
         </View>
 
+        <View style={[styles.card, styles.reminderCard]}>
+          <View style={styles.section}>
+            <Text style={styles.label} accessibilityRole="header">
+              Reminder
+            </Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {reminderOptions.map(option => (
+                <FilterChip
+                  key={option.label}
+                  label={option.label}
+                  selected={reminderMinutes === option.minutes}
+                  onPress={() => setReminderMinutes(option.minutes)}
+                />
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+
         <View style={styles.note}>
           <Text style={styles.noteIcon}>ℹ️</Text>
           <Text style={styles.noteText}>
@@ -139,6 +201,8 @@ export const BookingConfirmationScreen: React.FC<BookingConfirmationScreenProps>
           style={styles.cancelButton}
           onPress={handleCancel}
           disabled={isBooking}
+          accessibilityRole="button"
+          accessibilityLabel="Cancel and go back"
         >
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </TouchableOpacity>
@@ -147,6 +211,9 @@ export const BookingConfirmationScreen: React.FC<BookingConfirmationScreenProps>
           style={[styles.confirmButton, isBooking && styles.confirmButtonDisabled]}
           onPress={handleConfirmBooking}
           disabled={isBooking}
+          accessibilityRole="button"
+          accessibilityLabel={`Confirm booking with ${doctor.name}`}
+          accessibilityState={{ disabled: isBooking, busy: isBooking }}
         >
           <Text style={styles.confirmButtonText}>
             {isBooking ? 'Booking...' : 'Confirm Booking'}
@@ -192,6 +259,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  reminderCard: {
+    marginTop: 16,
   },
   section: {
     marginVertical: 8,

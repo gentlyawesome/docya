@@ -3,17 +3,31 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Doctor } from '../types';
 import { COLORS } from '../constants';
 import { formatTimezone } from '../utils/dateHelpers';
+import { RatingBadge } from './RatingBadge';
 
 interface DoctorCardProps {
   doctor: Doctor;
   onPress: () => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
-export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onPress }) => {
+export const DoctorCard: React.FC<DoctorCardProps> = ({
+  doctor,
+  onPress,
+  isFavorite = false,
+  onToggleFavorite,
+}) => {
   const availableDays = [...new Set(doctor.availabilities.map(a => a.day_of_week))];
   
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={onPress}
+      activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel={`${doctor.name}${doctor.specialty ? `, ${doctor.specialty}` : ''}. View schedule`}
+    >
       <View style={styles.header}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>
@@ -22,8 +36,26 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onPress }) => {
         </View>
         <View style={styles.info}>
           <Text style={styles.name}>{doctor.name}</Text>
+          {doctor.specialty && <Text style={styles.specialty}>{doctor.specialty}</Text>}
+          <RatingBadge rating={doctor.rating} reviewCount={doctor.reviewCount} />
           <Text style={styles.timezone}>📍 {formatTimezone(doctor.timezone)}</Text>
         </View>
+        {onToggleFavorite && (
+          <TouchableOpacity
+            style={styles.favoriteButton}
+            onPress={onToggleFavorite}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel={
+              isFavorite
+                ? `Remove ${doctor.name} from favorites`
+                : `Add ${doctor.name} to favorites`
+            }
+            accessibilityState={{ selected: isFavorite }}
+          >
+            <Text style={styles.favoriteIcon}>{isFavorite ? '♥' : '♡'}</Text>
+          </TouchableOpacity>
+        )}
       </View>
       
       <View style={styles.availability}>
@@ -34,6 +66,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onPress }) => {
       </View>
       
       <View style={styles.footer}>
+        {doctor.fee !== undefined && <Text style={styles.fee}>${doctor.fee} consult</Text>}
         <Text style={styles.viewButton}>View Schedule →</Text>
       </View>
     </TouchableOpacity>
@@ -105,6 +138,30 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  favoriteButton: {
+    alignSelf: 'flex-start',
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  favoriteIcon: {
+    fontSize: 26,
+    color: COLORS.danger,
+  },
+  specialty: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    marginBottom: 4,
+  },
+  fee: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: COLORS.text,
   },
   viewButton: {
     fontSize: 14,
