@@ -264,5 +264,10 @@ const styles = StyleSheet.create({
   off: { color: COLORS.textSecondary, textDecorationLine: 'line-through' },
   remove: { marginLeft: 12, minHeight: 44, justifyContent: 'center' },
   removeText: { color: COLORS.danger, fontSize: 15 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 12 },
+  chips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    rowGap: 10,
+    marginBottom: 12,
+  },
 });
