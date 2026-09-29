@@ -123,8 +123,9 @@ Docya is an appointment book for doctors. Sign in with the demo account. Tap "Ne
 
 ## Screenshots (iPhone only)
 
-**Done**: five 1320 x 2868 screenshots (the 6.9" iPhone size, no transparency) are in
-`store/screenshots/iphone-6.9/`, taken from the app with invented patients and a clean status bar.
+**Done**: five screenshots, no transparency, taken from the app with invented patients and a clean status
+bar. `store/screenshots/iphone-6.9/` (1320 x 2868) fits the **6.9" Display** slot; `store/screenshots/iphone-6.5/`
+(1284 x 2778, same pictures) fits the **6.5" Display** slot. Use whichever slot App Store Connect shows.
 App Store Connect scales them for smaller iPhones; check its upload page for the current required sizes.
 `store/README.md` explains how to retake them.
 

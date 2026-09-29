@@ -13,6 +13,18 @@
 
 Upload them in this order. App Store Connect scales them for smaller iPhones.
 
+**Which folder for which slot:** App Store Connect shows a slot per display size, and each slot accepts only
+certain pixel sizes.
+
+| Slot | Accepted sizes | Folder |
+|---|---|---|
+| iPhone 6.9" Display | 1320 x 2868 (or 1290 x 2796) | `iphone-6.9/` |
+| iPhone 6.5" Display | 1284 x 2778 or 1242 x 2688 | `iphone-6.5/` |
+
+You need one of the two; the 6.9" set is enough on its own. `iphone-6.5/` is the same five pictures scaled to
+1284 x 2778 (12 blank pixels trimmed from the bottom margin), for when only the 6.5" slot is shown. If you
+retake the 6.9" pictures, remake the 6.5" ones from them (resize to 1284 wide, crop to 2778 tall, save as RGB).
+
 ## Retaking them (after the UI changes)
 
 1. Boot an **iPhone 17 Pro Max** (or 16 Pro Max) simulator and shut the others down. Make the status bar tidy:
