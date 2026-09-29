@@ -35,6 +35,7 @@ FEATURES:
 • Book a patient by name and phone number
 • Calendar view with open and booked slots, no double-booking
 • Dashboard with today's and upcoming appointments
+• Reminders before each appointment (15, 30 or 60 minutes)
 • Cancel or complete appointments and add private notes
 • Your profile: name, specialization, time zone
 
@@ -214,6 +215,7 @@ Welcome to Docya!
 Features:
 • Weekly working hours
 • Book patients by name into open slots
+• Reminders before each appointment
 • Cancel or complete appointments, with private notes
 • Dashboard for today and upcoming
 

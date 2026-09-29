@@ -8,6 +8,7 @@ An iOS-first React Native app for doctors to manage their appointments. A doctor
 - Weekly working-hours editor and a small profile (name, phone, specialization, time zone)
 - **New appointment**: enter the patient's name and phone, pick a day on the calendar and an open slot, confirm. Booked slots are marked and cannot be double-booked
 - Appointment list (Upcoming / Past), dashboard with today's and upcoming counts, cancel, mark completed, private notes
+- **Reminders**: a notification 15, 30 or 60 minutes before each upcoming appointment (default 30), set on the Profile tab. They are local to the phone; patient names stay off the lock screen unless switched on. Scheduled when appointments are loaded or created, cancelled when an appointment is cancelled or the doctor signs out; at most 60 are pending at once (iOS allows 64).
 
 ## Tech stack
 
@@ -74,7 +75,7 @@ E2E flows: sign in/out, schedule a patient and cancel, slot availability, calend
 
 - Production needs a hosted Supabase project with custom SMTP and the two email templates (docs/HOSTING.md).
 - Anyone can register as a doctor; there is no verification step. Sign-up and password reset use a 6-digit code sent by email.
-- Patients get no notification or copy of their appointment; the doctor tells them. There are no reminders yet.
+- Patients get no notification or copy of their appointment; the doctor tells them. Reminders are for the doctor only and live on one phone (a second phone would plan its own once the app is opened there).
 - Times are shown in the doctor's time zone.
 - Android is not supported; no CI yet.
 

@@ -42,6 +42,8 @@ jest.mock('./src/config/supabase', () => ({
   },
 }));
 
+jest.mock('@notifee/react-native', () => require('@notifee/react-native/jest-mock'));
+
 jest.mock('react-native-haptic-feedback', () => ({
   __esModule: true,
   default: { trigger: jest.fn() },

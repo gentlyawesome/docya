@@ -4,8 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppSelector } from '../../store/hooks';
 import { useTabBarInset } from '../../hooks/useTabBarInset';
 import { selectUser } from '../../store/slices/authSlice';
-import { AboutSection, AccountActionsSection } from '../../components/AccountSections';
+import {
+  AboutSection,
+  AccountActionsSection,
+} from '../../components/AccountSections';
 import { ProfileForm } from '../../components/ProfileForm';
+import { ReminderSettings } from '../../components/ReminderSettings';
 import { COLORS } from '../../constants';
 
 export const DoctorProfileScreen: React.FC = () => {
@@ -17,7 +21,10 @@ export const DoctorProfileScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView
-        contentContainerStyle={[styles.content, { paddingBottom: 32 + tabBarInset }]}
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: 32 + tabBarInset },
+        ]}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         automaticallyAdjustKeyboardInsets
@@ -26,6 +33,7 @@ export const DoctorProfileScreen: React.FC = () => {
           My Profile
         </Text>
         <ProfileForm user={user} />
+        <ReminderSettings />
         <AboutSection />
         <AccountActionsSection />
       </ScrollView>
