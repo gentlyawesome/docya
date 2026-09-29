@@ -13,11 +13,17 @@ const flows = readdirSync(new URL('.', import.meta.url))
   .filter(f => f.endsWith('.yaml') && (!only || f.includes(only)))
   .sort();
 
-const reset = () =>
+// Emails are caught by the local Mailpit (never sent anywhere); start each flow with an empty inbox
+const clearInbox = () =>
+  spawnSync('curl', ['-s', '-X', 'DELETE', 'http://127.0.0.1:54324/api/v1/messages'], { stdio: 'ignore' });
+
+const reset = () => {
+  clearInbox();
   execFileSync('psql', [
     DB, '-X', '-q', '-c',
     "delete from public.appointments; delete from auth.users where email like 'e2e-%@doctora.test';",
   ]);
+};
 
 const results = [];
 for (const flow of flows) {

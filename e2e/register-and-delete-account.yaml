@@ -31,6 +31,22 @@ name: Register, edit profile, delete account
 - eraseText: 30
 - inputText: "Password123!"
 - pressKey: Enter
+# The account is confirmed with the code from the email (caught by the local mail catcher)
+- assertVisible: "We sent a 6-digit code.*"
+- tapOn: "Confirm"
+- assertVisible: "Enter the 6-digit code from the email"
+- tapOn: "Code"
+- inputText: "000000"
+- tapOn: "Confirm"
+- assertVisible: "That code is wrong or has expired.*"
+- runScript:
+    file: scripts/latest-code.js
+    env:
+      EMAIL: "e2e-eve@doctora.test"
+- tapOn: "Code"
+- eraseText: 10
+- inputText: ${output.code}
+- tapOn: "Confirm"
 # Registered and signed in as a doctor
 - assertVisible: "Hello, Dr. Tester"
 - tapOn: "Profile, tab.*"

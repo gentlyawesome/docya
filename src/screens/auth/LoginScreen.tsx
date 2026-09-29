@@ -1,6 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -9,7 +18,6 @@ import {
   loginUser,
   selectAuthError,
   selectAuthLoading,
-  selectAuthNotice,
 } from '../../store/slices/authSlice';
 import { Button } from '../../components/Button';
 import { FormField } from '../../components/FormField';
@@ -24,15 +32,19 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectAuthLoading);
   const serverError = useAppSelector(selectAuthError);
-  const notice = useAppSelector(selectAuthNotice);
   const passwordRef = useRef<TextInput>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {},
+  );
 
-  useEffect(() => {
-    dispatch(clearAuthMessages());
-  }, [dispatch]);
+  // Start each visit without another screen's error
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(clearAuthMessages());
+    }, [dispatch]),
+  );
 
   const submit = () => {
     const next: typeof errors = {};
@@ -49,22 +61,26 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['top', 'left', 'right', 'bottom']}
+    >
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps="handled"
+          automaticallyAdjustKeyboardInsets
+        >
           <Text style={styles.title} accessibilityRole="header">
             Welcome to Docya
           </Text>
-          <Text style={styles.subtitle}>Sign in to book and manage your appointments</Text>
+          <Text style={styles.subtitle}>
+            Sign in to manage your appointments
+          </Text>
 
-          {notice ? (
-            <View style={styles.notice} accessibilityRole="alert">
-              <Text style={styles.noticeText}>{notice}</Text>
-            </View>
-          ) : null}
           {serverError ? (
             <View style={styles.errorBox} accessibilityRole="alert">
               <Text style={styles.errorText}>{serverError}</Text>
@@ -101,6 +117,12 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
           <Button title="Sign in" onPress={submit} loading={loading} />
           <Button
+            title="Forgot password?"
+            variant="secondary"
+            onPress={() => navigation.navigate('ForgotPassword')}
+            disabled={loading}
+          />
+          <Button
             title="Create an account"
             variant="secondary"
             onPress={() => navigation.navigate('Register')}
@@ -116,10 +138,18 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { padding: 24, paddingTop: 48 },
-  title: { fontSize: 30, fontWeight: 'bold', color: COLORS.text, marginBottom: 6 },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 6,
+  },
   subtitle: { fontSize: 16, color: COLORS.textSecondary, marginBottom: 24 },
-  notice: { backgroundColor: '#E5F1FF', borderRadius: 10, padding: 12, marginBottom: 16 },
-  noticeText: { color: COLORS.primary, fontSize: 14 },
-  errorBox: { backgroundColor: '#FFEBEE', borderRadius: 10, padding: 12, marginBottom: 16 },
+  errorBox: {
+    backgroundColor: '#FFEBEE',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 16,
+  },
   errorText: { color: COLORS.danger, fontSize: 14 },
 });

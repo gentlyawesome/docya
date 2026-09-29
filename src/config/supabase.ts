@@ -11,6 +11,11 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   );
 }
 
+// A release build must talk to the hosted project, never to a developer's local stack
+if (!__DEV__ && /^https?:\/\/(127\.0\.0\.1|localhost|10\.|192\.168\.)/.test(SUPABASE_URL)) {
+  throw new Error('This release build points at a local Supabase. Check .env.production.');
+}
+
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     storage: AsyncStorage,

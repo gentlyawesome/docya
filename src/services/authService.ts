@@ -12,9 +12,13 @@ export interface RegisterInput {
   specialization?: string;
 }
 
-export type RegisterResult = { status: 'signed_in'; user: User } | { status: 'confirm_email' };
+export type RegisterResult =
+  | { status: 'signed_in'; user: User }
+  | { status: 'confirm_email' };
 
-export const register = async (input: RegisterInput): Promise<RegisterResult> => {
+export const register = async (
+  input: RegisterInput,
+): Promise<RegisterResult> => {
   const firstName = input.firstName.trim();
   const lastName = input.lastName.trim();
 
@@ -50,6 +54,66 @@ export const login = async (email: string, password: string): Promise<User> => {
     throw new Error(mapSupabaseError(error));
   }
   return getUserProfile(data.user.id);
+};
+
+// Sends a 6-digit code to the email address (it does nothing visible if no account uses it, so
+// the app cannot be used to find out who has an account).
+export const requestPasswordReset = async (email: string): Promise<void> => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email.trim());
+  if (error) {
+    throw new Error(mapSupabaseError(error));
+  }
+};
+
+// Checks the emailed code, then sets the new password. The code signs the person in.
+export const resetPassword = async (
+  email: string,
+  code: string,
+  newPassword: string,
+): Promise<User> => {
+  const { data, error } = await supabase.auth.verifyOtp({
+    email: email.trim(),
+    token: code.trim(),
+    type: 'recovery',
+  });
+  if (error || !data.user) {
+    throw new Error(mapSupabaseError(error ?? 'Invalid code'));
+  }
+  const { error: updateError } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+  if (updateError) {
+    // Do not leave a half-finished recovery session behind
+    await supabase.auth.signOut({ scope: 'local' });
+    throw new Error(mapSupabaseError(updateError));
+  }
+  return getUserProfile(data.user.id);
+};
+
+// Finishes sign-up with the code from the confirmation email
+export const confirmSignup = async (
+  email: string,
+  code: string,
+): Promise<User> => {
+  const { data, error } = await supabase.auth.verifyOtp({
+    email: email.trim(),
+    token: code.trim(),
+    type: 'signup',
+  });
+  if (error || !data.user) {
+    throw new Error(mapSupabaseError(error ?? 'Invalid code'));
+  }
+  return getUserProfile(data.user.id);
+};
+
+export const resendSignupCode = async (email: string): Promise<void> => {
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: email.trim(),
+  });
+  if (error) {
+    throw new Error(mapSupabaseError(error));
+  }
 };
 
 export const logout = async (): Promise<void> => {

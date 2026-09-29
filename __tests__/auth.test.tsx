@@ -13,7 +13,6 @@ import {
   loginUser,
   registerUser,
   selectAuthError,
-  selectAuthNotice,
   selectUser,
 } from '../src/store/slices/authSlice';
 import * as authService from '../src/services/authService';
@@ -183,7 +182,7 @@ describe('auth state', () => {
     expect(selectAuthError(store.getState())).toBeNull();
   });
 
-  it('shows a notice instead of signing in when email confirmation is required', async () => {
+  it('stays signed out when email confirmation is required', async () => {
     auth.signUp.mockResolvedValue({
       data: { user: { id: 'u3' }, session: null },
       error: null,
@@ -198,7 +197,6 @@ describe('auth state', () => {
       }),
     );
     expect(selectUser(store.getState())).toBeNull();
-    expect(selectAuthNotice(store.getState())).toMatch(/confirmation link/);
   });
 
   it('signs out locally after deleting the account', async () => {
