@@ -1,6 +1,4 @@
 // Jest setup file
-import '@testing-library/react-native/extend-expect';
-
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -22,5 +20,9 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-// Silence the warning: Animated: `useNativeDriver` is not supported
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+jest.mock('@notifee/react-native', () => require('@notifee/react-native/jest-mock'));
+
+jest.mock('react-native-haptic-feedback', () => ({
+  __esModule: true,
+  default: { trigger: jest.fn() },
+}));
