@@ -1,4 +1,4 @@
-import { format, parse, addMinutes, isBefore, isEqual } from 'date-fns';
+import { format, parse, addMinutes, isBefore } from 'date-fns';
 import { DoctorAvailability, TimeSlot, Booking } from '../types';
 import { SLOT_DURATION_MINUTES } from '../constants';
 import { logError } from './logger';
@@ -140,7 +140,7 @@ export const formatTime12Hour = (time24: string): string => {
   try {
     const parsed = parse(time24, 'HH:mm', new Date());
     return format(parsed, 'h:mm a');
-  } catch (error) {
+  } catch {
     return time24;
   }
 };

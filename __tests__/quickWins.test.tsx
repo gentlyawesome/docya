@@ -92,3 +92,27 @@ describe('DoctorCalendar', () => {
     expect(screen.getByText('›', { includeHiddenElements: true })).toBeTruthy();
   });
 });
+
+describe('sample profiles in release builds', () => {
+  it('are not merged when SHOW_SAMPLE_DOCTOR_PROFILES is false', () => {
+    jest.isolateModules(() => {
+      jest.doMock('../src/constants', () => ({
+        ...jest.requireActual('../src/constants'),
+        SHOW_SAMPLE_DOCTOR_PROFILES: false,
+      }));
+      const { transformToDoctors: transform } = require('../src/services/api');
+      const [doctor] = transform([
+        {
+          name: 'Christy Schumm',
+          timezone: 'Australia/Sydney',
+          day_of_week: 'Monday',
+          available_at: ' 9:00AM',
+          available_until: ' 5:00PM',
+        },
+      ]);
+      expect(doctor.rating).toBeUndefined();
+      expect(doctor.specialty).toBeUndefined();
+      expect(doctor.fee).toBeUndefined();
+    });
+  });
+});

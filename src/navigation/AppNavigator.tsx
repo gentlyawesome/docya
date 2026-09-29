@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,6 +12,18 @@ import { COLORS } from '../constants';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
+
+const styles = StyleSheet.create({
+  tabIcon: { fontSize: 24 },
+});
+
+// Simple icon component using emoji
+const TabIcon: React.FC<{ icon: string }> = ({ icon }) => {
+  return <Text style={styles.tabIcon}>{icon}</Text>;
+};
+
+const renderDoctorsIcon = () => <TabIcon icon="👨‍⚕️" />;
+const renderBookingsIcon = () => <TabIcon icon="📅" />;
 
 // Main Tabs Navigator
 const MainTabs = () => {
@@ -32,7 +44,7 @@ const MainTabs = () => {
         component={DoctorsListScreen}
         options={{
           tabBarLabel: 'Doctors',
-          tabBarIcon: ({ color }) => <TabIcon icon="👨‍⚕️" color={color} />,
+          tabBarIcon: renderDoctorsIcon,
         }}
       />
       <Tab.Screen
@@ -40,16 +52,11 @@ const MainTabs = () => {
         component={MyBookingsScreen}
         options={{
           tabBarLabel: 'My Bookings',
-          tabBarIcon: ({ color }) => <TabIcon icon="📅" color={color} />,
+          tabBarIcon: renderBookingsIcon,
         }}
       />
     </Tab.Navigator>
   );
-};
-
-// Simple icon component using emoji
-const TabIcon: React.FC<{ icon: string; color: string }> = ({ icon }) => {
-  return <Text style={{ fontSize: 24 }}>{icon}</Text>;
 };
 
 // Root Stack Navigator

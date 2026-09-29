@@ -33,9 +33,9 @@ export const transformToDoctors = (availabilities: DoctorAvailability[]): Doctor
   
   // Convert to Doctor objects
   const doctors: Doctor[] = [];
-  doctorMap.forEach((availabilities, name) => {
+  doctorMap.forEach((records, name) => {
     // Use first availability's timezone as doctor's primary timezone
-    const timezone = availabilities[0]?.timezone || 'UTC';
+    const timezone = records[0]?.timezone || 'UTC';
     
     // Generate a simple ID from the name
     const id = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -44,7 +44,7 @@ export const transformToDoctors = (availabilities: DoctorAvailability[]): Doctor
       id,
       name,
       timezone,
-      availabilities,
+      availabilities: records,
       ...(SHOW_SAMPLE_DOCTOR_PROFILES ? SAMPLE_DOCTOR_PROFILES[id] : undefined),
     });
   });

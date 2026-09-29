@@ -69,7 +69,7 @@ export const MyBookingsScreen: React.FC = () => {
             try {
               await dispatch(cancelBooking(booking.id)).unwrap();
               Alert.alert('Cancelled', 'Your appointment has been cancelled.');
-            } catch (error) {
+            } catch {
               Alert.alert(
                 'Error',
                 'Failed to cancel appointment. Please try again.',

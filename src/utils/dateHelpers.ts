@@ -8,7 +8,7 @@ export const formatDate = (dateStr: string): string => {
   try {
     const date = parseISO(dateStr);
     return format(date, 'MMM dd, yyyy');
-  } catch (error) {
+  } catch {
     return dateStr;
   }
 };
@@ -20,7 +20,7 @@ export const formatDateWithDay = (dateStr: string): string => {
   try {
     const date = parseISO(dateStr);
     return format(date, 'EEEE, MMM dd, yyyy');
-  } catch (error) {
+  } catch {
     return dateStr;
   }
 };
@@ -76,7 +76,7 @@ export const getDayName = (dateStr: string): string => {
   try {
     const date = parseISO(dateStr);
     return format(date, 'EEEE');
-  } catch (error) {
+  } catch {
     return '';
   }
 };
