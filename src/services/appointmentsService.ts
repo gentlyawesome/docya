@@ -2,6 +2,7 @@ import { supabase } from '../config/supabase';
 import { Booking, BookingStatus, TimeSlot } from '../types';
 import { AppointmentRow, toBooking } from './mappers';
 import { mapSupabaseError } from './supabaseErrors';
+import { dropReminder, syncReminders } from './reminders';
 
 const SELECT =
   'id, doctor_id, patient_name, patient_phone, appointment_date, start_time, end_time, status, notes, ' +
@@ -50,7 +51,10 @@ export const listMyAppointments = async (): Promise<Booking[]> => {
   if (error) {
     return fail(error);
   }
-  return (data as unknown as AppointmentRow[]).map(toBooking);
+  const bookings = (data as unknown as AppointmentRow[]).map(toBooking);
+  // Whenever the list is fetched, keep this phone's reminders in step with it
+  syncReminders(bookings); // never rejects; it logs its own problems
+  return bookings;
 };
 
 export const getAppointment = async (id: string): Promise<Booking> => {
@@ -78,6 +82,9 @@ export const updateAppointmentStatus = async (
     .single();
   if (error) {
     return fail(error);
+  }
+  if (status !== 'confirmed') {
+    await dropReminder(id);
   }
   return toBooking(data as unknown as AppointmentRow);
 };

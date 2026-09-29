@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { User } from '../../types';
 import * as authService from '../../services/authService';
+import { cancelAllReminders } from '../../services/reminders';
 import { RegisterInput } from '../../services/authService';
 import {
   updateUserProfile,
@@ -113,6 +114,7 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
+      await cancelAllReminders();
       await authService.logout();
     } catch (error) {
       return rejectWithValue(messageOf(error, 'Logout failed'));
@@ -124,6 +126,7 @@ export const deleteAccount = createAsyncThunk(
   'auth/deleteAccount',
   async (_, { rejectWithValue }) => {
     try {
+      await cancelAllReminders();
       await authService.deleteAccount();
     } catch (error) {
       return rejectWithValue(messageOf(error, 'Could not delete your account'));

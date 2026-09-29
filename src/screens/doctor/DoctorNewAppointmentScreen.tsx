@@ -25,6 +25,7 @@ import {
 } from '../../services/appointmentsService';
 import { listMyAvailability } from '../../services/availabilityService';
 import { AvailabilityRow, toAvailabilities } from '../../services/mappers';
+import { syncReminders } from '../../services/reminders';
 import { getDoctorProfile } from '../../services/userService';
 import {
   filterFutureSlots,
@@ -152,7 +153,12 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
           onPress: async () => {
             setSaving(true);
             try {
-              await createAppointment(slot, { name: patientName, phone });
+              const created = await createAppointment(slot, {
+                name: patientName,
+                phone,
+              });
+              // Remind the doctor about it (and ask for notification permission at this natural moment)
+              await syncReminders([...held, created]);
               Alert.alert(
                 'Appointment scheduled ✅',
                 `${patientName} is booked.`,

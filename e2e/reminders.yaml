@@ -1,0 +1,36 @@
+# Reminder settings: pick a lead time (iOS asks for permission), see it kept after a restart,
+# and switch patient names on.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Appointment reminders
+---
+# (launchApp grants notification permission, so iOS's prompt is answered by Maestro; the screens
+# for a refused permission are covered by unit tests)
+- launchApp:
+    clearState: true
+- runFlow: subflows/login-doctor.yaml
+- tapOn: "Profile, tab.*"
+- scrollUntilVisible:
+    element: "Remind me before each appointment"
+    centerElement: true
+# Starts at 30 minutes
+- assertVisible:
+    text: "30 min filter"
+    selected: true
+- tapOn: "15 min filter"
+- assertVisible:
+    text: "15 min filter"
+    selected: true
+# Remembered after the app is closed and opened again
+- launchApp
+- tapOn: "Profile, tab.*"
+- scrollUntilVisible:
+    element: "Remind me before each appointment"
+    centerElement: true
+- assertVisible:
+    text: "15 min filter"
+    selected: true
+# Off
+- tapOn: "Off filter"
+- assertVisible:
+    text: "Off filter"
+    selected: true
