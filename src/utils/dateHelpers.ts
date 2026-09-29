@@ -1,5 +1,5 @@
 import { format, parseISO, startOfWeek, addDays } from 'date-fns';
-import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+import { toZonedTime } from 'date-fns-tz';
 
 /**
  * Format date for display
@@ -8,7 +8,7 @@ export const formatDate = (dateStr: string): string => {
   try {
     const date = parseISO(dateStr);
     return format(date, 'MMM dd, yyyy');
-  } catch (error) {
+  } catch {
     return dateStr;
   }
 };
@@ -20,7 +20,7 @@ export const formatDateWithDay = (dateStr: string): string => {
   try {
     const date = parseISO(dateStr);
     return format(date, 'EEEE, MMM dd, yyyy');
-  } catch (error) {
+  } catch {
     return dateStr;
   }
 };
@@ -57,7 +57,7 @@ export const getNextDays = (numberOfDays: number = 7): Date[] => {
  * Convert time to timezone
  */
 export const convertToTimezone = (date: Date, timezone: string): Date => {
-  return utcToZonedTime(date, timezone);
+  return toZonedTime(date, timezone);
 };
 
 /**
@@ -76,7 +76,7 @@ export const getDayName = (dateStr: string): string => {
   try {
     const date = parseISO(dateStr);
     return format(date, 'EEEE');
-  } catch (error) {
+  } catch {
     return '';
   }
 };

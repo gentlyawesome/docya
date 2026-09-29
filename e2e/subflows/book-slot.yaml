@@ -1,0 +1,16 @@
+# From a doctor's page: book the first open slot with the reminder off. Ends on the "Appointment Requested" alert.
+# Picking the first open slot keeps flows independent of the time of day.
+appId: org.reactjs.native.example.DoctoraAppointments
+---
+- assertVisible: "Select Date"
+- scrollUntilVisible:
+    element: ".*, available"
+    centerElement: true
+- tapOn: ".*, available"
+- assertVisible: "Confirm Appointment"
+# Off avoids the system notification-permission prompt
+- scrollUntilVisible:
+    element: "Off filter"
+- tapOn: "Off filter"
+- tapOn: "Confirm booking with .*"
+- assertVisible: "Appointment Requested.*"

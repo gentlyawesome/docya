@@ -1,0 +1,5 @@
+# From the doctors list: open the first doctor and book their first open slot.
+appId: org.reactjs.native.example.DoctoraAppointments
+---
+- tapOn: ".*View schedule"
+- runFlow: book-slot.yaml

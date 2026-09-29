@@ -1,90 +1,76 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Booking } from '../types';
 import { STORAGE_KEYS } from '../constants';
+import { logError } from '../utils/logger';
 
-/**
- * Save bookings to AsyncStorage
- */
-export const saveBookings = async (bookings: Booking[]): Promise<void> => {
+// Device-only data. Appointments themselves live in Supabase.
+
+export interface ReminderInfo {
+  reminderId: string;
+  leadMinutes: number;
+}
+
+// Which local notification belongs to which appointment (notifications never leave the device)
+export const loadReminders = async (): Promise<Record<string, ReminderInfo>> => {
   try {
-    const jsonValue = JSON.stringify(bookings);
-    await AsyncStorage.setItem(STORAGE_KEYS.BOOKINGS, jsonValue);
+    const json = await AsyncStorage.getItem(STORAGE_KEYS.REMINDERS);
+    const parsed = json ? JSON.parse(json) : {};
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
   } catch (error) {
-    console.error('Error saving bookings:', error);
-    throw new Error('Failed to save bookings');
+    logError('Error loading reminders:', error);
+    return {};
   }
 };
 
-/**
- * Load bookings from AsyncStorage
- */
-export const loadBookings = async (): Promise<Booking[]> => {
+const writeReminders = async (reminders: Record<string, ReminderInfo>) => {
+  await AsyncStorage.setItem(STORAGE_KEYS.REMINDERS, JSON.stringify(reminders));
+};
+
+export const saveReminder = async (appointmentId: string, info: ReminderInfo): Promise<void> => {
   try {
-    const jsonValue = await AsyncStorage.getItem(STORAGE_KEYS.BOOKINGS);
-    return jsonValue != null ? JSON.parse(jsonValue) : [];
+    await writeReminders({ ...(await loadReminders()), [appointmentId]: info });
   } catch (error) {
-    console.error('Error loading bookings:', error);
+    logError('Error saving reminder:', error);
+  }
+};
+
+export const removeReminder = async (appointmentId: string): Promise<ReminderInfo | undefined> => {
+  try {
+    const { [appointmentId]: removed, ...rest } = await loadReminders();
+    await writeReminders(rest);
+    return removed;
+  } catch (error) {
+    logError('Error removing reminder:', error);
+    return undefined;
+  }
+};
+
+export const clearReminders = async (): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(STORAGE_KEYS.REMINDERS);
+  } catch (error) {
+    logError('Error clearing reminders:', error);
+  }
+};
+
+// Favorite doctors are kept per signed-in user
+const favoritesKey = (userId: string) => `${STORAGE_KEYS.FAVORITES}:${userId}`;
+
+export const loadFavorites = async (userId: string): Promise<string[]> => {
+  try {
+    const json = await AsyncStorage.getItem(favoritesKey(userId));
+    const parsed = json != null ? JSON.parse(json) : [];
+    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+  } catch (error) {
+    logError('Error loading favorites:', error);
     return [];
   }
 };
 
-/**
- * Add a new booking
- */
-export const addBooking = async (booking: Booking): Promise<Booking[]> => {
+export const saveFavorites = async (userId: string, ids: string[]): Promise<void> => {
   try {
-    const existingBookings = await loadBookings();
-    const updatedBookings = [...existingBookings, booking];
-    await saveBookings(updatedBookings);
-    return updatedBookings;
+    await AsyncStorage.setItem(favoritesKey(userId), JSON.stringify(ids));
   } catch (error) {
-    console.error('Error adding booking:', error);
-    throw new Error('Failed to add booking');
-  }
-};
-
-/**
- * Remove a booking by ID
- */
-export const removeBooking = async (bookingId: string): Promise<Booking[]> => {
-  try {
-    const existingBookings = await loadBookings();
-    const updatedBookings = existingBookings.filter(b => b.id !== bookingId);
-    await saveBookings(updatedBookings);
-    return updatedBookings;
-  } catch (error) {
-    console.error('Error removing booking:', error);
-    throw new Error('Failed to remove booking');
-  }
-};
-
-/**
- * Clear all bookings
- */
-export const clearAllBookings = async (): Promise<void> => {
-  try {
-    await AsyncStorage.removeItem(STORAGE_KEYS.BOOKINGS);
-  } catch (error) {
-    console.error('Error clearing bookings:', error);
-    throw new Error('Failed to clear bookings');
-  }
-};
-
-/**
- * Check if a slot is already booked
- */
-export const isSlotBooked = async (
-  doctorId: string,
-  date: string,
-  startTime: string
-): Promise<boolean> => {
-  try {
-    const bookings = await loadBookings();
-    return bookings.some(
-      b => b.doctorId === doctorId && b.date === date && b.startTime === startTime
-    );
-  } catch (error) {
-    console.error('Error checking slot:', error);
-    return false;
+    logError('Error saving favorites:', error);
+    throw new Error('Failed to save favorites');
   }
 };

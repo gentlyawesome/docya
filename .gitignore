@@ -73,3 +73,11 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+memory-bank
+# Environment and local Supabase state (never commit real keys)
+.env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+supabase/.env

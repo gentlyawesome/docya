@@ -1,0 +1,26 @@
+# A booked slot becomes unavailable, and cancelling the appointment frees it again.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Booked slots are unavailable until cancelled
+---
+- launchApp:
+    clearState: true
+- runFlow: subflows/login-patient.yaml
+- runFlow: subflows/book-first-slot.yaml
+# Back on the doctor's page, the slot we just booked is now unavailable
+- tapOn: "OK"
+- scrollUntilVisible:
+    element: ".*, booked"
+- assertVisible: ".*, booked"
+# Cancel it from My Bookings
+- tapOn: "MainTabs.*"
+- tapOn: "My Bookings, tab.*"
+- tapOn: "Cancel appointment with .*"
+- tapOn: "Yes, Cancel"
+- tapOn: "OK"
+- assertVisible: "Upcoming, 0"
+# Back on the doctor's page, nothing is booked any more
+- tapOn: "Doctors, tab.*"
+- tapOn: ".*View schedule"
+- scrollUntilVisible:
+    element: ".*, available"
+- assertNotVisible: ".*, booked"

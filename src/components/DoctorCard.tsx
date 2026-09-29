@@ -1,42 +1,99 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Doctor } from '../types';
-import { COLORS } from '../constants';
+import { COLORS, CURRENCY_SYMBOL } from '../constants';
 import { formatTimezone } from '../utils/dateHelpers';
+import { RatingBadge } from './RatingBadge';
 
 interface DoctorCardProps {
   doctor: Doctor;
   onPress: () => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
-export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onPress }) => {
-  const availableDays = [...new Set(doctor.availabilities.map(a => a.day_of_week))];
-  
+export const DoctorCard: React.FC<DoctorCardProps> = ({
+  doctor,
+  onPress,
+  isFavorite = false,
+  onToggleFavorite,
+}) => {
+  const availableDays = [
+    ...new Set(doctor.availabilities.map(a => a.day_of_week)),
+  ];
+
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
-      <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {doctor.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+    <View style={styles.card}>
+      <TouchableOpacity
+        style={styles.content}
+        onPress={onPress}
+        activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityLabel={`${doctor.name}${
+          doctor.specialty ? `, ${doctor.specialty}` : ''
+        }${
+          doctor.fee !== undefined ? `, ${CURRENCY_SYMBOL}${doctor.fee} consultation` : ''
+        }. View schedule`}
+      >
+        <View style={styles.header}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              {doctor.name
+                .split(' ')
+                .map(n => n[0])
+                .join('')
+                .substring(0, 2)}
+            </Text>
+          </View>
+          <View
+            style={[styles.info, onToggleFavorite && styles.infoWithFavorite]}
+          >
+            <Text style={styles.name}>{doctor.name}</Text>
+            {doctor.specialty && (
+              <Text style={styles.specialty}>{doctor.specialty}</Text>
+            )}
+            <RatingBadge
+              rating={doctor.rating}
+              reviewCount={doctor.reviewCount}
+            />
+            <Text style={styles.timezone}>
+              📍 {formatTimezone(doctor.timezone)}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.availability}>
+          <Text style={styles.availabilityLabel}>Available:</Text>
+          <Text style={styles.availabilityDays}>
+            {availableDays.length} day{availableDays.length !== 1 ? 's' : ''}{' '}
+            per week
           </Text>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.name}>{doctor.name}</Text>
-          <Text style={styles.timezone}>📍 {formatTimezone(doctor.timezone)}</Text>
+
+        <View style={styles.footer}>
+          {doctor.fee !== undefined && (
+            <Text style={styles.fee}>{CURRENCY_SYMBOL}{doctor.fee} consult</Text>
+          )}
+          <Text style={styles.viewButton}>View Schedule →</Text>
         </View>
-      </View>
-      
-      <View style={styles.availability}>
-        <Text style={styles.availabilityLabel}>Available:</Text>
-        <Text style={styles.availabilityDays}>
-          {availableDays.length} day{availableDays.length !== 1 ? 's' : ''} per week
-        </Text>
-      </View>
-      
-      <View style={styles.footer}>
-        <Text style={styles.viewButton}>View Schedule →</Text>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      {onToggleFavorite && (
+        <TouchableOpacity
+          style={styles.favoriteButton}
+          onPress={onToggleFavorite}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel={
+            isFavorite
+              ? `Remove ${doctor.name} from favorites`
+              : `Add ${doctor.name} to favorites`
+          }
+          accessibilityState={{ selected: isFavorite }}
+        >
+          <Text style={styles.favoriteIcon}>{isFavorite ? '♥' : '♡'}</Text>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 };
 
@@ -44,7 +101,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.card,
     borderRadius: 12,
-    padding: 16,
     marginHorizontal: 16,
     marginVertical: 8,
     shadowColor: '#000',
@@ -52,6 +108,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  content: {
+    padding: 16,
+  },
+  infoWithFavorite: {
+    marginRight: 40,
   },
   header: {
     flexDirection: 'row',
@@ -105,6 +167,32 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  favoriteIcon: {
+    fontSize: 26,
+    color: COLORS.danger,
+  },
+  specialty: {
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    marginBottom: 4,
+  },
+  fee: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: COLORS.text,
   },
   viewButton: {
     fontSize: 14,

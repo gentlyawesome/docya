@@ -1,6 +1,4 @@
 // Jest setup file
-import '@testing-library/react-native/extend-expect';
-
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -22,5 +20,27 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-// Silence the warning: Animated: `useNativeDriver` is not supported
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+// The real client needs a .env and a network; unit tests mock at the service boundary instead
+jest.mock('./src/config/supabase', () => ({
+  supabase: {
+    from: jest.fn(),
+    rpc: jest.fn(),
+    auth: {
+      signUp: jest.fn(),
+      signInWithPassword: jest.fn(),
+      signOut: jest.fn(),
+      getSession: jest.fn(),
+      startAutoRefresh: jest.fn(),
+      stopAutoRefresh: jest.fn(),
+    },
+  },
+}));
+
+jest.mock('@notifee/react-native', () => require('@notifee/react-native/jest-mock'));
+
+jest.mock('react-native-share', () => ({ __esModule: true, default: { open: jest.fn() } }));
+
+jest.mock('react-native-haptic-feedback', () => ({
+  __esModule: true,
+  default: { trigger: jest.fn() },
+}));

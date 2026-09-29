@@ -1,0 +1,59 @@
+# Creating an account, editing the profile, and deleting the account (required by the App Store).
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Register, edit profile, delete account
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Welcome to Docya"
+- tapOn: "Create an account"
+# Validation
+- tapOn: "Create account"
+- assertVisible: "Enter your first name"
+- assertVisible: "Enter a valid email address"
+- tapOn: "First name"
+- inputText: "Eve"
+- pressKey: Enter
+- inputText: "Tester"
+- pressKey: Enter
+- inputText: "e2e-eve@doctora.test"
+- pressKey: Enter
+# (phone is optional) skip to the password
+- pressKey: Enter
+- inputText: "Password123!"
+- pressKey: Enter
+- inputText: "Different123!"
+- pressKey: Enter
+- assertVisible: "Passwords do not match"
+- tapOn: "Confirm password"
+- eraseText: 30
+- inputText: "Password123!"
+- pressKey: Enter
+# Registered and signed in as a patient
+- assertVisible: "Find a Doctor"
+- tapOn: "Profile, tab.*"
+- assertVisible: "My Profile"
+- assertVisible: "e2e-eve@doctora.test"
+# Edit personal information
+- tapOn: "Phone"
+- inputText: "+639171112222"
+- scrollUntilVisible:
+    element: "Save personal information"
+    centerElement: true
+- tapOn: "Save personal information"
+- assertVisible: "Your details were updated."
+- tapOn: "OK"
+# Delete the account
+- scrollUntilVisible:
+    element: "Delete account"
+    centerElement: true
+- tapOn: "Delete account"
+- assertVisible: "Delete your account\\?"
+- tapOn: "Delete permanently"
+- assertVisible: "Welcome to Docya"
+# The deleted account can no longer sign in
+- tapOn: "Email"
+- inputText: "e2e-eve@doctora.test"
+- pressKey: Enter
+- inputText: "Password123!"
+- pressKey: Enter
+- assertVisible: "Invalid email or password."

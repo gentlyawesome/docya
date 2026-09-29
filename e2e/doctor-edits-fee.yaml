@@ -1,0 +1,23 @@
+# A doctor changes their consultation fee; a patient then sees the new price on the doctors list.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Doctor edits fee, patient sees it
+---
+- launchApp:
+    clearState: true
+- runFlow: subflows/login-doctor.yaml
+- tapOn: "Profile, tab.*"
+- scrollUntilVisible:
+    element: ".*Consultation fee.*"
+    centerElement: true
+- tapOn: ".*Consultation fee.*"
+- eraseText: 10
+- inputText: "1850"
+- scrollUntilVisible:
+    element: "Save professional details"
+    centerElement: true
+- tapOn: "Save professional details"
+- tapOn: "OK"
+- runFlow: subflows/sign-out.yaml
+
+- runFlow: subflows/login-patient.yaml
+- assertVisible: ".*1850.*"
