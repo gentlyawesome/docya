@@ -42,6 +42,7 @@ export const DoctorCalendar: React.FC<DoctorCalendarProps> = ({
   return (
     <View style={styles.container}>
       <Calendar
+        testID="doctor-calendar"
         current={selectedDate}
         minDate={minDate}
         maxDate={maxDate}

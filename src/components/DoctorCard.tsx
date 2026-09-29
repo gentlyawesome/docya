@@ -18,58 +18,80 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({
   isFavorite = false,
   onToggleFavorite,
 }) => {
-  const availableDays = [...new Set(doctor.availabilities.map(a => a.day_of_week))];
-  
+  const availableDays = [
+    ...new Set(doctor.availabilities.map(a => a.day_of_week)),
+  ];
+
   return (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={onPress}
-      activeOpacity={0.7}
-      accessibilityRole="button"
-      accessibilityLabel={`${doctor.name}${doctor.specialty ? `, ${doctor.specialty}` : ''}. View schedule`}
-    >
-      <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {doctor.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+    <View style={styles.card}>
+      <TouchableOpacity
+        style={styles.content}
+        onPress={onPress}
+        activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityLabel={`${doctor.name}${
+          doctor.specialty ? `, ${doctor.specialty}` : ''
+        }. View schedule`}
+      >
+        <View style={styles.header}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              {doctor.name
+                .split(' ')
+                .map(n => n[0])
+                .join('')
+                .substring(0, 2)}
+            </Text>
+          </View>
+          <View
+            style={[styles.info, onToggleFavorite && styles.infoWithFavorite]}
+          >
+            <Text style={styles.name}>{doctor.name}</Text>
+            {doctor.specialty && (
+              <Text style={styles.specialty}>{doctor.specialty}</Text>
+            )}
+            <RatingBadge
+              rating={doctor.rating}
+              reviewCount={doctor.reviewCount}
+            />
+            <Text style={styles.timezone}>
+              📍 {formatTimezone(doctor.timezone)}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.availability}>
+          <Text style={styles.availabilityLabel}>Available:</Text>
+          <Text style={styles.availabilityDays}>
+            {availableDays.length} day{availableDays.length !== 1 ? 's' : ''}{' '}
+            per week
           </Text>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.name}>{doctor.name}</Text>
-          {doctor.specialty && <Text style={styles.specialty}>{doctor.specialty}</Text>}
-          <RatingBadge rating={doctor.rating} reviewCount={doctor.reviewCount} />
-          <Text style={styles.timezone}>📍 {formatTimezone(doctor.timezone)}</Text>
+
+        <View style={styles.footer}>
+          {doctor.fee !== undefined && (
+            <Text style={styles.fee}>${doctor.fee} consult</Text>
+          )}
+          <Text style={styles.viewButton}>View Schedule →</Text>
         </View>
-        {onToggleFavorite && (
-          <TouchableOpacity
-            style={styles.favoriteButton}
-            onPress={onToggleFavorite}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            accessibilityRole="button"
-            accessibilityLabel={
-              isFavorite
-                ? `Remove ${doctor.name} from favorites`
-                : `Add ${doctor.name} to favorites`
-            }
-            accessibilityState={{ selected: isFavorite }}
-          >
-            <Text style={styles.favoriteIcon}>{isFavorite ? '♥' : '♡'}</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-      
-      <View style={styles.availability}>
-        <Text style={styles.availabilityLabel}>Available:</Text>
-        <Text style={styles.availabilityDays}>
-          {availableDays.length} day{availableDays.length !== 1 ? 's' : ''} per week
-        </Text>
-      </View>
-      
-      <View style={styles.footer}>
-        {doctor.fee !== undefined && <Text style={styles.fee}>${doctor.fee} consult</Text>}
-        <Text style={styles.viewButton}>View Schedule →</Text>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      {onToggleFavorite && (
+        <TouchableOpacity
+          style={styles.favoriteButton}
+          onPress={onToggleFavorite}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel={
+            isFavorite
+              ? `Remove ${doctor.name} from favorites`
+              : `Add ${doctor.name} to favorites`
+          }
+          accessibilityState={{ selected: isFavorite }}
+        >
+          <Text style={styles.favoriteIcon}>{isFavorite ? '♥' : '♡'}</Text>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 };
 
@@ -77,7 +99,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.card,
     borderRadius: 12,
-    padding: 16,
     marginHorizontal: 16,
     marginVertical: 8,
     shadowColor: '#000',
@@ -85,6 +106,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  content: {
+    padding: 16,
+  },
+  infoWithFavorite: {
+    marginRight: 40,
   },
   header: {
     flexDirection: 'row',
@@ -143,7 +170,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   favoriteButton: {
-    alignSelf: 'flex-start',
+    position: 'absolute',
+    top: 8,
+    right: 8,
     minWidth: 44,
     minHeight: 44,
     alignItems: 'center',
