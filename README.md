@@ -60,11 +60,13 @@ e2e/                      Maestro flows + run.mjs (resets the local DB per flow)
 ## Testing
 
 ```bash
-npx tsc --noEmit && npx eslint src __tests__
+npm run typecheck && npm run lint
 npm test                 # unit tests (Supabase mocked at the client boundary)
 npm run backend:check    # API checks against the local Supabase (wipes local appointments)
 npm run e2e              # all Maestro flows on the booted iOS simulator (needs Metro + Debug build)
 ```
+
+Every pull request runs the type check, lint and unit tests, and starts a throwaway local Supabase to run `backend:check` (see `.github/workflows/ci.yml`). The E2E flows are not in CI: they need a macOS runner with an iOS simulator, so run `npm run e2e` yourself before merging UI changes.
 
 E2E flows: sign in/out, schedule a patient and cancel, slot availability, calendar navigation, register and delete account. `npm run e2e` refuses to run unless `.env` points at a local Supabase.
 
