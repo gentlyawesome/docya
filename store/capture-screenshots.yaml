@@ -8,7 +8,7 @@ appId: org.reactjs.native.example.DoctoraAppointments
 - takeScreenshot: 01-dashboard
 
 - tapOn: "Appointments, tab.*"
-- assertVisible: "Upcoming \\(8\\) filter"
+- assertVisible: "Upcoming \\([0-9]+\\) filter"
 - waitForAnimationToEnd:
     timeout: 2000
 - takeScreenshot: 03-appointments

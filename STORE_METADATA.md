@@ -126,6 +126,10 @@ Docya is an appointment book for doctors. Sign in with the demo account. Tap "Ne
 **Done**: five screenshots, no transparency, taken from the app with invented patients and a clean status
 bar. `store/screenshots/iphone-6.9/` (1320 x 2868) fits the **6.9" Display** slot; `store/screenshots/iphone-6.5/`
 (1284 x 2778, same pictures) fits the **6.5" Display** slot. Use whichever slot App Store Connect shows.
+
+**iPad**: the app is iPhone-only, so no iPad screenshots are needed once an iPhone-only build is selected in
+App Store Connect. `store/screenshots/ipad-13/` (2064 x 2752) is a spare set, only for shipping a universal
+build; see `store/README.md`.
 App Store Connect scales them for smaller iPhones; check its upload page for the current required sizes.
 `store/README.md` explains how to retake them.
 
