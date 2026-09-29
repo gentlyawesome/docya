@@ -4,12 +4,12 @@ name: Search doctors
 ---
 - launchApp:
     clearState: true
-- assertVisible: "Find a Doctor"
-- assertVisible: "Dr. Geovany Keebler.*"
+- runFlow: subflows/login-patient.yaml
+- assertVisible: "Juan Dela Cruz.*"
 - tapOn: "Search doctors by name or location"
-- inputText: "Christy"
-- assertVisible: "Christy Schumm.*"
-- assertNotVisible: "Dr. Geovany Keebler.*"
+- inputText: "Maria"
+- assertVisible: "Maria Santos.*"
+- assertNotVisible: "Juan Dela Cruz.*"
 - eraseText: 20
 - inputText: "zzzz"
 - assertVisible: "No doctors match your search or filters"

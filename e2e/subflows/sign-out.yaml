@@ -1,0 +1,9 @@
+# From any signed-in tab: open Profile and sign out.
+appId: org.reactjs.native.example.DoctoraAppointments
+---
+- tapOn: "Profile, tab.*"
+- scrollUntilVisible:
+    element: "Sign out"
+    centerElement: true
+- tapOn: "Sign out"
+- assertVisible: "Welcome to Docya"

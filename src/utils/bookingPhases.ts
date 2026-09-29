@@ -25,6 +25,9 @@ export const getBookingPhase = (booking: Booking, now: number = Date.now()): Boo
   if (booking.status === 'cancelled') {
     return 'cancelled';
   }
+  if (booking.status === 'completed') {
+    return 'completed';
+  }
   return getBookingEnd(booking).getTime() > now ? 'upcoming' : 'completed';
 };
 

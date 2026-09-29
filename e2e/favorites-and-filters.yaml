@@ -4,7 +4,7 @@ name: Favorites and filters
 ---
 - launchApp:
     clearState: true
-- assertVisible: "Find a Doctor"
+- runFlow: subflows/login-patient.yaml
 - assertNotVisible: "Remove .* from favorites"
 - tapOn: "Add .* to favorites"
 - assertVisible: "Remove .* from favorites"
@@ -15,4 +15,5 @@ name: Favorites and filters
 - assertVisible: "Add .* to favorites"
 # Favorites are saved on the device
 - launchApp
+- assertVisible: "Find a Doctor"
 - assertVisible: "Remove .* from favorites"

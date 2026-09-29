@@ -83,8 +83,8 @@ export const BookingConfirmationScreen: React.FC<BookingConfirmationScreenProps>
       haptics.success();
       
       Alert.alert(
-        'Booking Confirmed! ✅',
-        `Your appointment with ${doctor.name} has been booked successfully.${reminderNote(reminder)}`,
+        'Appointment Requested ✅',
+        `Your appointment with ${doctor.name} has been requested. It will show as confirmed once the doctor accepts it.${reminderNote(reminder)}`,
         [
           {
             text: 'View My Bookings',

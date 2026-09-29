@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Doctor } from '../types';
-import { COLORS } from '../constants';
+import { COLORS, CURRENCY_SYMBOL } from '../constants';
 import { formatTimezone } from '../utils/dateHelpers';
 import { RatingBadge } from './RatingBadge';
 
@@ -70,7 +70,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({
 
         <View style={styles.footer}>
           {doctor.fee !== undefined && (
-            <Text style={styles.fee}>${doctor.fee} consult</Text>
+            <Text style={styles.fee}>{CURRENCY_SYMBOL}{doctor.fee} consult</Text>
           )}
           <Text style={styles.viewButton}>View Schedule →</Text>
         </View>

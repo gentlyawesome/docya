@@ -20,6 +20,22 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
+// The real client needs a .env and a network; unit tests mock at the service boundary instead
+jest.mock('./src/config/supabase', () => ({
+  supabase: {
+    from: jest.fn(),
+    rpc: jest.fn(),
+    auth: {
+      signUp: jest.fn(),
+      signInWithPassword: jest.fn(),
+      signOut: jest.fn(),
+      getSession: jest.fn(),
+      startAutoRefresh: jest.fn(),
+      stopAutoRefresh: jest.fn(),
+    },
+  },
+}));
+
 jest.mock('@notifee/react-native', () => require('@notifee/react-native/jest-mock'));
 
 jest.mock('react-native-share', () => ({ __esModule: true, default: { open: jest.fn() } }));

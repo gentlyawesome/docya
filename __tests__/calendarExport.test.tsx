@@ -1,27 +1,24 @@
 import React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Share from 'react-native-share';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
-import { configureStore } from '@reduxjs/toolkit';
 import {
   render,
   screen,
   fireEvent,
   waitFor,
 } from '@testing-library/react-native';
-import doctorsReducer from '../src/store/slices/doctorsSlice';
-import bookingsReducer from '../src/store/slices/bookingsSlice';
-import favoritesReducer from '../src/store/slices/favoritesSlice';
+import * as appointments from '../src/services/appointmentsService';
+import { signedIn } from './helpers/testStore';
 import { MyBookingsScreen } from '../src/screens/MyBookingsScreen';
 import { addToCalendar } from '../src/services/calendarExport';
 import { toBase64 } from '../src/utils/base64';
 import { buildIcs, icsFilename } from '../src/utils/ics';
 import { Booking } from '../src/types';
-import { STORAGE_KEYS } from '../src/constants';
 
 declare const Buffer: any;
 jest.mock('../src/utils/logger');
+jest.mock('../src/services/appointmentsService');
 
 const share = (Share as unknown as { open: jest.Mock }).open;
 
@@ -41,7 +38,6 @@ const now = new Date(Date.UTC(2026, 8, 29, 2, 3, 4));
 
 beforeEach(() => {
   jest.clearAllMocks();
-  return AsyncStorage.clear();
 });
 
 describe('toBase64', () => {
@@ -125,20 +121,11 @@ describe('addToCalendar', () => {
 describe('My Bookings calendar button', () => {
   it('appears on upcoming appointments and triggers the export', async () => {
     share.mockResolvedValue({ success: true });
-    await AsyncStorage.setItem(
-      STORAGE_KEYS.BOOKINGS,
-      JSON.stringify([
-        { ...booking, id: 'up', doctorName: 'Future Doc', date: '2099-01-01' },
-        { ...booking, id: 'done', doctorName: 'Done Doc', date: '2020-01-01' },
-      ]),
-    );
-    const store = configureStore({
-      reducer: {
-        doctors: doctorsReducer,
-        bookings: bookingsReducer,
-        favorites: favoritesReducer,
-      },
-    });
+    (appointments.listMyAppointments as jest.Mock).mockResolvedValue([
+      { ...booking, id: 'up', doctorName: 'Future Doc', date: '2099-01-01', status: 'confirmed' },
+      { ...booking, id: 'done', doctorName: 'Done Doc', date: '2020-01-01', status: 'confirmed' },
+    ]);
+    const store = signedIn();
     render(
       <Provider store={store}>
         <NavigationContainer>

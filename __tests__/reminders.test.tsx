@@ -1,21 +1,20 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import notifee, { AuthorizationStatus } from '@notifee/react-native';
-import { configureStore } from '@reduxjs/toolkit';
 import { render, screen } from '@testing-library/react-native';
 import { Provider } from 'react-redux';
-import doctorsReducer from '../src/store/slices/doctorsSlice';
-import favoritesReducer from '../src/store/slices/favoritesSlice';
-import bookingsReducer, {
-  cancelBooking,
-  createBooking,
-} from '../src/store/slices/bookingsSlice';
+import { cancelBooking, createBooking } from '../src/store/slices/bookingsSlice';
+import * as appointments from '../src/services/appointmentsService';
+import { loadReminders } from '../src/services/storage';
+import { booking as makeBooking, signedIn, slot } from './helpers/testStore';
 import { describeLead, scheduleReminder } from '../src/services/reminders';
 import { getReminderTime } from '../src/utils/bookingPhases';
 import { BookingConfirmationScreen } from '../src/screens/BookingConfirmationScreen';
 import { Booking, Doctor, TimeSlot } from '../src/types';
 
 jest.mock('../src/utils/logger');
+jest.mock('../src/services/appointmentsService');
+const svc = appointments as jest.Mocked<typeof appointments>;
 
 const n = notifee as unknown as Record<string, jest.Mock>;
 const setPermission = (status: AuthorizationStatus) => {
@@ -23,40 +22,8 @@ const setPermission = (status: AuthorizationStatus) => {
   n.requestPermission.mockResolvedValue({ authorizationStatus: status });
 };
 
-const makeStore = () =>
-  configureStore({
-    reducer: {
-      doctors: doctorsReducer,
-      bookings: bookingsReducer,
-      favorites: favoritesReducer,
-    },
-  });
-
-// 09:00 Perth (UTC+8) on 2099-01-01 is 01:00 UTC
-const slot: TimeSlot = {
-  id: 's',
-  doctorId: 'd1',
-  doctorName: 'Ann Lee',
-  date: '2099-01-01',
-  startTime: '09:00',
-  endTime: '09:30',
-  dayOfWeek: 'Thursday',
-  timezone: 'Australia/Perth',
-  isBooked: false,
-};
 const startUtc = Date.UTC(2099, 0, 1, 1, 0);
-
-const booking: Booking = {
-  id: 'b1',
-  doctorId: 'd1',
-  doctorName: 'Ann Lee',
-  date: '2099-01-01',
-  startTime: '09:00',
-  endTime: '09:30',
-  dayOfWeek: 'Thursday',
-  timezone: 'Australia/Perth',
-  bookedAt: '2026-01-01T00:00:00Z',
-};
+const booking: Booking = makeBooking();
 
 beforeEach(async () => {
   jest.clearAllMocks();
@@ -101,7 +68,7 @@ describe('scheduleReminder', () => {
     });
     const [notification, trigger] = n.createTriggerNotification.mock.calls[0];
     expect(notification.id).toBe('reminder-b1');
-    expect(notification.title).toBe('Appointment with Ann Lee');
+    expect(notification.title).toBe('Appointment with Dana Doc');
     expect(notification.body).toContain('9:00 AM');
     expect(notification.body).toContain('Perth');
     expect(trigger.timestamp).toBe(startUtc - 3_600_000);
@@ -138,43 +105,50 @@ describe('scheduleReminder', () => {
 });
 
 describe('booking + reminder lifecycle', () => {
-  it('stores the reminder on the booking and cancels it when the booking is cancelled', async () => {
-    const store = makeStore();
+  const created = makeBooking({ id: 'new-1' });
+  beforeEach(() => {
+    svc.createAppointment.mockResolvedValue(created);
+    svc.listMyAppointments.mockResolvedValue([created]);
+  });
+
+  it('schedules the reminder, remembers it on the device, and cancels it with the appointment', async () => {
+    const store = signedIn();
     const { reminder } = await store
       .dispatch(createBooking({ timeSlot: slot, reminderLeadMinutes: 1440 }))
       .unwrap();
     expect(reminder?.status).toBe('scheduled');
+    expect(await loadReminders()).toEqual({ 'new-1': { reminderId: 'reminder-new-1', leadMinutes: 1440 } });
 
+    // The list merges the device-only reminder into the server appointment
     const [saved] = store.getState().bookings.bookings;
-    expect(saved.reminderId).toBe(`reminder-${saved.id}`);
+    expect(saved.reminderId).toBe('reminder-new-1');
     expect(saved.reminderLeadMinutes).toBe(1440);
 
-    await store.dispatch(cancelBooking(saved.id)).unwrap();
-    expect(n.cancelTriggerNotification).toHaveBeenCalledWith(
-      `reminder-${saved.id}`,
-    );
+    svc.updateAppointmentStatus.mockResolvedValue({ ...created, status: 'cancelled' });
+    svc.listMyAppointments.mockResolvedValue([{ ...created, status: 'cancelled' }]);
+    await store.dispatch(cancelBooking('new-1')).unwrap();
+
+    expect(n.cancelTriggerNotification).toHaveBeenCalledWith('reminder-new-1');
+    expect(await loadReminders()).toEqual({});
     const [cancelled] = store.getState().bookings.bookings;
     expect(cancelled.status).toBe('cancelled');
     expect(cancelled.reminderId).toBeUndefined();
-    expect(cancelled.reminderLeadMinutes).toBeUndefined();
   });
 
   it('still books when notifications are denied, and records no reminder', async () => {
     setPermission(AuthorizationStatus.DENIED);
-    const store = makeStore();
+    const store = signedIn();
     const { reminder } = await store
       .dispatch(createBooking({ timeSlot: slot, reminderLeadMinutes: 60 }))
       .unwrap();
     expect(reminder?.status).toBe('denied');
-    const [saved] = store.getState().bookings.bookings;
-    expect(saved.reminderId).toBeUndefined();
+    expect(store.getState().bookings.bookings).toHaveLength(1);
+    expect(await loadReminders()).toEqual({});
   });
 
   it('does not touch notifications when reminders are off', async () => {
-    const store = makeStore();
-    const { reminder } = await store
-      .dispatch(createBooking({ timeSlot: slot }))
-      .unwrap();
+    const store = signedIn();
+    const { reminder } = await store.dispatch(createBooking({ timeSlot: slot })).unwrap();
     expect(reminder).toBeNull();
     expect(n.getNotificationSettings).not.toHaveBeenCalled();
   });
@@ -189,7 +163,7 @@ describe('confirmation screen reminder choices', () => {
   };
   const renderScreen = (timeSlot: TimeSlot) =>
     render(
-      <Provider store={makeStore()}>
+      <Provider store={signedIn()}>
         <BookingConfirmationScreen
           navigation={{ goBack: jest.fn(), reset: jest.fn() } as never}
           route={{ params: { doctor, timeSlot } } as never}

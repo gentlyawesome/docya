@@ -86,3 +86,11 @@ export const cancelReminder = async (reminderId: string): Promise<void> => {
     logError('Failed to cancel reminder:', error);
   }
 };
+
+export const cancelAllReminders = async (): Promise<void> => {
+  try {
+    await notifee.cancelTriggerNotifications();
+  } catch (error) {
+    logError('Failed to cancel reminders:', error);
+  }
+};

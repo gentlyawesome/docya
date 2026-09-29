@@ -1,0 +1,37 @@
+# Validation, wrong password, sign in, session restored after restart, sign out.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Sign in and sign out
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Welcome to Docya"
+- assertNotVisible: "Find a Doctor"
+# Validation happens before any request
+- tapOn: "Sign in"
+- assertVisible: "Enter a valid email address"
+# Wrong password is rejected by the server
+- tapOn: "Email"
+- inputText: "patient1@doctora.test"
+- pressKey: Enter
+- inputText: "not-the-password"
+- pressKey: Enter
+- assertVisible: "Invalid email or password."
+- assertVisible: "Welcome to Docya"
+# Correct password
+- tapOn: "Password"
+- eraseText: 30
+- inputText: "Password123!"
+- pressKey: Enter
+- runFlow:
+    when:
+      visible: "Save Password.*"
+    commands:
+      - tapOn: "Not Now"
+- assertVisible: "Find a Doctor"
+# The session survives an app restart
+- launchApp
+- assertVisible: "Find a Doctor"
+- runFlow: subflows/sign-out.yaml
+# ...and is gone after signing out
+- launchApp
+- assertVisible: "Welcome to Docya"

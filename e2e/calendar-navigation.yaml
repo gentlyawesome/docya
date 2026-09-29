@@ -5,7 +5,7 @@ name: Calendar month navigation
 ---
 - launchApp:
     clearState: true
-- assertVisible: "Find a Doctor"
+- runFlow: subflows/login-patient.yaml
 - tapOn: ".*View schedule"
 - assertVisible: "Select Date"
 - copyTextFrom:

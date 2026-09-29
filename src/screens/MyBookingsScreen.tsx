@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
@@ -11,8 +11,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useTabBarInset } from '../hooks/useTabBarInset';
 import {
-  loadBookingsFromStorage,
+  loadBookings,
   cancelBooking,
   selectAllBookings,
   selectBookingsLoading,
@@ -22,21 +23,25 @@ import { formatDateWithDay, formatTimezone } from '../utils/dateHelpers';
 import { formatTime12Hour } from '../utils/timeSlotGenerator';
 import { COLORS } from '../constants';
 import { describeLead } from '../services/reminders';
+import { StatusBadge } from '../components/StatusBadge';
 import { addToCalendar } from '../services/calendarExport';
 import { getBookingPhase, partitionBookings } from '../utils/bookingPhases';
 
 export const MyBookingsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
+  const tabBarInset = useTabBarInset();
   const allBookings = useAppSelector(selectAllBookings);
   const loading = useAppSelector(selectBookingsLoading);
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
   const [now, setNow] = useState(() => Date.now());
 
-  // Appointments move from Upcoming to Past as time passes, so re-check on focus
+  // Reload on focus: a doctor may have confirmed or cancelled, and appointments
+  // move from Upcoming to Past as time passes
   useFocusEffect(
     useCallback(() => {
       setNow(Date.now());
-    }, []),
+      dispatch(loadBookings());
+    }, [dispatch]),
   );
 
   const { upcoming, past } = useMemo(
@@ -45,13 +50,9 @@ export const MyBookingsScreen: React.FC = () => {
   );
   const bookings = tab === 'upcoming' ? upcoming : past;
 
-  useEffect(() => {
-    dispatch(loadBookingsFromStorage());
-  }, [dispatch]);
-
   const handleRefresh = () => {
     setNow(Date.now());
-    dispatch(loadBookingsFromStorage());
+    dispatch(loadBookings());
   };
 
   const handleCancelBooking = (booking: Booking) => {
@@ -115,20 +116,7 @@ export const MyBookingsScreen: React.FC = () => {
               📍 {formatTimezone(item.timezone)}
             </Text>
           </View>
-          {phase !== 'upcoming' && (
-            <View
-              style={[
-                styles.badge,
-                phase === 'cancelled'
-                  ? styles.badgeCancelled
-                  : styles.badgeCompleted,
-              ]}
-            >
-              <Text style={styles.badgeText}>
-                {phase === 'cancelled' ? 'Cancelled' : 'Completed'}
-              </Text>
-            </View>
-          )}
+          <StatusBadge booking={item} phase={phase} />
         </View>
 
         <View style={styles.divider} />
@@ -219,7 +207,7 @@ export const MyBookingsScreen: React.FC = () => {
         data={bookings}
         keyExtractor={item => item.id}
         renderItem={renderBookingCard}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[styles.listContent, { paddingBottom: 16 + tabBarInset }]}
         refreshControl={
           <RefreshControl
             refreshing={loading}
@@ -292,22 +280,6 @@ const styles = StyleSheet.create({
   },
   tabTextSelected: {
     color: COLORS.text,
-    fontWeight: '600',
-  },
-  badge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 10,
-  },
-  badgeCancelled: {
-    backgroundColor: COLORS.danger,
-  },
-  badgeCompleted: {
-    backgroundColor: COLORS.textSecondary,
-  },
-  badgeText: {
-    color: '#FFFFFF',
-    fontSize: 12,
     fontWeight: '600',
   },
   container: {

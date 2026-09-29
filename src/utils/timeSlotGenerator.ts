@@ -1,5 +1,8 @@
 import { format, parse, addMinutes, isBefore } from 'date-fns';
 import { DoctorAvailability, TimeSlot, Booking } from '../types';
+
+// Anything that occupies a slot: your own booking, or one held by another patient
+export type HeldSlot = Pick<Booking, 'doctorId' | 'date' | 'startTime'>;
 import { SLOT_DURATION_MINUTES } from '../constants';
 import { logError } from './logger';
 import { fromZonedTime } from 'date-fns-tz';
@@ -29,7 +32,7 @@ export const generateTimeSlotsFromRange = (
   dayOfWeek: string,
   timezone: string,
   date: string,
-  bookedSlots: Booking[] = []
+  bookedSlots: HeldSlot[] = []
 ): TimeSlot[] => {
   const slots: TimeSlot[] = [];
   
@@ -85,7 +88,7 @@ export const generateDoctorTimeSlots = (
   availabilities: DoctorAvailability[],
   startDate: Date,
   numberOfDays: number = 7,
-  bookedSlots: Booking[] = []
+  bookedSlots: HeldSlot[] = []
 ): TimeSlot[] => {
   const allSlots: TimeSlot[] = [];
   

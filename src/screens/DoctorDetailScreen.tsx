@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,18 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
-import { format } from 'date-fns';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
+import { addDays, format } from 'date-fns';
 import { RootStackParamList, TimeSlot } from '../types';
 import { useAppSelector } from '../store/hooks';
 import { selectActiveBookings } from '../store/slices/bookingsSlice';
-import { filterFutureSlots, generateDoctorTimeSlots } from '../utils/timeSlotGenerator';
+import { filterFutureSlots, generateDoctorTimeSlots, HeldSlot } from '../utils/timeSlotGenerator';
+import { fetchBookedSlots } from '../services/doctorsService';
 import { formatTimezone } from '../utils/dateHelpers';
 import { TimeSlotButton } from '../components/TimeSlotButton';
 import { DoctorCalendar } from '../components/DoctorCalendar';
 import { RatingBadge } from '../components/RatingBadge';
-import { COLORS } from '../constants';
+import { COLORS, CURRENCY_SYMBOL } from '../constants';
 
 type DoctorDetailScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -37,6 +38,32 @@ export const DoctorDetailScreen: React.FC<DoctorDetailScreenProps> = ({
 }) => {
   const { doctor } = route.params;
   const bookings = useAppSelector(selectActiveBookings);
+  const [heldByOthers, setHeldByOthers] = useState<HeldSlot[]>([]);
+
+  // Slots other patients already hold; refreshed whenever this screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      const today = new Date();
+      fetchBookedSlots(
+        doctor.id,
+        format(today, 'yyyy-MM-dd'),
+        format(addDays(today, 13), 'yyyy-MM-dd')
+      )
+        .then(slots => {
+          if (active) {
+            setHeldByOthers(slots.map(s => ({ doctorId: doctor.id, ...s })));
+          }
+        })
+        .catch(() => {
+          // Your own bookings still block their slots; the server rejects any double booking
+        });
+      return () => {
+        active = false;
+      };
+    }, [doctor.id])
+  );
+
   // Generate time slots for the doctor
   const allSlots = useMemo(() => {
     return filterFutureSlots(
@@ -46,10 +73,10 @@ export const DoctorDetailScreen: React.FC<DoctorDetailScreenProps> = ({
         doctor.availabilities,
         new Date(),
         14,
-        bookings
+        [...bookings, ...heldByOthers]
       )
     );
-  }, [doctor, bookings]);
+  }, [doctor, bookings, heldByOthers]);
 
   const availableDates = useMemo(
     () => [...new Set(allSlots.filter(slot => !slot.isBooked).map(slot => slot.date))],
@@ -89,7 +116,7 @@ export const DoctorDetailScreen: React.FC<DoctorDetailScreenProps> = ({
           <Text style={styles.doctorName}>{doctor.name}</Text>
           {doctor.specialty && <Text style={styles.specialty}>{doctor.specialty}</Text>}
           <RatingBadge rating={doctor.rating} reviewCount={doctor.reviewCount} />
-          {doctor.fee !== undefined && <Text style={styles.fee}>Consultation ${doctor.fee}</Text>}
+          {doctor.fee !== undefined && <Text style={styles.fee}>Consultation {CURRENCY_SYMBOL}{doctor.fee}</Text>}
           <Text style={styles.timezone}>📍 {formatTimezone(doctor.timezone)}</Text>
         </View>
 

@@ -4,7 +4,7 @@ name: Booked slots are unavailable until cancelled
 ---
 - launchApp:
     clearState: true
-- assertVisible: "Find a Doctor"
+- runFlow: subflows/login-patient.yaml
 - runFlow: subflows/book-first-slot.yaml
 # Back on the doctor's page, the slot we just booked is now unavailable
 - tapOn: "OK"

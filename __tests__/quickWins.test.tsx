@@ -4,7 +4,7 @@ import RNHapticFeedback from 'react-native-haptic-feedback';
 import { RatingBadge } from '../src/components/RatingBadge';
 import { TimeSlotButton } from '../src/components/TimeSlotButton';
 import { DoctorCard } from '../src/components/DoctorCard';
-import { transformToDoctors } from '../src/services/api';
+import { DoctorCalendar } from '../src/components/DoctorCalendar';
 import { Doctor, TimeSlot } from '../src/types';
 
 const slot: TimeSlot = {
@@ -52,67 +52,41 @@ describe('TimeSlotButton haptics', () => {
   });
 });
 
-describe('DoctorCard profile', () => {
+describe('DoctorCard', () => {
   const doctor: Doctor = {
     id: 'd1',
     name: 'Dr X',
-    timezone: 'Australia/Sydney',
+    timezone: 'Asia/Manila',
     availabilities: [],
-    specialty: 'Cardiologist',
-    rating: 4.5,
-    reviewCount: 10,
-    fee: 120,
+    specialty: 'Cardiology',
+    fee: 1500,
   };
 
-  it('shows specialty, rating and fee when present', () => {
+  it('shows the real specialty and fee from the database', () => {
     render(<DoctorCard doctor={doctor} onPress={jest.fn()} />);
-    expect(screen.getByText('Cardiologist')).toBeTruthy();
-    expect(screen.getByText('4.5')).toBeTruthy();
-    expect(screen.getByText('$120 consult')).toBeTruthy();
+    expect(screen.getByText('Cardiology')).toBeTruthy();
+    expect(screen.getByText('₱1500 consult')).toBeTruthy();
   });
-});
 
-describe('sample profiles', () => {
-  it('merges sample profile by doctor id and leaves unknown doctors untouched', () => {
-    const base = { timezone: 'Australia/Sydney', day_of_week: 'Monday', available_at: ' 9:00AM', available_until: ' 5:00PM' };
-    const doctors = transformToDoctors([
-      { ...base, name: 'Christy Schumm' },
-      { ...base, name: 'Someone Else' },
-    ]);
-    expect(doctors.find(d => d.id === 'christy-schumm')?.rating).toBeDefined();
-    expect(doctors.find(d => d.id === 'someone-else')?.rating).toBeUndefined();
+  it('shows no rating when there is none, instead of inventing one', () => {
+    render(<DoctorCard doctor={doctor} onPress={jest.fn()} />);
+    expect(screen.queryByText('★')).toBeNull();
+  });
+
+  it('exposes the favorite button separately from the card, so assistive tech can reach it', () => {
+    const onToggleFavorite = jest.fn();
+    const onPress = jest.fn();
+    render(<DoctorCard doctor={doctor} onPress={onPress} onToggleFavorite={onToggleFavorite} />);
+    fireEvent.press(screen.getByRole('button', { name: 'Add Dr X to favorites' }));
+    expect(onToggleFavorite).toHaveBeenCalledTimes(1);
+    expect(onPress).not.toHaveBeenCalled();
   });
 });
 
 describe('DoctorCalendar', () => {
   it('draws month arrows itself, because the library image assets do not resolve in Metro', () => {
-    const { DoctorCalendar } = require('../src/components/DoctorCalendar');
     render(<DoctorCalendar selectedDate="2026-10-01" onDateSelect={jest.fn()} />);
     expect(screen.getByText('‹', { includeHiddenElements: true })).toBeTruthy();
     expect(screen.getByText('›', { includeHiddenElements: true })).toBeTruthy();
-  });
-});
-
-describe('sample profiles in release builds', () => {
-  it('are not merged when SHOW_SAMPLE_DOCTOR_PROFILES is false', () => {
-    jest.isolateModules(() => {
-      jest.doMock('../src/constants', () => ({
-        ...jest.requireActual('../src/constants'),
-        SHOW_SAMPLE_DOCTOR_PROFILES: false,
-      }));
-      const { transformToDoctors: transform } = require('../src/services/api');
-      const [doctor] = transform([
-        {
-          name: 'Christy Schumm',
-          timezone: 'Australia/Sydney',
-          day_of_week: 'Monday',
-          available_at: ' 9:00AM',
-          available_until: ' 5:00PM',
-        },
-      ]);
-      expect(doctor.rating).toBeUndefined();
-      expect(doctor.specialty).toBeUndefined();
-      expect(doctor.fee).toBeUndefined();
-    });
   });
 });

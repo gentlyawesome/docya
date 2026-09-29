@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useTabBarInset } from '../hooks/useTabBarInset';
 import {
   loadDoctors,
   selectFilteredDoctors,
@@ -58,6 +59,7 @@ interface DoctorsListScreenProps {
 
 export const DoctorsListScreen: React.FC<DoctorsListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
+  const tabBarInset = useTabBarInset();
   const doctors = useAppSelector(selectFilteredDoctors);
   const loading = useAppSelector(selectDoctorsLoading);
   const error = useAppSelector(selectDoctorsError);
@@ -183,7 +185,7 @@ export const DoctorsListScreen: React.FC<DoctorsListScreenProps> = ({ navigation
             }}
           />
         )}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[styles.listContent, { paddingBottom: 16 + tabBarInset }]}
         refreshControl={
           <RefreshControl
             refreshing={loading}

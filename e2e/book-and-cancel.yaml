@@ -4,7 +4,7 @@ name: Book an appointment, then cancel it
 ---
 - launchApp:
     clearState: true
-- assertVisible: "Find a Doctor"
+- runFlow: subflows/login-patient.yaml
 - runFlow: subflows/book-first-slot.yaml
 - tapOn: "View My Bookings"
 - tapOn: "My Bookings, tab.*"

@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Doctor } from '../types';
 import { STORAGE_KEYS } from '../constants';
 import { logError } from '../utils/logger';
-import { fetchDoctorAvailability, transformToDoctors } from './api';
-import { parseDoctorAvailability } from './schemas';
+import { fetchDoctors } from './doctorsService';
+import { doctorListSchema } from './schemas';
 
 export interface DoctorsResult {
   doctors: Doctor[];
@@ -17,12 +17,14 @@ export const getCachedDoctors = async (): Promise<DoctorsResult | null> => {
     if (!json) {
       return null;
     }
-    const { records, savedAt } = JSON.parse(json);
+    const { doctors, savedAt } = JSON.parse(json);
     if (typeof savedAt !== 'number') {
       return null;
     }
-    const doctors = transformToDoctors(parseDoctorAvailability(records));
-    return doctors.length > 0 ? { doctors, fromCache: true, updatedAt: savedAt } : null;
+    const parsed = doctorListSchema.safeParse(doctors);
+    return parsed.success && parsed.data.length > 0
+      ? { doctors: parsed.data, fromCache: true, updatedAt: savedAt }
+      : null;
   } catch (error) {
     logError('Ignoring unreadable doctors cache:', error);
     return null;
@@ -31,17 +33,14 @@ export const getCachedDoctors = async (): Promise<DoctorsResult | null> => {
 
 export const fetchDoctorsWithCache = async (): Promise<DoctorsResult> => {
   try {
-    const records = await fetchDoctorAvailability();
+    const doctors = await fetchDoctors();
     const updatedAt = Date.now();
     try {
-      await AsyncStorage.setItem(
-        STORAGE_KEYS.DOCTORS_CACHE,
-        JSON.stringify({ records, savedAt: updatedAt })
-      );
+      await AsyncStorage.setItem(STORAGE_KEYS.DOCTORS_CACHE, JSON.stringify({ doctors, savedAt: updatedAt }));
     } catch (error) {
       logError('Failed to write doctors cache:', error);
     }
-    return { doctors: transformToDoctors(records), fromCache: false, updatedAt };
+    return { doctors, fromCache: false, updatedAt };
   } catch (error) {
     const cached = await getCachedDoctors();
     if (cached) {
