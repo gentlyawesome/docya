@@ -68,6 +68,33 @@ the dashboard).
    local address refuses to start.
 4. Restart Metro with `--reset-cache` when you change either file.
 
+### Building a Release app for your iPhone
+
+1. Connect the iPhone by cable, unlock it, tap Trust, and turn on **Settings > Privacy & Security >
+   Developer Mode** (the phone restarts once). It must show as *connected* in
+   `xcrun devicectl list devices`.
+2. Build and sign (uses your team's development profile; nothing to download):
+   ```bash
+   cd ios
+   xcodebuild -workspace DoctoraAppointments.xcworkspace -scheme DoctoraAppointments \
+     -configuration Release -destination 'generic/platform=iOS' -derivedDataPath build-device build
+   xcrun devicectl device install app --device <device id> build-device/Build/Products/Release-iphoneos/DoctoraAppointments.app
+   ```
+3. On the phone the first launch may need **Settings > General > VPN & Device Management** to trust the
+   developer certificate.
+4. Confirm the bundle points at the hosted project and nothing else:
+   `strings -a <app>/main.jsbundle | grep -c 127.0.0.1:54321` must be `0`.
+5. **Afterwards, put the project back in Debug mode** (a Release build swaps React's prebuilt core inside
+   `ios/Pods`, and the next Debug build then fails to link):
+   ```bash
+   cd ios/Pods && printf Release > React-Core-prebuilt/.last_build_configuration \
+     && node ../../node_modules/react-native/scripts/replace-rncore-version.js -c Debug -r 0.84.1 -p "$PWD"
+   ```
+
+The app currently uses the template bundle id `org.reactjs.native.example.DoctoraAppointments` and a
+wildcard development profile. That is fine for your own phone, but the App Store needs your own bundle id
+(for example `com.yourname.docya`), an explicit App ID and a distribution profile.
+
 ## 5. Smoke test on the hosted project
 
 Use a real address you can read:
