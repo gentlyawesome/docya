@@ -17,7 +17,7 @@ export const approvalMessage = (
   if (status === 'rejected') {
     return {
       title: 'Not approved',
-      body: `We could not approve your account. Check your license number and details, or contact ${SUPPORT_EMAIL}.`,
+      body: `We could not approve your account. Please contact ${SUPPORT_EMAIL}.`,
     };
   }
   return null;

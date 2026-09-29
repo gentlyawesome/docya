@@ -4,7 +4,7 @@
 
 CREATE OR REPLACE FUNCTION pg_temp.seed_user(
   p_id uuid, p_email text, p_first text, p_last text, p_role text,
-  p_phone text DEFAULT NULL, p_specialization text DEFAULT NULL, p_license text DEFAULT NULL
+  p_phone text DEFAULT NULL, p_specialization text DEFAULT NULL
 ) RETURNS void LANGUAGE plpgsql AS $$
 BEGIN
   INSERT INTO auth.users (
@@ -17,7 +17,7 @@ BEGIN
     '{"provider":"email","providers":["email"]}',
     jsonb_strip_nulls(jsonb_build_object(
       'first_name', p_first, 'last_name', p_last, 'full_name', p_first || ' ' || p_last,
-      'role', p_role, 'phone', p_phone, 'specialization', p_specialization, 'license_number', p_license
+      'role', p_role, 'phone', p_phone, 'specialization', p_specialization
     )),
     now(), now(), '', '', '', ''
   );
@@ -33,11 +33,11 @@ $$;
 
 -- Doctors
 SELECT pg_temp.seed_user('b1a2c3d4-5e6f-4a8b-9c0d-1e2f3a4b5c6d', 'maria.santos@doctora.test',
-  'Maria', 'Santos', 'doctor', '+639171234567', 'Cardiology', 'DEV-DOC-0001');
+  'Maria', 'Santos', 'doctor', '+639171234567', 'Cardiology');
 SELECT pg_temp.seed_user('c2b3d4e5-6f7a-4b9c-8d1e-2f3a4b5c6d7e', 'juan.delacruz@doctora.test',
-  'Juan', 'Dela Cruz', 'doctor', '+639172345678', 'Pediatrics', 'DEV-DOC-0002');
+  'Juan', 'Dela Cruz', 'doctor', '+639172345678', 'Pediatrics');
 SELECT pg_temp.seed_user('d3c4e5f6-7a8b-4c9d-9e2f-3a4b5c6d7e8f', 'angela.reyes@doctora.test',
-  'Angela', 'Reyes', 'doctor', '+639173456789', 'Dermatology', 'DEV-DOC-0003');
+  'Angela', 'Reyes', 'doctor', '+639173456789', 'Dermatology');
 
 UPDATE public.doctor_profiles SET
   verification_status = 'approved', verified_at = now(),

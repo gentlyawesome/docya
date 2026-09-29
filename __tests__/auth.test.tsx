@@ -101,7 +101,6 @@ describe('authService', () => {
       lastName: 'Doc',
       role: 'doctor',
       specialization: 'Cardiology',
-      licenseNumber: 'LIC-1',
     });
     expect(result.status).toBe('signed_in');
     expect(auth.signUp.mock.calls[0][0].options.data).toMatchObject({
@@ -110,7 +109,6 @@ describe('authService', () => {
       full_name: 'Dana Doc',
       role: 'doctor',
       specialization: 'Cardiology',
-      license_number: 'LIC-1',
     });
   });
 
@@ -305,15 +303,14 @@ describe('register screen', () => {
     expect(auth.signUp).not.toHaveBeenCalled();
   });
 
-  it('asks doctors for a specialization and license, and patients for neither', () => {
+  it('asks doctors for a specialization, and patients for none', () => {
     renderScreen();
     expect(screen.queryByLabelText('Specialization')).toBeNull();
     fireEvent.press(screen.getByRole('button', { name: 'Doctor filter' }));
     expect(screen.getByLabelText('Specialization')).toBeTruthy();
-    expect(screen.getByLabelText('License number')).toBeTruthy();
+    expect(screen.queryByLabelText('License number')).toBeNull();
     fireEvent.press(screen.getByRole('button', { name: 'Create account' }));
     expect(screen.getByText('Enter your specialization')).toBeTruthy();
-    expect(screen.getByText('Enter your license number')).toBeTruthy();
   });
 
   it('registers with valid details', async () => {

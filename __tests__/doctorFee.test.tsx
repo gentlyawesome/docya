@@ -19,7 +19,6 @@ jest.mock('../src/utils/logger');
 const saved = {
   userId: 'doctor-1',
   specialization: 'Cardiology',
-  licenseNumber: 'LIC-1',
   clinicName: 'Heart Clinic',
   consultationFee: 1500,
   bio: '',
@@ -55,7 +54,6 @@ describe('saveDoctorProfile fee', () => {
             data: {
               user_id: 'doctor-1',
               specialization: 'Cardiology',
-              license_number: 'LIC-1',
               consultation_fee: '1250.50',
               timezone: 'Asia/Manila',
             },

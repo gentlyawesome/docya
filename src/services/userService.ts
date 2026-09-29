@@ -106,7 +106,6 @@ export const savePatientProfile = async (
 const toDoctorProfile = (row: Record<string, any>): DoctorProfile => ({
   userId: row.user_id,
   specialization: row.specialization,
-  licenseNumber: row.license_number,
   clinicName: row.clinic_name ?? undefined,
   consultationFee: row.consultation_fee != null ? Number(row.consultation_fee) : undefined,
   bio: row.bio ?? undefined,
@@ -136,7 +135,6 @@ export const saveDoctorProfile = async (
       {
         user_id: userId,
         specialization: profile.specialization.trim(),
-        license_number: profile.licenseNumber.trim(),
         clinic_name: profile.clinicName?.trim() || null,
         consultation_fee: profile.consultationFee ?? null,
         bio: profile.bio?.trim() || null,

@@ -11,7 +11,6 @@ export interface RegisterInput {
   role: UserRole;
   phone?: string;
   specialization?: string;
-  licenseNumber?: string;
 }
 
 export type RegisterResult = { status: 'signed_in'; user: User } | { status: 'confirm_email' };
@@ -31,7 +30,6 @@ export const register = async (input: RegisterInput): Promise<RegisterResult> =>
         role: input.role,
         phone: input.phone?.trim() || undefined,
         specialization: input.specialization?.trim() || undefined,
-        license_number: input.licenseNumber?.trim() || undefined,
       },
     },
   });

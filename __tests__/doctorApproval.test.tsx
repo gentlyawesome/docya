@@ -21,7 +21,6 @@ const profile = (
 ): DoctorProfile => ({
   userId: 'doctor-1',
   specialization: 'Cardiology',
-  licenseNumber: 'LIC-1',
   timezone: 'Asia/Manila',
   verificationStatus: status,
 });
@@ -96,7 +95,6 @@ describe('profile mapping', () => {
           data: {
             user_id: 'doctor-1',
             specialization: 'X',
-            license_number: 'L',
             timezone: 'Asia/Manila',
             verification_status: 'rejected',
           },
@@ -107,7 +105,6 @@ describe('profile mapping', () => {
     (supabase.from as jest.Mock).mockReturnValue({ upsert });
     const saved = await users.saveDoctorProfile('doctor-1', {
       specialization: 'X',
-      licenseNumber: 'L',
       timezone: 'Asia/Manila',
     });
     expect(saved.verificationStatus).toBe('rejected');

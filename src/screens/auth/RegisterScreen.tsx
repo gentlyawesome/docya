@@ -48,8 +48,7 @@ type Errors = Partial<
     | 'phone'
     | 'password'
     | 'confirm'
-    | 'specialization'
-    | 'license',
+    | 'specialization',
     string
   >
 >;
@@ -64,7 +63,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const emailRef = useRef<TextInput>(null);
   const phoneRef = useRef<TextInput>(null);
   const specializationRef = useRef<TextInput>(null);
-  const licenseRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
   const confirmRef = useRef<TextInput>(null);
 
@@ -76,7 +74,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [specialization, setSpecialization] = useState('');
-  const [license, setLicense] = useState('');
   const [errors, setErrors] = useState<Errors>({});
 
   useEffect(() => {
@@ -96,7 +93,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     if (role === 'doctor') {
       if (!specialization.trim())
         next.specialization = 'Enter your specialization';
-      if (!license.trim()) next.license = 'Enter your license number';
     }
     setErrors(next);
     if (Object.keys(next).length > 0) {
@@ -111,7 +107,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         role,
         phone,
         specialization: role === 'doctor' ? specialization : undefined,
-        licenseNumber: role === 'doctor' ? license : undefined,
       }),
     );
   };
@@ -214,17 +209,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
                 value={specialization}
                 onChangeText={setSpecialization}
                 error={errors.specialization}
-                returnKeyType="next"
-                blurOnSubmit={false}
-                onSubmitEditing={() => licenseRef.current?.focus()}
-              />
-              <FormField
-                ref={licenseRef}
-                label="License number"
-                value={license}
-                onChangeText={setLicense}
-                error={errors.license}
-                autoCapitalize="characters"
                 returnKeyType="next"
                 blurOnSubmit={false}
                 onSubmitEditing={() => passwordRef.current?.focus()}

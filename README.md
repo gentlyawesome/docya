@@ -64,11 +64,11 @@ e2e/                      Maestro flows + run.mjs (resets the local DB per flow)
 
 ## Approving doctors
 
-Anyone can register as a doctor, but a new doctor starts as `pending`: they see an "Awaiting approval" banner, can fill in their profile and schedule, and are invisible to patients and cannot be booked. An operator approves or rejects after checking the license number, using the service role (Studio SQL editor locally at http://127.0.0.1:54323, or the hosted dashboard):
+Anyone can register as a doctor, but a new doctor starts as `pending`: they see an "Awaiting approval" banner, can fill in their profile and schedule, and are invisible to patients and cannot be booked. An operator approves or rejects after checking who they are, using the service role (Studio SQL editor locally at http://127.0.0.1:54323, or the hosted dashboard):
 
 ```sql
 select public.set_doctor_verification('<doctor user id>', 'approved');  -- or 'rejected' / 'pending'
-select u.id, u.email, d.license_number, d.verification_status
+select u.id, u.email, u.created_at, d.specialization, d.verification_status
 from doctor_profiles d join auth.users u on u.id = d.user_id where d.verification_status = 'pending';
 ```
 

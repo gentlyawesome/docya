@@ -143,7 +143,7 @@ check('patients see the updated fee', Number(r.json[0]?.consultation_fee) === 17
 // --- Doctor approval
 const stamp = Date.now();
 const newDoctorEmail = `pending-doc-${stamp}@doctora.test`;
-r = await call('/auth/v1/signup', { method: 'POST', body: { email: newDoctorEmail, password: PASSWORD, data: { first_name: 'Nina', last_name: 'Newdoc', role: 'doctor', specialization: 'Neurology', license_number: `LIC-${stamp}` } } });
+r = await call('/auth/v1/signup', { method: 'POST', body: { email: newDoctorEmail, password: PASSWORD, data: { first_name: 'Nina', last_name: 'Newdoc', role: 'doctor', specialization: 'Neurology' } } });
 check('a new doctor can register', r.status === 200 && !!r.json.access_token, JSON.stringify(r.json).slice(0, 100));
 const newDoc = { token: r.json.access_token, id: r.json.user?.id };
 
@@ -153,7 +153,7 @@ check('a new doctor starts as pending', r.json?.[0]?.verification_status === 'pe
 r = await call(`/rest/v1/doctor_profiles?user_id=eq.${newDoc.id}`, { method: 'PATCH', token: newDoc.token, body: { verification_status: 'approved' } });
 check('a doctor cannot approve themselves', r.status >= 400, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
 
-r = await call('/rest/v1/doctor_profiles?on_conflict=user_id', { method: 'POST', token: newDoc.token, headers: { Prefer: 'resolution=merge-duplicates,return=representation' }, body: { user_id: newDoc.id, specialization: 'Neurology', license_number: `LIC-${stamp}`, consultation_fee: 900, timezone: 'Asia/Manila' } });
+r = await call('/rest/v1/doctor_profiles?on_conflict=user_id', { method: 'POST', token: newDoc.token, headers: { Prefer: 'resolution=merge-duplicates,return=representation' }, body: { user_id: newDoc.id, specialization: 'Neurology', consultation_fee: 900, timezone: 'Asia/Manila' } });
 check('a pending doctor can still edit their professional details', r.status === 201 || r.status === 200, `${r.status} ${JSON.stringify(r.json).slice(0, 120)}`);
 check('editing details does not change the status', r.json?.[0]?.verification_status === 'pending', JSON.stringify(r.json).slice(0, 120));
 

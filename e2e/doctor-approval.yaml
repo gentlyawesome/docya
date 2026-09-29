@@ -17,8 +17,6 @@ name: New doctor awaits approval
 - pressKey: Enter
 - inputText: "Neurology"
 - pressKey: Enter
-- inputText: "E2E-LIC-1"
-- pressKey: Enter
 - inputText: "Password123!"
 - pressKey: Enter
 - inputText: "Password123!"

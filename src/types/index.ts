@@ -90,7 +90,6 @@ export type VerificationStatus = 'pending' | 'approved' | 'rejected';
 export interface DoctorProfile {
   userId: string;
   specialization: string;
-  licenseNumber: string;
   clinicName?: string;
   consultationFee?: number;
   bio?: string;
