@@ -14,6 +14,7 @@ import * as availability from '../src/services/availabilityService';
 import * as users from '../src/services/userService';
 import { DoctorNewAppointmentScreen } from '../src/screens/doctor/DoctorNewAppointmentScreen';
 import { DoctorAppointmentsScreen } from '../src/screens/doctor/DoctorAppointmentsScreen';
+import { DoctorScheduleScreen } from '../src/screens/doctor/DoctorScheduleScreen';
 import { booking, doctorUser, signedIn } from './helpers/testStore';
 import { AvailabilityWindow } from '../src/types';
 
@@ -207,5 +208,15 @@ describe('Appointments list', () => {
     expect(screen.queryByText(/Pending/)).toBeNull();
     expect(screen.queryByText('Confirm')).toBeNull();
     expect(screen.queryByText('Decline')).toBeNull();
+  });
+});
+
+describe('Schedule screen wording', () => {
+  it('speaks to the doctor booking patients, not to patients booking', async () => {
+    withNav(<DoctorScheduleScreen />);
+    expect(
+      await screen.findByText(/You can book patients into 30-minute slots/),
+    ).toBeTruthy();
+    expect(screen.queryByText(/Patients can book/)).toBeNull();
   });
 });

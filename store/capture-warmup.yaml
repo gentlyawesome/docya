@@ -1,0 +1,9 @@
+# Step 1 of the App Store screenshots: sign in once so iOS's one-time notification prompt is answered
+# (Maestro accepts it) before any picture is taken. See store/README.md.
+appId: org.reactjs.native.example.DoctoraAppointments
+---
+- launchApp:
+    clearState: true
+- runFlow: ../e2e/subflows/login-doctor.yaml
+- waitForAnimationToEnd:
+    timeout: 4000

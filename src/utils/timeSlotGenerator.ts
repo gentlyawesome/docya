@@ -1,7 +1,7 @@
 import { format, parse, addMinutes, isBefore } from 'date-fns';
 import { DoctorAvailability, TimeSlot, Booking } from '../types';
 
-// Anything that occupies a slot: your own booking, or one held by another patient
+// Anything that occupies a slot: an appointment already booked for that doctor and time
 export type HeldSlot = Pick<Booking, 'doctorId' | 'date' | 'startTime'>;
 import { SLOT_DURATION_MINUTES } from '../constants';
 import { logError } from './logger';

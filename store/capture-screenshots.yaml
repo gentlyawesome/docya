@@ -1,0 +1,38 @@
+# Step 2: take the five App Store screenshots. Run capture-warmup.yaml first. See store/README.md.
+appId: org.reactjs.native.example.DoctoraAppointments
+---
+- launchApp
+- assertVisible: "Hello, Dr. Santos"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: 01-dashboard
+
+- tapOn: "Appointments, tab.*"
+- assertVisible: "Upcoming \\(8\\) filter"
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot: 03-appointments
+
+- tapOn: "New appointment"
+- tapOn: "Patient name"
+- inputText: "Sam Rivera"
+- pressKey: Enter
+- inputText: "+1 555 0136"
+- pressKey: Enter
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot: 02-new-appointment
+- tapOn: "Back"
+
+- tapOn: "Schedule, tab.*"
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot: 04-working-hours
+
+- tapOn: "Profile, tab.*"
+- scrollUntilVisible:
+    element: "Remind me before each appointment"
+    centerElement: true
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot: 05-reminders
