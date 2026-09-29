@@ -149,8 +149,8 @@ export const DoctorScheduleScreen: React.FC = () => {
           My Schedule
         </Text>
         <Text style={styles.hint}>
-          Patients can book 30-minute slots inside these weekly windows, in your
-          time zone.
+          You can book patients into 30-minute slots inside these weekly
+          windows, in your time zone.
         </Text>
         {loadError ? <Text style={styles.error}>{loadError}</Text> : null}
 

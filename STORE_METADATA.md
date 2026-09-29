@@ -123,15 +123,26 @@ Docya is an appointment book for doctors. Sign in with the demo account. Tap "Ne
 
 ## Screenshots (iPhone only)
 
-Take them from a **Release** build, on a simulator sized for the largest iPhone (iPhone 17 Pro Max or 16 Pro Max, 6.9" display, 1320 x 2868). App Store Connect scales them for smaller iPhones; check its upload page for the current required sizes. Minimum 1, up to 10; use 4 to 6.
+**Done**: five screenshots, no transparency, taken from the app with invented patients and a clean status
+bar. `store/screenshots/iphone-6.9/` (1320 x 2868) fits the **6.9" Display** slot; `store/screenshots/iphone-6.5/`
+(1284 x 2778, same pictures) fits the **6.5" Display** slot. Use whichever slot App Store Connect shows.
 
-1. **Your Day at a Glance** - Dashboard with a few appointments
-2. **Book in Seconds** - New appointment: patient entered, day picked, open slots showing
-3. **Every Visit in One Place** - Appointments list (Upcoming)
-4. **Your Hours, Your Rules** - Schedule tab with working hours
-5. **Reminders** - Profile > Reminders card (optional)
+**iPad**: the app is iPhone-only, so no iPad screenshots are needed once an iPhone-only build is selected in
+App Store Connect. `store/screenshots/ipad-13/` (2064 x 2752) is a spare set, only for shipping a universal
+build; see `store/README.md`.
+App Store Connect scales them for smaller iPhones; check its upload page for the current required sizes.
+`store/README.md` explains how to retake them.
 
-Use invented patients ("Pat Patient"), never real names.
+Upload in this order, with these captions if you add text overlays (plain screenshots are also fine):
+
+1. `01-dashboard.png` - **Your Day at a Glance**: today's and upcoming appointments
+2. `02-new-appointment.png` - **Book in Seconds**: enter the patient, pick a day and an open slot
+3. `03-appointments.png` - **Every Visit in One Place**: upcoming appointments, cancel or complete
+4. `04-working-hours.png` - **Your Hours, Your Rules**: set the weekly schedule
+5. `05-reminders.png` - **Never Miss a Visit**: reminders 15, 30 or 60 minutes before
+
+They were taken from a Debug build against a local test database. Nothing in them differs from a Release
+build, but if the interface changes, retake them.
 
 ---
 
@@ -156,7 +167,7 @@ Source: the 1024 x 1024 artwork in `ios/DoctoraAppointments/Images.xcassets/AppI
 - [ ] Decide who may register as a doctor (open sign-up today)
 - [ ] Legal review of the privacy policy
 - [ ] Demo account for App Review
-- [ ] Screenshots from a Release build
+- [x] Screenshots (5, 6.9", in `store/screenshots/iphone-6.9/`)
 - [ ] Archive, upload with Xcode, TestFlight test on a real iPhone
 - [ ] Enter the App Privacy answers above in App Store Connect
 - [ ] Developer name / copyright line
