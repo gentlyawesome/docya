@@ -1,0 +1,23 @@
+# Core journey: book -> appears under Upcoming -> cancel -> appears under Past as Cancelled.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Book an appointment, then cancel it
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Find a Doctor"
+- runFlow: subflows/book-first-slot.yaml
+- tapOn: "View My Bookings"
+- tapOn: "My Bookings, tab.*"
+- assertVisible: "My Appointments"
+- assertVisible: "Upcoming, 1"
+- assertVisible: "Past, 0"
+- tapOn: "Cancel appointment with .*"
+- assertVisible: "Are you sure you want to cancel.*"
+- tapOn: "Yes, Cancel"
+- assertVisible: "Your appointment has been cancelled."
+- tapOn: "OK"
+- assertVisible: "Upcoming, 0"
+- assertVisible: "Past, 1"
+- tapOn: "Past, 1"
+- assertVisible: "Cancelled"
+- assertNotVisible: "Cancel appointment with .*"

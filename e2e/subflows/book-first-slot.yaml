@@ -1,0 +1,17 @@
+# Shared steps: from the doctors list, open the first doctor and book the first open slot (reminder off).
+# Ends on the "Booking Confirmed!" alert. Picking the first open slot keeps flows independent of the time of day.
+appId: org.reactjs.native.example.DoctoraAppointments
+---
+- tapOn: ".*View schedule"
+- assertVisible: "Select Date"
+- scrollUntilVisible:
+    element: ".*, available"
+    centerElement: true
+- tapOn: ".*, available"
+- assertVisible: "Confirm Appointment"
+# Off avoids the system notification-permission prompt
+- scrollUntilVisible:
+    element: "Off filter"
+- tapOn: "Off filter"
+- tapOn: "Confirm booking with .*"
+- assertVisible: "Booking Confirmed!.*"

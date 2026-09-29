@@ -1,0 +1,18 @@
+# Favoriting a doctor, filtering by favorites, and keeping favorites across app restarts.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Favorites and filters
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Find a Doctor"
+- assertNotVisible: "Remove .* from favorites"
+- tapOn: "Add .* to favorites"
+- assertVisible: "Remove .* from favorites"
+- tapOn: "♥ Favorites filter"
+- assertVisible: "Remove .* from favorites"
+- assertNotVisible: "Add .* to favorites"
+- tapOn: "Clear all filters"
+- assertVisible: "Add .* to favorites"
+# Favorites are saved on the device
+- launchApp
+- assertVisible: "Remove .* from favorites"

@@ -1,0 +1,15 @@
+# Searching narrows the list, and an unmatched search shows the empty state.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Search doctors
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Find a Doctor"
+- assertVisible: "Dr. Geovany Keebler.*"
+- tapOn: "Search doctors by name or location"
+- inputText: "Christy"
+- assertVisible: "Christy Schumm.*"
+- assertNotVisible: "Dr. Geovany Keebler.*"
+- eraseText: 20
+- inputText: "zzzz"
+- assertVisible: "No doctors match your search or filters"

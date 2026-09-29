@@ -1,0 +1,20 @@
+# Month arrows work (they are drawn by the app; the library's own images do not load in Metro).
+# Date-independent: reads the month shown, moves forward and back, and checks the title each time.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Calendar month navigation
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Find a Doctor"
+- tapOn: ".*View schedule"
+- assertVisible: "Select Date"
+- copyTextFrom:
+    text: "[A-Z][a-z]+ 20[0-9][0-9]"
+- assertTrue: ${maestro.copiedText.length > 0}
+- tapOn:
+    id: "doctor-calendar.header.rightArrow"
+- assertVisible: "[A-Z][a-z]+ 20[0-9][0-9]"
+- assertNotVisible: "${maestro.copiedText}"
+- tapOn:
+    id: "doctor-calendar.header.leftArrow"
+- assertVisible: "${maestro.copiedText}"
