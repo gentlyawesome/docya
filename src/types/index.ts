@@ -32,7 +32,7 @@ export interface TimeSlot {
   isBooked: boolean;
 }
 
-export type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed';
+export type BookingStatus = 'confirmed' | 'cancelled' | 'completed';
 export type BookingPhase = 'upcoming' | 'completed' | 'cancelled';
 
 // An appointment as the app uses it (mapped from the `appointments` table)
@@ -114,10 +114,6 @@ export type AuthStackParamList = {
 export type RootStackParamList = {
   MainTabs: undefined;
   DoctorDetail: { doctor: Doctor };
-  BookingConfirmation: {
-    doctor: Doctor;
-    timeSlot: TimeSlot;
-  };
 };
 
 export type MainTabParamList = {
@@ -128,6 +124,7 @@ export type MainTabParamList = {
 
 export type DoctorStackParamList = {
   DoctorTabs: undefined;
+  DoctorNewAppointment: undefined;
   DoctorAppointmentDetail: { appointmentId: string };
 };
 

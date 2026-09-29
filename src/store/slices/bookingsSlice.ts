@@ -1,9 +1,15 @@
-import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
-import { Booking, TimeSlot } from '../../types';
-import * as storage from '../../services/storage';
-import { cancelReminder, scheduleReminder, ReminderResult } from '../../services/reminders';
 import {
-  createAppointment,
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from '@reduxjs/toolkit';
+import { Booking } from '../../types';
+import { DEFAULT_REMINDER_MINUTES } from '../../constants';
+import { getBookingPhase } from '../../utils/bookingPhases';
+import { logError } from '../../utils/logger';
+import * as storage from '../../services/storage';
+import { cancelReminder, scheduleReminder } from '../../services/reminders';
+import {
   listMyAppointments,
   updateAppointmentStatus,
 } from '../../services/appointmentsService';
@@ -29,60 +35,66 @@ const withReminders = async (bookings: Booking[]): Promise<Booking[]> => {
   const reminders = await storage.loadReminders();
   return bookings.map(b =>
     reminders[b.id]
-      ? { ...b, reminderId: reminders[b.id].reminderId, reminderLeadMinutes: reminders[b.id].leadMinutes }
-      : b
+      ? {
+          ...b,
+          reminderId: reminders[b.id].reminderId,
+          reminderLeadMinutes: reminders[b.id].leadMinutes,
+        }
+      : b,
   );
 };
 
-const loadAll = async () => withReminders(await listMyAppointments());
-
-export const loadBookings = createAsyncThunk('bookings/load', async (_, { rejectWithValue }) => {
+// Doctors create appointments, so the patient's phone learns about them here. Keep the local
+// reminders in step: schedule one for every upcoming appointment and drop those of cancelled
+// ones. A reminder problem never blocks or fails loading the appointments.
+const syncReminders = async (bookings: Booking[]): Promise<void> => {
   try {
-    return await loadAll();
-  } catch (error) {
-    return rejectWithValue(messageOf(error, 'Failed to load appointments'));
-  }
-});
+    const stored = await storage.loadReminders();
+    const upcoming = bookings.filter(
+      b => b.status !== 'cancelled' && getBookingPhase(b) === 'upcoming',
+    );
+    const liveIds = new Set(upcoming.map(b => b.id));
 
-export const createBooking = createAsyncThunk(
-  'bookings/create',
-  async (
-    { timeSlot, reminderLeadMinutes = null }: { timeSlot: TimeSlot; reminderLeadMinutes?: number | null },
-    { getState, rejectWithValue }
-  ) => {
-    const state = getState() as { auth: { user: { id: string } | null }; bookings: BookingsState };
-    const userId = state.auth.user?.id;
-    if (!userId) {
-      return rejectWithValue('Please sign in to book an appointment');
-    }
-
-    let booking: Booking;
-    try {
-      booking = await createAppointment(timeSlot, userId);
-    } catch (error) {
-      return rejectWithValue(messageOf(error, 'Failed to create booking'));
-    }
-
-    // A reminder problem must never undo or fail the booking itself
-    let reminder: ReminderResult | null = null;
-    if (reminderLeadMinutes !== null) {
-      reminder = await scheduleReminder(booking, reminderLeadMinutes);
-      if (reminder.status === 'scheduled') {
-        await storage.saveReminder(booking.id, {
-          reminderId: reminder.reminderId,
-          leadMinutes: reminder.leadMinutes,
-        });
+    for (const [appointmentId, info] of Object.entries(stored)) {
+      if (!liveIds.has(appointmentId)) {
+        await cancelReminder(info.reminderId);
+        await storage.removeReminder(appointmentId);
       }
     }
-
-    let bookings: Booking[];
-    try {
-      bookings = await loadAll();
-    } catch {
-      bookings = await withReminders([...state.bookings.bookings, booking]);
+    for (const booking of upcoming) {
+      if (!stored[booking.id]) {
+        const result = await scheduleReminder(
+          booking,
+          DEFAULT_REMINDER_MINUTES,
+        );
+        if (result.status === 'scheduled') {
+          await storage.saveReminder(booking.id, {
+            reminderId: result.reminderId,
+            leadMinutes: result.leadMinutes,
+          });
+        }
+      }
     }
-    return { bookings, reminder };
+  } catch (error) {
+    logError('Could not sync reminders:', error);
   }
+};
+
+const loadAll = async () => {
+  const bookings = await listMyAppointments();
+  await syncReminders(bookings);
+  return withReminders(bookings);
+};
+
+export const loadBookings = createAsyncThunk(
+  'bookings/load',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await loadAll();
+    } catch (error) {
+      return rejectWithValue(messageOf(error, 'Failed to load appointments'));
+    }
+  },
 );
 
 export const cancelBooking = createAsyncThunk(
@@ -98,7 +110,7 @@ export const cancelBooking = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(messageOf(error, 'Failed to cancel appointment'));
     }
-  }
+  },
 );
 
 const bookingsSlice = createSlice({
@@ -123,18 +135,6 @@ const bookingsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(createBooking.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(createBooking.fulfilled, (state, action) => {
-        state.loading = false;
-        state.bookings = action.payload.bookings;
-      })
-      .addCase(createBooking.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
       .addCase(cancelBooking.pending, state => {
         state.loading = true;
         state.error = null;
@@ -155,13 +155,18 @@ const bookingsSlice = createSlice({
 
 export const { clearBookingsError } = bookingsSlice.actions;
 
-export const selectAllBookings = (state: { bookings: BookingsState }) => state.bookings.bookings;
-export const selectBookingsLoading = (state: { bookings: BookingsState }) => state.bookings.loading;
-export const selectBookingsError = (state: { bookings: BookingsState }) => state.bookings.error;
+export const selectAllBookings = (state: { bookings: BookingsState }) =>
+  state.bookings.bookings;
+export const selectBookingsLoading = (state: { bookings: BookingsState }) =>
+  state.bookings.loading;
+export const selectBookingsError = (state: { bookings: BookingsState }) =>
+  state.bookings.error;
 
 // Bookings that still occupy a slot (cancelled and completed ones do not)
-export const selectActiveBookings = createSelector([selectAllBookings], bookings =>
-  bookings.filter(b => b.status === undefined || b.status === 'pending' || b.status === 'confirmed')
+export const selectActiveBookings = createSelector(
+  [selectAllBookings],
+  bookings =>
+    bookings.filter(b => b.status === undefined || b.status === 'confirmed'),
 );
 
 export default bookingsSlice.reducer;

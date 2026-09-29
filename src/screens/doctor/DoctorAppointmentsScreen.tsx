@@ -25,14 +25,14 @@ import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay } from '../../utils/dateHelpers';
 import { formatTime12Hour } from '../../utils/timeSlotGenerator';
 
-type Bucket = 'pending' | 'upcoming' | 'past';
+type Bucket = 'upcoming' | 'past';
 
 export const DoctorAppointmentsScreen: React.FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<DoctorStackParamList>>();
   const tabBarInset = useTabBarInset();
   const [appointments, setAppointments] = useState<Booking[]>([]);
-  const [bucket, setBucket] = useState<Bucket>('pending');
+  const [bucket, setBucket] = useState<Bucket>('upcoming');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(() => Date.now());
@@ -58,18 +58,15 @@ export const DoctorAppointmentsScreen: React.FC = () => {
 
   const buckets = useMemo(() => {
     const result: Record<Bucket, Booking[]> = {
-      pending: [],
       upcoming: [],
       past: [],
     };
     appointments.forEach(a => {
       const phase = getBookingPhase(a, now);
       if (phase !== 'upcoming') result.past.push(a);
-      else if (a.status === 'pending') result.pending.push(a);
       else result.upcoming.push(a);
     });
     const key = (a: Booking) => `${a.date} ${a.startTime}`;
-    result.pending.sort((a, b) => key(a).localeCompare(key(b)));
     result.upcoming.sort((a, b) => key(a).localeCompare(key(b)));
     result.past.sort((a, b) => key(b).localeCompare(key(a)));
     return result;
@@ -114,13 +111,15 @@ export const DoctorAppointmentsScreen: React.FC = () => {
             })
           }
           accessibilityRole="button"
-          accessibilityLabel={`${who}, ${statusLabel(item, phase)}, ${formatDateWithDay(
-            item.date,
-          )}, ${formatTime12Hour(item.startTime)}. Open details`}
+          accessibilityLabel={`${who}, ${statusLabel(
+            phase,
+          )}, ${formatDateWithDay(item.date)}, ${formatTime12Hour(
+            item.startTime,
+          )}. Open details`}
         >
           <View style={styles.cardHeader}>
             <Text style={styles.patient}>{who}</Text>
-            <StatusBadge booking={item} phase={phase} />
+            <StatusBadge phase={phase} />
           </View>
           <Text style={styles.when}>{formatDateWithDay(item.date)}</Text>
           <Text style={styles.time}>
@@ -129,37 +128,6 @@ export const DoctorAppointmentsScreen: React.FC = () => {
           </Text>
         </TouchableOpacity>
 
-        {phase === 'upcoming' && item.status === 'pending' && (
-          <>
-            <Button
-              title="Confirm"
-              accessibilityLabel={`Confirm appointment with ${who}`}
-              onPress={() =>
-                change(
-                  item,
-                  'confirmed',
-                  'Confirm appointment?',
-                  `Confirm the appointment with ${who}?`,
-                  'Yes, confirm',
-                )
-              }
-            />
-            <Button
-              title="Decline"
-              variant="danger"
-              accessibilityLabel={`Decline appointment with ${who}`}
-              onPress={() =>
-                change(
-                  item,
-                  'cancelled',
-                  'Decline appointment?',
-                  `Decline the appointment with ${who}?`,
-                  'Yes, decline',
-                )
-              }
-            />
-          </>
-        )}
         {phase === 'upcoming' && item.status === 'confirmed' && (
           <Button
             title="Cancel appointment"
@@ -202,8 +170,12 @@ export const DoctorAppointmentsScreen: React.FC = () => {
         <Text style={styles.title} accessibilityRole="header">
           Appointments
         </Text>
+        <Button
+          title="New appointment"
+          onPress={() => navigation.navigate('DoctorNewAppointment')}
+        />
         <View style={styles.chips}>
-          {(['pending', 'upcoming', 'past'] as const).map(key => (
+          {(['upcoming', 'past'] as const).map(key => (
             <FilterChip
               key={key}
               label={`${key[0].toUpperCase()}${key.slice(1)} (${
@@ -233,10 +205,8 @@ export const DoctorAppointmentsScreen: React.FC = () => {
         }
         ListEmptyComponent={
           <Text style={styles.empty}>
-            {bucket === 'pending'
-              ? 'No requests waiting for you.'
-              : bucket === 'upcoming'
-              ? 'No upcoming appointments.'
+            {bucket === 'upcoming'
+              ? 'No upcoming appointments. Tap New appointment to schedule a patient.'
               : 'Nothing here yet.'}
           </Text>
         }

@@ -116,7 +116,7 @@ export const MyBookingsScreen: React.FC = () => {
               📍 {formatTimezone(item.timezone)}
             </Text>
           </View>
-          <StatusBadge booking={item} phase={phase} />
+          <StatusBadge phase={phase} />
         </View>
 
         <View style={styles.divider} />
@@ -207,7 +207,10 @@ export const MyBookingsScreen: React.FC = () => {
         data={bookings}
         keyExtractor={item => item.id}
         renderItem={renderBookingCard}
-        contentContainerStyle={[styles.listContent, { paddingBottom: 16 + tabBarInset }]}
+        contentContainerStyle={[
+          styles.listContent,
+          { paddingBottom: 16 + tabBarInset },
+        ]}
         refreshControl={
           <RefreshControl
             refreshing={loading}

@@ -36,10 +36,4 @@ export const COLORS = {
   disabled: '#D1D1D6',
 } as const;
 
-export const REMINDER_OPTIONS: ReadonlyArray<{ label: string; minutes: number | null }> = [
-  { label: 'Off', minutes: null },
-  { label: '1 hour before', minutes: 60 },
-  { label: '1 day before', minutes: 1440 },
-];
-
 export const DEFAULT_REMINDER_MINUTES = 60;

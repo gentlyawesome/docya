@@ -16,7 +16,7 @@ const fail = (error: unknown): never => {
 export const createAppointment = async (
   slot: TimeSlot,
   patientId: string,
-  reason?: string
+  reason?: string,
 ): Promise<Booking> => {
   const { data, error } = await supabase
     .from('appointments')
@@ -50,7 +50,11 @@ export const listMyAppointments = async (): Promise<Booking[]> => {
 };
 
 export const getAppointment = async (id: string): Promise<Booking> => {
-  const { data, error } = await supabase.from('appointments').select(SELECT).eq('id', id).single();
+  const { data, error } = await supabase
+    .from('appointments')
+    .select(SELECT)
+    .eq('id', id)
+    .single();
   if (error) {
     return fail(error);
   }
@@ -60,7 +64,7 @@ export const getAppointment = async (id: string): Promise<Booking> => {
 export const updateAppointmentStatus = async (
   id: string,
   status: BookingStatus,
-  notes?: string
+  notes?: string,
 ): Promise<Booking> => {
   const { data, error } = await supabase
     .from('appointments')
@@ -74,7 +78,10 @@ export const updateAppointmentStatus = async (
   return toBooking(data as unknown as AppointmentRow);
 };
 
-export const saveAppointmentNotes = async (id: string, notes: string): Promise<Booking> => {
+export const saveAppointmentNotes = async (
+  id: string,
+  notes: string,
+): Promise<Booking> => {
   const { data, error } = await supabase
     .from('appointments')
     .update({ notes: notes.trim() || null })

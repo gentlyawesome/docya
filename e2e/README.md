@@ -4,7 +4,7 @@ These drive the real app on a booted iOS simulator through accessibility labels.
 
 1. Install Maestro once: `brew tap mobile-dev-inc/tap && brew install mobile-dev-inc/tap/maestro` (needs Java 17+)
 2. Boot a simulator and install a Debug build (`npx react-native run-ios`), then keep Metro running (`npm start`)
-3. Run everything: `npm run e2e`, or one flow: `maestro test e2e/book-and-cancel.yaml`
+3. Run everything: `npm run e2e`, or one flow: `maestro test e2e/doctor-schedules-patient.yaml`
 
 Notes
 - Every flow starts with `clearState`, so it wipes the app's data on that simulator.

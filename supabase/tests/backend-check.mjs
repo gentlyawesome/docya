@@ -78,51 +78,66 @@ check("a patient cannot see another patient's profile", !emails.includes('patien
 r = await call('/rest/v1/doctor_profiles?select=user_id');
 check('anonymous callers cannot read doctor profiles', [401, 403].includes(r.status) || (r.status === 200 && r.json.length === 0), `${r.status}`);
 
-// --- Booking
+// --- Doctors schedule appointments for patients
 r = await call('/rest/v1/appointments', { method: 'POST', token: patient1.token, body: { ...slot, doctor_id: maria.id, patient_id: patient1.id } });
-check('a patient can book a slot (starts as pending)', r.status === 201 && r.json[0]?.status === 'pending', JSON.stringify(r.json).slice(0, 120));
+check('a patient cannot book an appointment themselves', r.status >= 400, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+
+r = await call('/rest/v1/rpc/find_patient_by_email', { method: 'POST', token: patient1.token, body: { p_email: 'patient2@doctora.test' } });
+check('a patient cannot look up other patients', r.status >= 400, `${r.status}`);
+r = await call('/rest/v1/rpc/find_patient_by_email', { method: 'POST', body: { p_email: 'patient1@doctora.test' } });
+check('anonymous callers cannot look up patients', r.status >= 400, `${r.status}`);
+
+r = await call('/rest/v1/rpc/find_patient_by_email', { method: 'POST', token: maria.token, body: { p_email: ' Patient1@Doctora.test ' } });
+check('a doctor finds a patient by exact email (any case), seeing only id and name', r.status === 200 && r.json.length === 1 && r.json[0].id === patient1.id && Object.keys(r.json[0]).sort().join() === 'full_name,id', JSON.stringify(r.json));
+r = await call('/rest/v1/rpc/find_patient_by_email', { method: 'POST', token: maria.token, body: { p_email: 'patient' } });
+check('a partial email finds nothing (no browsing)', r.status === 200 && r.json.length === 0, JSON.stringify(r.json));
+r = await call('/rest/v1/rpc/find_patient_by_email', { method: 'POST', token: maria.token, body: { p_email: 'juan.delacruz@doctora.test' } });
+check('a doctor cannot look up another doctor this way', r.status === 200 && r.json.length === 0, JSON.stringify(r.json));
+
+r = await call('/rest/v1/appointments', { method: 'POST', token: maria.token, body: { ...slot, doctor_id: maria.id, patient_id: patient1.id } });
+check('a doctor can schedule a patient and it is confirmed immediately', r.status === 201 && r.json[0]?.status === 'confirmed', JSON.stringify(r.json).slice(0, 120));
 const appointmentId = r.json?.[0]?.id;
 
-r = await call('/rest/v1/appointments', { method: 'POST', token: patient2.token, body: { ...slot, doctor_id: maria.id, patient_id: patient2.id } });
-check('a second patient cannot double-book the same slot', r.status === 409, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+r = await call('/rest/v1/appointments', { method: 'POST', token: maria.token, body: { ...slot, start_time: '09:30', end_time: '10:00', status: 'cancelled', doctor_id: maria.id, patient_id: patient1.id } });
+check('an appointment cannot be created in another status', r.status >= 400, `${r.status}`);
 
-r = await call('/rest/v1/appointments', { method: 'POST', token: patient2.token, body: { ...slot, start_time: '10:00', end_time: '10:30', doctor_id: maria.id, patient_id: patient1.id } });
-check('a patient cannot book on behalf of another patient', r.status >= 400, `${r.status}`);
+r = await call('/rest/v1/appointments', { method: 'POST', token: maria.token, body: { ...slot, doctor_id: maria.id, patient_id: patient2.id } });
+check('the same slot cannot be booked twice', r.status === 409, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
 
-r = await call('/rest/v1/appointments', { method: 'POST', token: patient1.token, body: { ...slot, start_time: '11:00', end_time: '11:30', doctor_id: patient2.id, patient_id: patient1.id } });
-check('an appointment must be with a doctor', r.status >= 400, `${r.status}`);
+r = await call('/rest/v1/appointments', { method: 'POST', token: juan.token, body: { ...slot, start_time: '10:00', end_time: '10:30', doctor_id: maria.id, patient_id: patient1.id } });
+check("a doctor cannot schedule into another doctor's calendar", r.status >= 400, `${r.status}`);
 
-r = await call('/rest/v1/rpc/get_booked_slots', { method: 'POST', token: patient2.token, body: { p_doctor_id: maria.id, p_from: date, p_to: date } });
-check('other patients can see the slot is taken (times only)', r.status === 200 && r.json.length === 1 && r.json[0].start_time.startsWith('09:00') && !('patient_id' in r.json[0]), JSON.stringify(r.json));
+r = await call('/rest/v1/appointments', { method: 'POST', token: maria.token, body: { ...slot, start_time: '11:00', end_time: '11:30', doctor_id: maria.id, patient_id: juan.id } });
+check('an appointment must be with a patient', r.status >= 400, `${r.status}`);
 
+r = await call('/rest/v1/appointments', { method: 'POST', token: maria.token, body: { appointment_date: '2020-01-06', start_time: '09:00', end_time: '09:30', doctor_id: maria.id, patient_id: patient1.id } });
+check('an appointment in the past is rejected', r.status >= 400, `${r.status}`);
+
+r = await call('/rest/v1/appointments?select=id,status', { token: patient1.token });
+check('the patient sees the appointment their doctor made', r.status === 200 && r.json.length === 1 && r.json[0].status === 'confirmed', JSON.stringify(r.json));
 r = await call('/rest/v1/appointments?select=id', { token: patient2.token });
 check("a patient cannot read another patient's appointments", r.status === 200 && r.json.length === 0);
-
-r = await call('/rest/v1/rpc/get_booked_slots', { method: 'POST', body: { p_doctor_id: maria.id, p_from: date, p_to: date } });
-check('anonymous callers cannot look up booked slots', r.status >= 400, `${r.status}`);
-
-// --- Doctor side
-r = await call('/rest/v1/appointments?select=id,patient:profiles!patient_id(full_name)', { token: maria.token });
-check('the doctor sees the appointment with the patient name', r.status === 200 && r.json.length === 1 && r.json[0].patient?.full_name === 'Pat Patient', JSON.stringify(r.json).slice(0, 120));
+r = await call('/rest/v1/appointments?select=id', { token: juan.token });
+check("another doctor cannot see this doctor's appointments", r.status === 200 && r.json.length === 0);
 
 r = await call('/rest/v1/profiles?select=email&role=eq.patient', { token: maria.token });
 check("the doctor sees only their own patients' profiles", r.json.length === 1 && r.json[0].email === 'patient1@doctora.test', JSON.stringify(r.json));
 
-r = await call('/rest/v1/appointments?select=id', { token: juan.token });
-check("another doctor cannot see this doctor's appointments", r.status === 200 && r.json.length === 0);
-
-r = await call(`/rest/v1/appointments?id=eq.${appointmentId}`, { method: 'PATCH', token: patient1.token, body: { status: 'confirmed' } });
-check('a patient cannot confirm their own appointment', !(r.status === 200 && r.json?.[0]?.status === 'confirmed'), JSON.stringify(r.json).slice(0, 100));
-
-r = await call(`/rest/v1/appointments?id=eq.${appointmentId}`, { method: 'PATCH', token: maria.token, body: { status: 'confirmed' } });
-check('the doctor can confirm it', r.status === 200 && r.json[0]?.status === 'confirmed', JSON.stringify(r.json).slice(0, 100));
-
-// --- Cancelling frees the slot
+// --- Changing an appointment
+r = await call(`/rest/v1/appointments?id=eq.${appointmentId}`, { method: 'PATCH', token: patient1.token, body: { appointment_date: '2099-01-01' } });
+check('a patient cannot move an appointment', r.status >= 400 || r.json.length === 0, `${r.status} ${JSON.stringify(r.json).slice(0, 80)}`);
+r = await call(`/rest/v1/appointments?id=eq.${appointmentId}`, { method: 'PATCH', token: patient2.token, body: { status: 'cancelled' } });
+check("a patient cannot cancel someone else's appointment", r.status >= 400 || r.json.length === 0, `${r.status}`);
 r = await call(`/rest/v1/appointments?id=eq.${appointmentId}`, { method: 'PATCH', token: patient1.token, body: { status: 'cancelled' } });
 check('the patient can cancel', r.status === 200 && r.json[0]?.status === 'cancelled', JSON.stringify(r.json).slice(0, 100));
+r = await call(`/rest/v1/appointments?id=eq.${appointmentId}`, { method: 'PATCH', token: maria.token, body: { status: 'confirmed' } });
+check('a cancelled appointment cannot be revived', r.status >= 400 || r.json.length === 0, `${r.status}`);
 
-r = await call('/rest/v1/appointments', { method: 'POST', token: patient2.token, body: { ...slot, doctor_id: maria.id, patient_id: patient2.id } });
-check('the cancelled slot can be booked by someone else', r.status === 201, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+r = await call('/rest/v1/appointments', { method: 'POST', token: maria.token, body: { ...slot, doctor_id: maria.id, patient_id: patient2.id } });
+check('the cancelled slot can be given to someone else', r.status === 201, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+const second = r.json?.[0]?.id;
+r = await call(`/rest/v1/appointments?id=eq.${second}`, { method: 'PATCH', token: maria.token, body: { status: 'cancelled' } });
+check('the doctor can cancel an appointment', r.status === 200 && r.json[0]?.status === 'cancelled', JSON.stringify(r.json).slice(0, 100));
 
 // --- Doctor fee
 r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: maria.token, body: { consultation_fee: 1750.5 } });

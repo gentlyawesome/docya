@@ -17,13 +17,18 @@ export const toUser = (row: ProfileRow): User => ({
   email: row.email ?? '',
   firstName: row.first_name ?? '',
   lastName: row.last_name ?? '',
-  fullName: row.full_name ?? `${row.first_name ?? ''} ${row.last_name ?? ''}`.trim(),
+  fullName:
+    row.full_name ?? `${row.first_name ?? ''} ${row.last_name ?? ''}`.trim(),
   role: row.role,
   phone: row.phone ?? undefined,
 });
 
 export const getUserProfile = async (userId: string): Promise<User> => {
-  const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
   if (error) {
     throw new Error(mapSupabaseError(error));
   }
@@ -36,7 +41,10 @@ export interface UserProfileUpdate {
   phone?: string;
 }
 
-export const updateUserProfile = async (userId: string, update: UserProfileUpdate): Promise<User> => {
+export const updateUserProfile = async (
+  userId: string,
+  update: UserProfileUpdate,
+): Promise<User> => {
   const firstName = update.firstName.trim();
   const lastName = update.lastName.trim();
   const { data, error } = await supabase
@@ -56,7 +64,9 @@ export const updateUserProfile = async (userId: string, update: UserProfileUpdat
   return toUser(data as ProfileRow);
 };
 
-export const getPatientProfile = async (userId: string): Promise<PatientProfile | null> => {
+export const getPatientProfile = async (
+  userId: string,
+): Promise<PatientProfile | null> => {
   const { data, error } = await supabase
     .from('patient_profiles')
     .select('*')
@@ -77,7 +87,7 @@ export const getPatientProfile = async (userId: string): Promise<PatientProfile 
 
 export const savePatientProfile = async (
   userId: string,
-  profile: Omit<PatientProfile, 'userId'>
+  profile: Omit<PatientProfile, 'userId'>,
 ): Promise<PatientProfile> => {
   const { data, error } = await supabase
     .from('patient_profiles')
@@ -88,7 +98,7 @@ export const savePatientProfile = async (
         gender: profile.gender?.trim() || null,
         address: profile.address?.trim() || null,
       },
-      { onConflict: 'user_id' }
+      { onConflict: 'user_id' },
     )
     .select('*')
     .single();
@@ -107,12 +117,15 @@ const toDoctorProfile = (row: Record<string, any>): DoctorProfile => ({
   userId: row.user_id,
   specialization: row.specialization,
   clinicName: row.clinic_name ?? undefined,
-  consultationFee: row.consultation_fee != null ? Number(row.consultation_fee) : undefined,
+  consultationFee:
+    row.consultation_fee != null ? Number(row.consultation_fee) : undefined,
   bio: row.bio ?? undefined,
   timezone: row.timezone,
 });
 
-export const getDoctorProfile = async (userId: string): Promise<DoctorProfile | null> => {
+export const getDoctorProfile = async (
+  userId: string,
+): Promise<DoctorProfile | null> => {
   const { data, error } = await supabase
     .from('doctor_profiles')
     .select('*')
@@ -126,7 +139,7 @@ export const getDoctorProfile = async (userId: string): Promise<DoctorProfile | 
 
 export const saveDoctorProfile = async (
   userId: string,
-  profile: Omit<DoctorProfile, 'userId'>
+  profile: Omit<DoctorProfile, 'userId'>,
 ): Promise<DoctorProfile> => {
   const { data, error } = await supabase
     .from('doctor_profiles')
@@ -139,7 +152,7 @@ export const saveDoctorProfile = async (
         bio: profile.bio?.trim() || null,
         timezone: profile.timezone,
       },
-      { onConflict: 'user_id' }
+      { onConflict: 'user_id' },
     )
     .select('*')
     .single();
@@ -147,4 +160,25 @@ export const saveDoctorProfile = async (
     throw new Error(mapSupabaseError(error));
   }
   return toDoctorProfile(data);
+};
+
+export interface FoundPatient {
+  id: string;
+  fullName: string;
+}
+
+// A doctor looks a patient up by exact email; nothing else about the patient is revealed
+export const findPatientByEmail = async (
+  email: string,
+): Promise<FoundPatient | null> => {
+  const { data, error } = await supabase.rpc('find_patient_by_email', {
+    p_email: email.trim(),
+  });
+  if (error) {
+    throw new Error(mapSupabaseError(error));
+  }
+  const row = (
+    data as Array<{ id: string; full_name: string | null }> | null
+  )?.[0];
+  return row ? { id: row.id, fullName: row.full_name ?? 'Patient' } : null;
 };

@@ -11,19 +11,23 @@ import {
   RootStackParamList,
 } from '../types';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { initializeAuth, selectAuthInitialized, selectUser } from '../store/slices/authSlice';
+import {
+  initializeAuth,
+  selectAuthInitialized,
+  selectUser,
+} from '../store/slices/authSlice';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { LoginScreen } from '../screens/auth/LoginScreen';
 import { RegisterScreen } from '../screens/auth/RegisterScreen';
 import { DoctorsListScreen } from '../screens/DoctorsListScreen';
 import { DoctorDetailScreen } from '../screens/DoctorDetailScreen';
-import { BookingConfirmationScreen } from '../screens/BookingConfirmationScreen';
 import { MyBookingsScreen } from '../screens/MyBookingsScreen';
 import { PatientProfileScreen } from '../screens/profile/PatientProfileScreen';
 import { DoctorProfileScreen } from '../screens/profile/DoctorProfileScreen';
 import { DoctorDashboardScreen } from '../screens/doctor/DoctorDashboardScreen';
 import { DoctorAppointmentsScreen } from '../screens/doctor/DoctorAppointmentsScreen';
 import { DoctorScheduleScreen } from '../screens/doctor/DoctorScheduleScreen';
+import { DoctorNewAppointmentScreen } from '../screens/doctor/DoctorNewAppointmentScreen';
 import { DoctorAppointmentDetailScreen } from '../screens/doctor/DoctorAppointmentDetailScreen';
 import { COLORS } from '../constants';
 
@@ -37,7 +41,9 @@ const styles = StyleSheet.create({
   tabIcon: { fontSize: 24 },
 });
 
-const TabIcon: React.FC<{ icon: string }> = ({ icon }) => <Text style={styles.tabIcon}>{icon}</Text>;
+const TabIcon: React.FC<{ icon: string }> = ({ icon }) => (
+  <Text style={styles.tabIcon}>{icon}</Text>
+);
 
 const renderDoctorsIcon = () => <TabIcon icon="👨‍⚕️" />;
 const renderBookingsIcon = () => <TabIcon icon="📅" />;
@@ -80,16 +86,15 @@ const PatientTabs = () => (
 
 const PatientNavigator = () => (
   <PatientStack.Navigator screenOptions={stackOptions}>
-    <PatientStack.Screen name="MainTabs" component={PatientTabs} options={{ headerShown: false }} />
+    <PatientStack.Screen
+      name="MainTabs"
+      component={PatientTabs}
+      options={{ headerShown: false }}
+    />
     <PatientStack.Screen
       name="DoctorDetail"
       component={DoctorDetailScreen}
       options={({ route }) => ({ title: route.params.doctor.name })}
-    />
-    <PatientStack.Screen
-      name="BookingConfirmation"
-      component={BookingConfirmationScreen}
-      options={{ title: 'Confirm Booking', presentation: 'modal' }}
     />
   </PatientStack.Navigator>
 );
@@ -121,7 +126,16 @@ const DoctorTabs = () => (
 
 const DoctorNavigator = () => (
   <DoctorStack.Navigator screenOptions={stackOptions}>
-    <DoctorStack.Screen name="DoctorTabs" component={DoctorTabs} options={{ headerShown: false }} />
+    <DoctorStack.Screen
+      name="DoctorTabs"
+      component={DoctorTabs}
+      options={{ headerShown: false }}
+    />
+    <DoctorStack.Screen
+      name="DoctorNewAppointment"
+      component={DoctorNewAppointmentScreen}
+      options={{ title: 'New appointment', headerBackTitle: 'Back' }}
+    />
     <DoctorStack.Screen
       name="DoctorAppointmentDetail"
       component={DoctorAppointmentDetailScreen}
@@ -132,8 +146,16 @@ const DoctorNavigator = () => (
 
 const AuthNavigator = () => (
   <AuthStack.Navigator screenOptions={stackOptions}>
-    <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-    <AuthStack.Screen name="Register" component={RegisterScreen} options={{ title: 'New account' }} />
+    <AuthStack.Screen
+      name="Login"
+      component={LoginScreen}
+      options={{ headerShown: false }}
+    />
+    <AuthStack.Screen
+      name="Register"
+      component={RegisterScreen}
+      options={{ title: 'New account' }}
+    />
   </AuthStack.Navigator>
 );
 
@@ -153,7 +175,13 @@ export const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      {!user ? <AuthNavigator /> : user.role === 'doctor' ? <DoctorNavigator /> : <PatientNavigator />}
+      {!user ? (
+        <AuthNavigator />
+      ) : user.role === 'doctor' ? (
+        <DoctorNavigator />
+      ) : (
+        <PatientNavigator />
+      )}
     </NavigationContainer>
   );
 };

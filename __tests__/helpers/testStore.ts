@@ -55,7 +55,7 @@ export const booking = (over: Partial<Booking> = {}): Booking => ({
   dayOfWeek: 'Thursday',
   timezone: 'Australia/Perth',
   bookedAt: '2026-01-01T00:00:00Z',
-  status: 'pending',
+  status: 'confirmed',
   patientId: 'patient-1',
   ...over,
 });

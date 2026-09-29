@@ -75,7 +75,7 @@ describe('appointment mapping', () => {
     appointment_date: '2099-01-01',
     start_time: '09:00:00',
     end_time: '09:30:00',
-    status: 'pending',
+    status: 'confirmed',
     reason: null,
     notes: 'bring results',
     created_at: '2026-01-01T00:00:00Z',
@@ -95,9 +95,13 @@ describe('appointment mapping', () => {
       endTime: '09:30',
       dayOfWeek: 'Thursday',
       timezone: 'Asia/Manila',
-      status: 'pending',
+      status: 'confirmed',
       notes: 'bring results',
     });
+  });
+
+  it('treats a legacy pending row as confirmed', () => {
+    expect(toBooking({ ...base, status: 'pending' }).status).toBe('confirmed');
   });
 
   it('records when an appointment was cancelled and tolerates missing joins', () => {

@@ -15,7 +15,6 @@ import {
 } from '../src/store/slices/doctorsSlice';
 import {
   cancelBooking,
-  createBooking,
   loadBookings,
   selectActiveBookings,
 } from '../src/store/slices/bookingsSlice';
@@ -74,31 +73,6 @@ describe('booking phases', () => {
 });
 
 describe('bookings', () => {
-  it('books as the signed-in patient and shows the server result', async () => {
-    const created = booking({ id: 'new' });
-    svc.createAppointment.mockResolvedValue(created);
-    svc.listMyAppointments.mockResolvedValue([created]);
-    const store = signedIn();
-
-    await store.dispatch(createBooking({ timeSlot: slot })).unwrap();
-    expect(svc.createAppointment).toHaveBeenCalledWith(slot, 'patient-1');
-    expect(store.getState().bookings.bookings.map(b => b.id)).toEqual(['new']);
-  });
-
-  it('refuses to book when signed out', async () => {
-    const store = makeStore();
-    await expect(store.dispatch(createBooking({ timeSlot: slot })).unwrap()).rejects.toMatch(/sign in/i);
-    expect(svc.createAppointment).not.toHaveBeenCalled();
-  });
-
-  it('surfaces the server message when someone else got the slot first', async () => {
-    svc.createAppointment.mockRejectedValue(new Error('That time slot was just booked by someone else. Please choose another.'));
-    const store = signedIn();
-    await store.dispatch(createBooking({ timeSlot: slot }));
-    expect(store.getState().bookings.error).toMatch(/just booked/);
-    expect(store.getState().bookings.bookings).toEqual([]);
-  });
-
   it('cancels on the server and reloads', async () => {
     svc.updateAppointmentStatus.mockResolvedValue(booking({ status: 'cancelled' }));
     svc.listMyAppointments.mockResolvedValue([booking({ id: 'b1', status: 'cancelled' })]);
@@ -109,16 +83,15 @@ describe('bookings', () => {
     expect(store.getState().bookings.bookings[0].status).toBe('cancelled');
   });
 
-  it('counts only pending and confirmed appointments as occupying a slot', async () => {
+  it('counts only confirmed appointments as occupying a slot', async () => {
     svc.listMyAppointments.mockResolvedValue([
-      booking({ id: 'p', status: 'pending' }),
       booking({ id: 'c', status: 'confirmed' }),
       booking({ id: 'x', status: 'cancelled' }),
       booking({ id: 'd', status: 'completed' }),
     ]);
     const store = signedIn();
     await store.dispatch(loadBookings());
-    expect(selectActiveBookings(store.getState()).map(b => b.id)).toEqual(['p', 'c']);
+    expect(selectActiveBookings(store.getState()).map(b => b.id)).toEqual(['c']);
   });
 });
 
@@ -252,18 +225,6 @@ describe('MyBookings tabs', () => {
     expect(screen.getByText('Cancelled')).toBeTruthy();
     expect(screen.queryByText('Cancel Appointment')).toBeNull();
     expect(screen.queryByText('Future Doc')).toBeNull();
-  });
-
-  it('marks a request the doctor has not accepted yet', async () => {
-    svc.listMyAppointments.mockResolvedValue([booking({ doctorName: 'Wait Doc', status: 'pending' })]);
-    render(
-      <Provider store={signedIn()}>
-        <NavigationContainer>
-          <MyBookingsScreen />
-        </NavigationContainer>
-      </Provider>
-    );
-    expect(await screen.findByText('Awaiting confirmation')).toBeTruthy();
   });
 });
 
