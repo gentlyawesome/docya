@@ -7,7 +7,6 @@ import {
 } from '../src/services/mappers';
 import { mapSupabaseError } from '../src/services/supabaseErrors';
 import {
-  isValidBirthDate,
   isValidEmail,
   isValidPassword,
   isValidPhone,
@@ -96,7 +95,6 @@ describe('appointment mapping', () => {
     start_time: '09:00:00',
     end_time: '09:30:00',
     status: 'confirmed',
-    reason: null,
     notes: 'bring results',
     created_at: '2026-01-01T00:00:00Z',
     updated_at: '2026-01-02T00:00:00Z',
@@ -188,12 +186,6 @@ describe('validation', () => {
     expect(isValidPhone('abc')).toBe(false);
   });
 
-  it('validates birth dates as real, past calendar dates', () => {
-    expect(isValidBirthDate('1990-04-23')).toBe(true);
-    expect(isValidBirthDate('1990-02-30')).toBe(false);
-    expect(isValidBirthDate('23/04/1990')).toBe(false);
-    expect(isValidBirthDate('2999-01-01')).toBe(false);
-  });
 
   it('validates IANA time zones', () => {
     expect(isValidTimezone('Asia/Manila')).toBe(true);

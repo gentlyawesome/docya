@@ -124,13 +124,13 @@ check('a cancelled appointment cannot be revived', r.status >= 400 || r.json.len
 r = await call('/rest/v1/appointments', { method: 'POST', token: maria.token, body: visit(maria, { patient_name: 'Sam Sample' }) });
 check('the cancelled slot can be given to someone else', r.status === 201, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
 
-// --- Doctor fee
-r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: maria.token, body: { consultation_fee: 1750.5 } });
-check('a doctor can change their own fee', r.status === 200 && Number(r.json[0]?.consultation_fee) === 1750.5, JSON.stringify(r.json).slice(0, 100));
-r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: juan.token, body: { consultation_fee: 1 } });
-check("another doctor cannot change this doctor's fee", r.status === 200 && r.json.length === 0, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
-r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: maria.token, body: { consultation_fee: -5 } });
-check('a negative fee is rejected', r.status >= 400, `${r.status}`);
+// --- Professional details
+r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: maria.token, body: { specialization: 'Interventional Cardiology' } });
+check('a doctor can change their own specialization', r.status === 200 && r.json[0]?.specialization === 'Interventional Cardiology', JSON.stringify(r.json).slice(0, 100));
+r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: juan.token, body: { specialization: 'Hacked' } });
+check("another doctor cannot change this doctor's details", r.status === 200 && r.json.length === 0, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: maria.token, body: { timezone: 'Mars/Olympus' } });
+check('an unknown time zone is rejected', r.status >= 400, `${r.status}`);
 
 // --- Accounts: everyone who registers is a doctor
 const email = `delete-me-${Date.now()}@doctora.test`;
@@ -155,6 +155,6 @@ check('a deleted account can no longer sign in', r.status === 400, `${r.status}`
 r = await call('/rest/v1/rpc/delete_my_account', { method: 'POST', body: {} });
 check('anonymous callers cannot call delete_my_account', r.status >= 400, `${r.status}`);
 
-psql('delete from public.appointments; update public.doctor_profiles set consultation_fee = 1500 where user_id = \'' + maria.id + '\'');
+psql('delete from public.appointments; update public.doctor_profiles set specialization = \'Cardiology\' where user_id = \'' + maria.id + '\'');
 console.log(failures === 0 ? '\nAll backend checks passed.' : `\n${failures} backend check(s) FAILED.`);
 process.exit(failures === 0 ? 0 : 1);

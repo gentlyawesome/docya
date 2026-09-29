@@ -5,7 +5,7 @@ An iOS-first React Native app for doctors to manage their appointments. A doctor
 ## Features
 
 - Email/password accounts for doctors, with in-app account deletion
-- Weekly working-hours editor and a professional profile (specialization, clinic, fee, bio, time zone)
+- Weekly working-hours editor and a small profile (name, phone, specialization, time zone)
 - **New appointment**: enter the patient's name and phone, pick a day on the calendar and an open slot, confirm. Booked slots are marked and cannot be double-booked
 - Appointment list (Upcoming / Past), dashboard with today's and upcoming counts, cancel, mark completed, private notes
 
@@ -70,7 +70,6 @@ E2E flows: sign in/out, schedule a patient and cancel, slot availability, calend
 - Anyone can register as a doctor; there is no verification step.
 - Patients get no notification or copy of their appointment; the doctor tells them. There are no reminders yet.
 - Times are shown in the doctor's time zone.
-- `@notifee/react-native` and `react-native-share` are still installed but unused (left over from removed patient features); removing them needs a `pod install` and native rebuild.
 - Android is not supported; no CI yet.
 
 ## License

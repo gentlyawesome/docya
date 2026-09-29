@@ -65,10 +65,6 @@ export const updateUserProfile = async (
 const toDoctorProfile = (row: Record<string, any>): DoctorProfile => ({
   userId: row.user_id,
   specialization: row.specialization,
-  clinicName: row.clinic_name ?? undefined,
-  consultationFee:
-    row.consultation_fee != null ? Number(row.consultation_fee) : undefined,
-  bio: row.bio ?? undefined,
   timezone: row.timezone,
 });
 
@@ -96,9 +92,6 @@ export const saveDoctorProfile = async (
       {
         user_id: userId,
         specialization: profile.specialization.trim(),
-        clinic_name: profile.clinicName?.trim() || null,
-        consultation_fee: profile.consultationFee ?? null,
-        bio: profile.bio?.trim() || null,
         timezone: profile.timezone,
       },
       { onConflict: 'user_id' },

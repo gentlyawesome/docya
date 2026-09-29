@@ -4,7 +4,7 @@ import { AppointmentRow, toBooking } from './mappers';
 import { mapSupabaseError } from './supabaseErrors';
 
 const SELECT =
-  'id, doctor_id, patient_name, patient_phone, appointment_date, start_time, end_time, status, reason, notes, ' +
+  'id, doctor_id, patient_name, patient_phone, appointment_date, start_time, end_time, status, notes, ' +
   'created_at, updated_at, ' +
   'doctor:profiles!doctor_id(full_name, doctor_profiles(timezone))';
 

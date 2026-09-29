@@ -132,10 +132,6 @@ export const generateDoctorTimeSlots = (
 /**
  * Format time slot for display
  */
-export const formatTimeSlot = (slot: TimeSlot): string => {
-  return `${slot.startTime} - ${slot.endTime}`;
-};
-
 /**
  * Format time in 12-hour format
  */

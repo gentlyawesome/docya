@@ -7,19 +7,6 @@ export interface DoctorAvailability {
   available_until: string;
 }
 
-export interface Doctor {
-  id: string;
-  name: string;
-  timezone: string;
-  availabilities: DoctorAvailability[];
-  specialty?: string;
-  fee?: number;
-  clinicName?: string;
-  bio?: string;
-  rating?: number;
-  reviewCount?: number;
-}
-
 export interface TimeSlot {
   id: string;
   doctorId: string;
@@ -78,9 +65,6 @@ export interface User {
 export interface DoctorProfile {
   userId: string;
   specialization: string;
-  clinicName?: string;
-  consultationFee?: number;
-  bio?: string;
   timezone: string;
 }
 

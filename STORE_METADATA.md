@@ -36,7 +36,7 @@ FEATURES:
 • Calendar view with open and booked slots, no double-booking
 • Dashboard with today's and upcoming appointments
 • Cancel or complete appointments and add private notes
-• Your professional profile: specialization, clinic, fee, time zone
+• Your profile: name, specialization, time zone
 
 PRIVACY FIRST:
 Your appointments are visible only to you. No ads, no tracking. Delete your account and all of its data in the app any time.

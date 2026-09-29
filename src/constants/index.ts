@@ -1,9 +1,6 @@
 export const SLOT_DURATION_MINUTES = 30;
 
-export const CURRENCY_SYMBOL = '₱';
-
 export const PRIVACY_POLICY_URL = 'https://gentlyawesome.github.io/docya/privacy-policy.html';
-export const SUPPORT_EMAIL = 'gentlyawesome@gmail.com';
 
 export const DAYS_OF_WEEK = [
   'Monday',

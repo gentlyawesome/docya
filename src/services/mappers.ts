@@ -43,7 +43,6 @@ export interface AppointmentRow {
   start_time: string;
   end_time: string;
   status: BookingStatus;
-  reason: string | null;
   notes: string | null;
   created_at: string;
   updated_at: string;
@@ -67,6 +66,5 @@ export const toBooking = (row: AppointmentRow): Booking => ({
   cancelledAt: row.status === 'cancelled' ? row.updated_at : undefined,
   patientName: row.patient_name,
   patientPhone: row.patient_phone ?? undefined,
-  reason: row.reason ?? undefined,
   notes: row.notes ?? undefined,
 });

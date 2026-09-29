@@ -155,7 +155,6 @@ export const { clearAuthMessages } = authSlice.actions;
 
 type Root = { auth: AuthState };
 export const selectUser = (state: Root) => state.auth.user;
-export const selectIsAuthenticated = (state: Root) => state.auth.user !== null;
 export const selectAuthInitialized = (state: Root) => state.auth.initialized;
 export const selectAuthLoading = (state: Root) => state.auth.loading;
 export const selectAuthError = (state: Root) => state.auth.error;
