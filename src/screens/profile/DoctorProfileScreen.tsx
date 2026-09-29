@@ -8,6 +8,7 @@ import { selectUser } from '../../store/slices/authSlice';
 import { getDoctorProfile, saveDoctorProfile } from '../../services/userService';
 import { AboutSection, AccountActionsSection, PersonalInfoSection, Section } from '../../components/AccountSections';
 import { Button } from '../../components/Button';
+import { ApprovalBanner } from '../../components/ApprovalBanner';
 import { FormField } from '../../components/FormField';
 import { COLORS, CURRENCY_SYMBOL } from '../../constants';
 import { isValidFee, isValidTimezone } from '../../utils/validation';
@@ -76,6 +77,7 @@ const ProfessionalSection: React.FC<{ userId: string }> = ({ userId }) => {
 
   return (
     <Section title="Professional details">
+      <ApprovalBanner userId={userId} />
       {loadError ? <Text style={styles.error}>{loadError}</Text> : null}
       <FormField label="Specialization" value={specialization} onChangeText={setSpecialization} error={errors.specialization} />
       <FormField label="License number" value={license} onChangeText={setLicense} error={errors.license} autoCapitalize="characters" />

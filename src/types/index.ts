@@ -85,6 +85,8 @@ export interface PatientProfile {
   address?: string;
 }
 
+export type VerificationStatus = 'pending' | 'approved' | 'rejected';
+
 export interface DoctorProfile {
   userId: string;
   specialization: string;
@@ -93,6 +95,7 @@ export interface DoctorProfile {
   consultationFee?: number;
   bio?: string;
   timezone: string;
+  verificationStatus: VerificationStatus;
 }
 
 // Weekly availability row managed by a doctor

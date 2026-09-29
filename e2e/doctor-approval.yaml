@@ -1,0 +1,33 @@
+# A newly registered doctor is told they await approval, and patients cannot see them yet.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: New doctor awaits approval
+---
+- launchApp:
+    clearState: true
+- tapOn: "Create an account"
+- tapOn: "Doctor filter"
+- tapOn: "First name"
+- inputText: "Nina"
+- pressKey: Enter
+- inputText: "Newdoc"
+- pressKey: Enter
+- inputText: "e2e-nina@doctora.test"
+- pressKey: Enter
+# (phone is optional)
+- pressKey: Enter
+- inputText: "Neurology"
+- pressKey: Enter
+- inputText: "E2E-LIC-1"
+- pressKey: Enter
+- inputText: "Password123!"
+- pressKey: Enter
+- inputText: "Password123!"
+- pressKey: Enter
+- assertVisible: "Hello, Dr. Newdoc"
+- assertVisible: ".*Awaiting approval.*"
+- runFlow: subflows/sign-out.yaml
+
+# Patients do not see the unapproved doctor
+- runFlow: subflows/login-patient.yaml
+- assertVisible: "Maria Santos.*"
+- assertNotVisible: ".*Newdoc.*"

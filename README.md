@@ -62,6 +62,18 @@ e2e/                      Maestro flows + run.mjs (resets the local DB per flow)
 - `delete_my_account()` removes the account and its data. Reminders and the session stay on the device.
 - The `anon` key in `.env` is public by design; access is enforced by RLS. `.env` is git-ignored.
 
+## Approving doctors
+
+Anyone can register as a doctor, but a new doctor starts as `pending`: they see an "Awaiting approval" banner, can fill in their profile and schedule, and are invisible to patients and cannot be booked. An operator approves or rejects after checking the license number, using the service role (Studio SQL editor locally at http://127.0.0.1:54323, or the hosted dashboard):
+
+```sql
+select public.set_doctor_verification('<doctor user id>', 'approved');  -- or 'rejected' / 'pending'
+select u.id, u.email, d.license_number, d.verification_status
+from doctor_profiles d join auth.users u on u.id = d.user_id where d.verification_status = 'pending';
+```
+
+Doctors cannot change their own status (column-level grants), and the seeded doctors are pre-approved. A patient who already has an appointment with a doctor still sees that doctor if approval is later withdrawn.
+
 ## Testing
 
 ```bash
@@ -76,7 +88,7 @@ E2E flows: sign in/out, book and cancel, slot availability, favourites and filte
 ## Known limitations
 
 - Production needs a hosted Supabase project, its keys, and email-confirmation settings configured.
-- Doctor role is chosen at sign-up and is not verified; a real launch needs an approval step.
+- Doctor approval is manual: an operator must approve each new doctor (see below). There is no admin screen yet.
 - Signed-in users can see the email/phone of doctors.
 - Reminders are per device and not synced.
 - Android is not supported (Notifee build issue); no CI yet.

@@ -111,6 +111,7 @@ const toDoctorProfile = (row: Record<string, any>): DoctorProfile => ({
   consultationFee: row.consultation_fee != null ? Number(row.consultation_fee) : undefined,
   bio: row.bio ?? undefined,
   timezone: row.timezone,
+  verificationStatus: row.verification_status ?? 'pending',
 });
 
 export const getDoctorProfile = async (userId: string): Promise<DoctorProfile | null> => {
@@ -127,7 +128,7 @@ export const getDoctorProfile = async (userId: string): Promise<DoctorProfile | 
 
 export const saveDoctorProfile = async (
   userId: string,
-  profile: Omit<DoctorProfile, 'userId'>
+  profile: Omit<DoctorProfile, 'userId' | 'verificationStatus'>
 ): Promise<DoctorProfile> => {
   const { data, error } = await supabase
     .from('doctor_profiles')

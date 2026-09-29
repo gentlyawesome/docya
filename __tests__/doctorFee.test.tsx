@@ -24,6 +24,7 @@ const saved = {
   consultationFee: 1500,
   bio: '',
   timezone: 'Asia/Manila',
+  verificationStatus: 'approved' as const,
 };
 
 describe('isValidFee', () => {

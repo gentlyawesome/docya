@@ -140,6 +140,56 @@ check('a negative fee is rejected', r.status >= 400, `${r.status}`);
 r = await call('/rest/v1/doctor_profiles?select=consultation_fee&user_id=eq.' + maria.id, { token: patient1.token });
 check('patients see the updated fee', Number(r.json[0]?.consultation_fee) === 1750.5, JSON.stringify(r.json));
 
+// --- Doctor approval
+const stamp = Date.now();
+const newDoctorEmail = `pending-doc-${stamp}@doctora.test`;
+r = await call('/auth/v1/signup', { method: 'POST', body: { email: newDoctorEmail, password: PASSWORD, data: { first_name: 'Nina', last_name: 'Newdoc', role: 'doctor', specialization: 'Neurology', license_number: `LIC-${stamp}` } } });
+check('a new doctor can register', r.status === 200 && !!r.json.access_token, JSON.stringify(r.json).slice(0, 100));
+const newDoc = { token: r.json.access_token, id: r.json.user?.id };
+
+r = await call(`/rest/v1/doctor_profiles?select=verification_status&user_id=eq.${newDoc.id}`, { token: newDoc.token });
+check('a new doctor starts as pending', r.json?.[0]?.verification_status === 'pending', JSON.stringify(r.json));
+
+r = await call(`/rest/v1/doctor_profiles?user_id=eq.${newDoc.id}`, { method: 'PATCH', token: newDoc.token, body: { verification_status: 'approved' } });
+check('a doctor cannot approve themselves', r.status >= 400, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+
+r = await call('/rest/v1/doctor_profiles?on_conflict=user_id', { method: 'POST', token: newDoc.token, headers: { Prefer: 'resolution=merge-duplicates,return=representation' }, body: { user_id: newDoc.id, specialization: 'Neurology', license_number: `LIC-${stamp}`, consultation_fee: 900, timezone: 'Asia/Manila' } });
+check('a pending doctor can still edit their professional details', r.status === 201 || r.status === 200, `${r.status} ${JSON.stringify(r.json).slice(0, 120)}`);
+check('editing details does not change the status', r.json?.[0]?.verification_status === 'pending', JSON.stringify(r.json).slice(0, 120));
+
+r = await call('/rest/v1/doctor_availability', { method: 'POST', token: newDoc.token, body: { doctor_id: newDoc.id, day_of_week: 'Monday', start_time: '09:00', end_time: '12:00' } });
+check('a pending doctor can prepare their schedule', r.status === 201, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+
+r = await call('/rest/v1/profiles?select=id&role=eq.doctor', { token: patient1.token });
+check('patients do not see a pending doctor (profiles)', r.json.length === 3 && !r.json.some(p => p.id === newDoc.id), `${r.json.length}`);
+r = await call(`/rest/v1/doctor_profiles?select=user_id&user_id=eq.${newDoc.id}`, { token: patient1.token });
+check('patients do not see a pending doctor (doctor profile)', r.json.length === 0);
+r = await call(`/rest/v1/doctor_availability?select=id&doctor_id=eq.${newDoc.id}`, { token: patient1.token });
+check('patients do not see a pending doctor (availability)', r.json.length === 0);
+
+r = await call('/rest/v1/appointments', { method: 'POST', token: patient1.token, body: { ...slot, start_time: '09:00', end_time: '09:30', doctor_id: newDoc.id, patient_id: patient1.id } });
+check('patients cannot book a pending doctor', r.status >= 400, `${r.status}`);
+
+r = await call('/rest/v1/rpc/set_doctor_verification', { method: 'POST', token: newDoc.token, body: { p_doctor_id: newDoc.id, p_status: 'approved' } });
+check('app users cannot call set_doctor_verification', r.status >= 400, `${r.status}`);
+
+execFileSync('psql', [DB, '-X', '-q', '-c', `select public.set_doctor_verification('${newDoc.id}', 'approved')`]);
+r = await call('/rest/v1/profiles?select=id&role=eq.doctor', { token: patient1.token });
+check('once approved the doctor is listed', r.json.length === 4 && r.json.some(p => p.id === newDoc.id), `${r.json.length}`);
+r = await call(`/rest/v1/doctor_availability?select=id&doctor_id=eq.${newDoc.id}`, { token: patient1.token });
+check('once approved patients see the availability', r.json.length === 1);
+r = await call('/rest/v1/appointments', { method: 'POST', token: patient1.token, body: { appointment_date: date, start_time: '09:00', end_time: '09:30', doctor_id: newDoc.id, patient_id: patient1.id } });
+check('once approved the doctor can be booked', r.status === 201, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+
+execFileSync('psql', [DB, '-X', '-q', '-c', `select public.set_doctor_verification('${newDoc.id}', 'rejected')`]);
+r = await call('/rest/v1/profiles?select=id&role=eq.doctor', { token: patient2.token });
+check('a rejected doctor disappears for other patients', r.json.length === 3 && !r.json.some(p => p.id === newDoc.id), `${r.json.length}`);
+r = await call(`/rest/v1/doctor_profiles?select=user_id&user_id=eq.${newDoc.id}`, { token: patient1.token });
+check('but a patient with an appointment still sees that doctor', r.json.length === 1);
+r = await call('/rest/v1/appointments', { method: 'POST', token: patient2.token, body: { ...slot, start_time: '15:00', end_time: '15:30', doctor_id: newDoc.id, patient_id: patient2.id } });
+check('a rejected doctor cannot be booked', r.status >= 400, `${r.status}`);
+execFileSync('psql', [DB, '-X', '-q', '-c', `delete from auth.users where id = '${newDoc.id}'`]);
+
 // --- Account deletion
 const email = `delete-me-${Date.now()}@doctora.test`;
 r = await call('/auth/v1/signup', { method: 'POST', body: { email, password: PASSWORD, data: { first_name: 'Temp', last_name: 'User', role: 'patient' } } });

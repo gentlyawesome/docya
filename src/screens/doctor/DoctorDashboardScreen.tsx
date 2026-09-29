@@ -9,6 +9,7 @@ import { useTabBarInset } from '../../hooks/useTabBarInset';
 import { selectUser } from '../../store/slices/authSlice';
 import { listMyAppointments } from '../../services/appointmentsService';
 import { Button } from '../../components/Button';
+import { ApprovalBanner } from '../../components/ApprovalBanner';
 import { StatusBadge } from '../../components/StatusBadge';
 import { COLORS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
@@ -71,6 +72,7 @@ export const DoctorDashboardScreen: React.FC = () => {
         <Text style={styles.title} accessibilityRole="header">
           Hello, Dr. {user?.lastName || user?.fullName}
         </Text>
+        <ApprovalBanner userId={user?.id ?? ''} />
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         <View style={styles.stats}>
