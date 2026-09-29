@@ -5,13 +5,13 @@ name: Sign in and sign out
 - launchApp:
     clearState: true
 - assertVisible: "Welcome to Docya"
-- assertNotVisible: "Find a Doctor"
+- assertNotVisible: "Hello, Dr. Santos"
 # Validation happens before any request
 - tapOn: "Sign in"
 - assertVisible: "Enter a valid email address"
 # Wrong password is rejected by the server
 - tapOn: "Email"
-- inputText: "patient1@doctora.test"
+- inputText: "maria.santos@doctora.test"
 - pressKey: Enter
 - inputText: "not-the-password"
 - pressKey: Enter
@@ -27,10 +27,10 @@ name: Sign in and sign out
       visible: "Save Password.*"
     commands:
       - tapOn: "Not Now"
-- assertVisible: "Find a Doctor"
+- assertVisible: "Hello, Dr. Santos"
 # The session survives an app restart
 - launchApp
-- assertVisible: "Find a Doctor"
+- assertVisible: "Hello, Dr. Santos"
 - runFlow: subflows/sign-out.yaml
 # ...and is gone after signing out
 - launchApp

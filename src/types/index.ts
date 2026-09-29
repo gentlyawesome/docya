@@ -7,19 +7,6 @@ export interface DoctorAvailability {
   available_until: string;
 }
 
-export interface Doctor {
-  id: string;
-  name: string;
-  timezone: string;
-  availabilities: DoctorAvailability[];
-  specialty?: string;
-  fee?: number;
-  clinicName?: string;
-  bio?: string;
-  rating?: number;
-  reviewCount?: number;
-}
-
 export interface TimeSlot {
   id: string;
   doctorId: string;
@@ -32,7 +19,7 @@ export interface TimeSlot {
   isBooked: boolean;
 }
 
-export type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed';
+export type BookingStatus = 'confirmed' | 'cancelled' | 'completed';
 export type BookingPhase = 'upcoming' | 'completed' | 'cancelled';
 
 // An appointment as the app uses it (mapped from the `appointments` table)
@@ -48,8 +35,8 @@ export interface Booking {
   bookedAt: string; // ISO timestamp
   status?: BookingStatus; // missing = 'confirmed'
   cancelledAt?: string; // ISO timestamp
-  patientId?: string;
   patientName?: string;
+  patientPhone?: string;
   reason?: string;
   notes?: string;
   reminderId?: string; // scheduled local notification (device-only)
@@ -66,32 +53,18 @@ export type DayOfWeek =
   | 'Sunday';
 
 // Accounts
-export type UserRole = 'patient' | 'doctor';
-
 export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   fullName: string;
-  role: UserRole;
   phone?: string;
-}
-
-export interface PatientProfile {
-  userId: string;
-  dateOfBirth?: string; // YYYY-MM-DD
-  gender?: string;
-  address?: string;
 }
 
 export interface DoctorProfile {
   userId: string;
   specialization: string;
-  licenseNumber: string;
-  clinicName?: string;
-  consultationFee?: number;
-  bio?: string;
   timezone: string;
 }
 
@@ -111,24 +84,9 @@ export type AuthStackParamList = {
   Register: undefined;
 };
 
-// Patient navigator (root stack over the patient tabs)
-export type RootStackParamList = {
-  MainTabs: undefined;
-  DoctorDetail: { doctor: Doctor };
-  BookingConfirmation: {
-    doctor: Doctor;
-    timeSlot: TimeSlot;
-  };
-};
-
-export type MainTabParamList = {
-  DoctorsList: undefined;
-  MyBookings: undefined;
-  Profile: undefined;
-};
-
 export type DoctorStackParamList = {
   DoctorTabs: undefined;
+  DoctorNewAppointment: undefined;
   DoctorAppointmentDetail: { appointmentId: string };
 };
 

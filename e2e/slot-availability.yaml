@@ -1,26 +1,35 @@
-# A booked slot becomes unavailable, and cancelling the appointment frees it again.
+# A slot the doctor has given out is unavailable to them, and cancelling frees it again.
 appId: org.reactjs.native.example.DoctoraAppointments
-name: Booked slots are unavailable until cancelled
+name: Given-out slots are unavailable until cancelled
 ---
 - launchApp:
     clearState: true
-- runFlow: subflows/login-patient.yaml
-- runFlow: subflows/book-first-slot.yaml
-# Back on the doctor's page, the slot we just booked is now unavailable
-- tapOn: "OK"
+- runFlow: subflows/login-doctor.yaml
+- runFlow: subflows/schedule-patient.yaml
+# Scheduling again shows the slot we just gave out as booked
+- tapOn: "New appointment"
+- tapOn: "Patient name"
+- inputText: "Pat Patient"
+# Return twice: name -> phone -> closes the keyboard
+- pressKey: Enter
+- pressKey: Enter
 - scrollUntilVisible:
     element: ".*, booked"
+    centerElement: true
 - assertVisible: ".*, booked"
-# Cancel it from My Bookings
-- tapOn: "MainTabs.*"
-- tapOn: "My Bookings, tab.*"
-- tapOn: "Cancel appointment with .*"
-- tapOn: "Yes, Cancel"
-- tapOn: "OK"
-- assertVisible: "Upcoming, 0"
-# Back on the doctor's page, nothing is booked any more
-- tapOn: "Doctors, tab.*"
-- tapOn: ".*View schedule"
+- tapOn: "Back"
+# Cancel it from the list
+- tapOn: "Cancel appointment with Pat Patient"
+- tapOn: "Yes, cancel"
+- assertVisible: "Upcoming \\(0\\) filter"
+# The slot is free again
+- tapOn: "New appointment"
+- tapOn: "Patient name"
+- inputText: "Pat Patient"
+# Return twice: name -> phone -> closes the keyboard
+- pressKey: Enter
+- pressKey: Enter
 - scrollUntilVisible:
     element: ".*, available"
+    centerElement: true
 - assertNotVisible: ".*, booked"

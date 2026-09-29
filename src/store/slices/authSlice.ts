@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { User } from '../../types';
 import * as authService from '../../services/authService';
-import { cancelAllReminders } from '../../services/reminders';
 import { RegisterInput } from '../../services/authService';
 import { updateUserProfile, UserProfileUpdate } from '../../services/userService';
 
@@ -52,7 +51,6 @@ export const registerUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
   try {
-    await cancelAllReminders();
     await authService.logout();
   } catch (error) {
     return rejectWithValue(messageOf(error, 'Logout failed'));
@@ -62,7 +60,6 @@ export const logoutUser = createAsyncThunk('auth/logout', async (_, { rejectWith
 export const deleteAccount = createAsyncThunk('auth/deleteAccount', async (_, { rejectWithValue }) => {
   try {
     await authService.deleteAccount();
-    await cancelAllReminders();
   } catch (error) {
     return rejectWithValue(messageOf(error, 'Could not delete your account'));
   }
@@ -158,7 +155,6 @@ export const { clearAuthMessages } = authSlice.actions;
 
 type Root = { auth: AuthState };
 export const selectUser = (state: Root) => state.auth.user;
-export const selectIsAuthenticated = (state: Root) => state.auth.user !== null;
 export const selectAuthInitialized = (state: Root) => state.auth.initialized;
 export const selectAuthLoading = (state: Root) => state.auth.loading;
 export const selectAuthError = (state: Root) => state.auth.error;

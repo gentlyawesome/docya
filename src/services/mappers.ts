@@ -22,7 +22,7 @@ export interface AvailabilityRow {
 export const toAvailabilities = (
   name: string,
   timezone: string,
-  rows: AvailabilityRow[]
+  rows: AvailabilityRow[],
 ): DoctorAvailability[] =>
   rows
     .filter(row => row.is_available)
@@ -37,17 +37,19 @@ export const toAvailabilities = (
 export interface AppointmentRow {
   id: string;
   doctor_id: string;
-  patient_id: string;
+  patient_name: string;
+  patient_phone: string | null;
   appointment_date: string;
   start_time: string;
   end_time: string;
   status: BookingStatus;
-  reason: string | null;
   notes: string | null;
   created_at: string;
   updated_at: string;
-  doctor?: { full_name: string | null; doctor_profiles?: { timezone: string } | null } | null;
-  patient?: { full_name: string | null } | null;
+  doctor?: {
+    full_name: string | null;
+    doctor_profiles?: { timezone: string } | null;
+  } | null;
 }
 
 export const toBooking = (row: AppointmentRow): Booking => ({
@@ -62,8 +64,7 @@ export const toBooking = (row: AppointmentRow): Booking => ({
   bookedAt: row.created_at,
   status: row.status,
   cancelledAt: row.status === 'cancelled' ? row.updated_at : undefined,
-  patientId: row.patient_id,
-  patientName: row.patient?.full_name ?? undefined,
-  reason: row.reason ?? undefined,
+  patientName: row.patient_name,
+  patientPhone: row.patient_phone ?? undefined,
   notes: row.notes ?? undefined,
 });

@@ -4,7 +4,7 @@
 
 CREATE OR REPLACE FUNCTION pg_temp.seed_user(
   p_id uuid, p_email text, p_first text, p_last text, p_role text,
-  p_phone text DEFAULT NULL, p_specialization text DEFAULT NULL, p_license text DEFAULT NULL
+  p_phone text DEFAULT NULL, p_specialization text DEFAULT NULL
 ) RETURNS void LANGUAGE plpgsql AS $$
 BEGIN
   INSERT INTO auth.users (
@@ -17,7 +17,7 @@ BEGIN
     '{"provider":"email","providers":["email"]}',
     jsonb_strip_nulls(jsonb_build_object(
       'first_name', p_first, 'last_name', p_last, 'full_name', p_first || ' ' || p_last,
-      'role', p_role, 'phone', p_phone, 'specialization', p_specialization, 'license_number', p_license
+      'role', p_role, 'phone', p_phone, 'specialization', p_specialization
     )),
     now(), now(), '', '', '', ''
   );
@@ -33,23 +33,17 @@ $$;
 
 -- Doctors
 SELECT pg_temp.seed_user('b1a2c3d4-5e6f-4a8b-9c0d-1e2f3a4b5c6d', 'maria.santos@doctora.test',
-  'Maria', 'Santos', 'doctor', '+639171234567', 'Cardiology', 'DEV-DOC-0001');
+  'Maria', 'Santos', 'doctor', '+639171234567', 'Cardiology');
 SELECT pg_temp.seed_user('c2b3d4e5-6f7a-4b9c-8d1e-2f3a4b5c6d7e', 'juan.delacruz@doctora.test',
-  'Juan', 'Dela Cruz', 'doctor', '+639172345678', 'Pediatrics', 'DEV-DOC-0002');
+  'Juan', 'Dela Cruz', 'doctor', '+639172345678', 'Pediatrics');
 SELECT pg_temp.seed_user('d3c4e5f6-7a8b-4c9d-9e2f-3a4b5c6d7e8f', 'angela.reyes@doctora.test',
-  'Angela', 'Reyes', 'doctor', '+639173456789', 'Dermatology', 'DEV-DOC-0003');
+  'Angela', 'Reyes', 'doctor', '+639173456789', 'Dermatology');
 
-UPDATE public.doctor_profiles SET
-  clinic_name = 'Heart Care Medical Center', consultation_fee = 1500, timezone = 'Asia/Manila',
-  bio = 'Cardiologist focused on preventive cardiology and long-term heart health.'
+UPDATE public.doctor_profiles SET timezone = 'Asia/Manila'
 WHERE user_id = 'b1a2c3d4-5e6f-4a8b-9c0d-1e2f3a4b5c6d';
-UPDATE public.doctor_profiles SET
-  clinic_name = 'Children''s Health Clinic', consultation_fee = 1200, timezone = 'Asia/Manila',
-  bio = 'Pediatrician caring for infants, children and teenagers.'
+UPDATE public.doctor_profiles SET timezone = 'Asia/Manila'
 WHERE user_id = 'c2b3d4e5-6f7a-4b9c-8d1e-2f3a4b5c6d7e';
-UPDATE public.doctor_profiles SET
-  clinic_name = 'Skin Health Center', consultation_fee = 1300, timezone = 'Asia/Manila',
-  bio = 'Dermatologist for medical and cosmetic skin care, including skin-cancer screening.'
+UPDATE public.doctor_profiles SET timezone = 'Asia/Manila'
 WHERE user_id = 'd3c4e5f6-7a8b-4c9d-9e2f-3a4b5c6d7e8f';
 
 -- Weekly availability (doctor's local time)
@@ -61,9 +55,3 @@ FROM (VALUES
   ('d3c4e5f6-7a8b-4c9d-9e2f-3a4b5c6d7e8f'::uuid, '10:00'::time, '18:00'::time)
 ) AS d(id, start_time, end_time)
 CROSS JOIN unnest(ARRAY['Monday','Tuesday','Wednesday','Thursday','Friday']) AS day;
-
--- Patients
-SELECT pg_temp.seed_user('e4d5f6a7-8b9c-4d0e-8f3a-4b5c6d7e8f90', 'patient1@doctora.test',
-  'Pat', 'Patient', 'patient', '+639175550001');
-SELECT pg_temp.seed_user('f5e6a7b8-9c0d-4e1f-9a4b-5c6d7e8f9012', 'patient2@doctora.test',
-  'Sam', 'Sample', 'patient', '+639175550002');

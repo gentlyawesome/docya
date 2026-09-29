@@ -5,8 +5,9 @@ name: Calendar month navigation
 ---
 - launchApp:
     clearState: true
-- runFlow: subflows/login-patient.yaml
-- tapOn: ".*View schedule"
+- runFlow: subflows/login-doctor.yaml
+- tapOn: "Appointments, tab.*"
+- tapOn: "New appointment"
 - assertVisible: "Select Date"
 - copyTextFrom:
     text: "[A-Z][a-z]+ 20[0-9][0-9]"
