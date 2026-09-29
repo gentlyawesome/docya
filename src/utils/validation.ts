@@ -30,3 +30,6 @@ export const isValidTimezone = (timezone: string): boolean => {
     return false;
   }
 };
+
+// Matches the database column numeric(10,2): up to 8 whole digits and 2 decimals, no signs or exponents
+export const isValidFee = (value: string): boolean => /^\d{1,8}(\.\d{1,2})?$/.test(value.trim());

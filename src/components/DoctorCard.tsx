@@ -31,6 +31,8 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({
         accessibilityRole="button"
         accessibilityLabel={`${doctor.name}${
           doctor.specialty ? `, ${doctor.specialty}` : ''
+        }${
+          doctor.fee !== undefined ? `, ${CURRENCY_SYMBOL}${doctor.fee} consultation` : ''
         }. View schedule`}
       >
         <View style={styles.header}>

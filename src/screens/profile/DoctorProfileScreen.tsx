@@ -10,7 +10,7 @@ import { AboutSection, AccountActionsSection, PersonalInfoSection, Section } fro
 import { Button } from '../../components/Button';
 import { FormField } from '../../components/FormField';
 import { COLORS, CURRENCY_SYMBOL } from '../../constants';
-import { isValidTimezone } from '../../utils/validation';
+import { isValidFee, isValidTimezone } from '../../utils/validation';
 
 type Errors = Partial<Record<'specialization' | 'license' | 'fee' | 'timezone', string>>;
 
@@ -50,7 +50,7 @@ const ProfessionalSection: React.FC<{ userId: string }> = ({ userId }) => {
     const next: Errors = {};
     if (!specialization.trim()) next.specialization = 'Enter your specialization';
     if (!license.trim()) next.license = 'Enter your license number';
-    if (fee.trim() && !(Number(fee) >= 0)) next.fee = 'Enter a number, for example 1200';
+    if (fee.trim() && !isValidFee(fee)) next.fee = 'Enter an amount such as 1200 or 1200.50';
     if (!isValidTimezone(timezone)) next.timezone = 'Use a time zone name such as Asia/Manila';
     setErrors(next);
     if (Object.keys(next).length > 0) {

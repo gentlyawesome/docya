@@ -124,6 +124,22 @@ check('the patient can cancel', r.status === 200 && r.json[0]?.status === 'cance
 r = await call('/rest/v1/appointments', { method: 'POST', token: patient2.token, body: { ...slot, doctor_id: maria.id, patient_id: patient2.id } });
 check('the cancelled slot can be booked by someone else', r.status === 201, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
 
+// --- Doctor fee
+r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: maria.token, body: { consultation_fee: 1750.5 } });
+check('a doctor can change their own fee', r.status === 200 && Number(r.json[0]?.consultation_fee) === 1750.5, JSON.stringify(r.json).slice(0, 100));
+
+r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: juan.token, body: { consultation_fee: 1 } });
+check("another doctor cannot change this doctor's fee", r.status === 200 && r.json.length === 0, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+
+r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: patient1.token, body: { consultation_fee: 1 } });
+check("a patient cannot change a doctor's fee", r.status >= 400 || r.json.length === 0, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+
+r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: maria.token, body: { consultation_fee: -5 } });
+check('a negative fee is rejected', r.status >= 400, `${r.status}`);
+
+r = await call('/rest/v1/doctor_profiles?select=consultation_fee&user_id=eq.' + maria.id, { token: patient1.token });
+check('patients see the updated fee', Number(r.json[0]?.consultation_fee) === 1750.5, JSON.stringify(r.json));
+
 // --- Account deletion
 const email = `delete-me-${Date.now()}@doctora.test`;
 r = await call('/auth/v1/signup', { method: 'POST', body: { email, password: PASSWORD, data: { first_name: 'Temp', last_name: 'User', role: 'patient' } } });
@@ -141,6 +157,6 @@ check('anonymous callers cannot call delete_my_account', r.status >= 400, `${r.s
 r = await call('/auth/v1/signup', { method: 'POST', body: { email: `nobody-${Date.now()}@doctora.test`, password: PASSWORD } });
 check('signing up without a role is rejected', r.status >= 400, `${r.status}`);
 
-execFileSync('psql', [DB, '-X', '-q', '-c', 'delete from public.appointments']);
+execFileSync('psql', [DB, '-X', '-q', '-c', 'delete from public.appointments; update public.doctor_profiles set consultation_fee = 1500 where user_id = \'' + maria.id + '\'']);
 console.log(failures === 0 ? '\nAll backend checks passed.' : `\n${failures} backend check(s) FAILED.`);
 process.exit(failures === 0 ? 0 : 1);
