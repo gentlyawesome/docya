@@ -61,9 +61,3 @@ FROM (VALUES
   ('d3c4e5f6-7a8b-4c9d-9e2f-3a4b5c6d7e8f'::uuid, '10:00'::time, '18:00'::time)
 ) AS d(id, start_time, end_time)
 CROSS JOIN unnest(ARRAY['Monday','Tuesday','Wednesday','Thursday','Friday']) AS day;
-
--- Patients
-SELECT pg_temp.seed_user('e4d5f6a7-8b9c-4d0e-8f3a-4b5c6d7e8f90', 'patient1@doctora.test',
-  'Pat', 'Patient', 'patient', '+639175550001');
-SELECT pg_temp.seed_user('f5e6a7b8-9c0d-4e1f-9a4b-5c6d7e8f9012', 'patient2@doctora.test',
-  'Sam', 'Sample', 'patient', '+639175550002');

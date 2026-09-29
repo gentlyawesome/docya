@@ -32,7 +32,7 @@ describe('timeSlotGenerator', () => {
         'Monday',
         'UTC',
         '2024-01-01',
-        []
+        [],
       );
 
       expect(slots).toHaveLength(2);
@@ -65,7 +65,7 @@ describe('timeSlotGenerator', () => {
         'Monday',
         'UTC',
         '2024-01-01',
-        bookedSlots
+        bookedSlots,
       );
 
       expect(slots[0].isBooked).toBe(true);
@@ -95,7 +95,7 @@ describe('timeSlotGenerator', () => {
         'Monday',
         'UTC',
         '2024-01-01',
-        bookedSlots
+        bookedSlots,
       );
 
       expect(slots[0].isBooked).toBe(false);

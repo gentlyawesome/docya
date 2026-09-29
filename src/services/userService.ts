@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { DoctorProfile, PatientProfile, User } from '../types';
+import { DoctorProfile, User } from '../types';
 import { mapSupabaseError } from './supabaseErrors';
 
 interface ProfileRow {
@@ -8,7 +8,6 @@ interface ProfileRow {
   first_name: string | null;
   last_name: string | null;
   full_name: string | null;
-  role: 'patient' | 'doctor';
   phone: string | null;
 }
 
@@ -19,7 +18,6 @@ export const toUser = (row: ProfileRow): User => ({
   lastName: row.last_name ?? '',
   fullName:
     row.full_name ?? `${row.first_name ?? ''} ${row.last_name ?? ''}`.trim(),
-  role: row.role,
   phone: row.phone ?? undefined,
 });
 
@@ -62,55 +60,6 @@ export const updateUserProfile = async (
     throw new Error(mapSupabaseError(error));
   }
   return toUser(data as ProfileRow);
-};
-
-export const getPatientProfile = async (
-  userId: string,
-): Promise<PatientProfile | null> => {
-  const { data, error } = await supabase
-    .from('patient_profiles')
-    .select('*')
-    .eq('user_id', userId)
-    .maybeSingle();
-  if (error) {
-    throw new Error(mapSupabaseError(error));
-  }
-  return data
-    ? {
-        userId: data.user_id,
-        dateOfBirth: data.date_of_birth ?? undefined,
-        gender: data.gender ?? undefined,
-        address: data.address ?? undefined,
-      }
-    : null;
-};
-
-export const savePatientProfile = async (
-  userId: string,
-  profile: Omit<PatientProfile, 'userId'>,
-): Promise<PatientProfile> => {
-  const { data, error } = await supabase
-    .from('patient_profiles')
-    .upsert(
-      {
-        user_id: userId,
-        date_of_birth: profile.dateOfBirth || null,
-        gender: profile.gender?.trim() || null,
-        address: profile.address?.trim() || null,
-      },
-      { onConflict: 'user_id' },
-    )
-    .select('*')
-    .single();
-  if (error) {
-    throw new Error(mapSupabaseError(error));
-  }
-  return {
-    userId: data.user_id,
-    dateOfBirth: data.date_of_birth ?? undefined,
-    gender: data.gender ?? undefined,
-    address: data.address ?? undefined,
-  };
 };
 
 const toDoctorProfile = (row: Record<string, any>): DoctorProfile => ({
@@ -160,25 +109,4 @@ export const saveDoctorProfile = async (
     throw new Error(mapSupabaseError(error));
   }
   return toDoctorProfile(data);
-};
-
-export interface FoundPatient {
-  id: string;
-  fullName: string;
-}
-
-// A doctor looks a patient up by exact email; nothing else about the patient is revealed
-export const findPatientByEmail = async (
-  email: string,
-): Promise<FoundPatient | null> => {
-  const { data, error } = await supabase.rpc('find_patient_by_email', {
-    p_email: email.trim(),
-  });
-  if (error) {
-    throw new Error(mapSupabaseError(error));
-  }
-  const row = (
-    data as Array<{ id: string; full_name: string | null }> | null
-  )?.[0];
-  return row ? { id: row.id, fullName: row.full_name ?? 'Patient' } : null;
 };

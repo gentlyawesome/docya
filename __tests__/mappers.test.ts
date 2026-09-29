@@ -1,5 +1,10 @@
-import { to12Hour, toAvailabilities, toBooking, toHHmm, AppointmentRow } from '../src/services/mappers';
-import { toDoctor } from '../src/services/doctorsService';
+import {
+  to12Hour,
+  toAvailabilities,
+  toBooking,
+  toHHmm,
+  AppointmentRow,
+} from '../src/services/mappers';
 import { mapSupabaseError } from '../src/services/supabaseErrors';
 import {
   isValidBirthDate,
@@ -24,46 +29,60 @@ describe('time conversion', () => {
   });
 });
 
-describe('doctor mapping', () => {
+describe('working hours mapping', () => {
   const row = {
-    id: 'd1',
-    full_name: 'Maria Santos',
-    first_name: 'Maria',
-    last_name: 'Santos',
-    doctor_profiles: {
-      specialization: 'Cardiology',
-      clinic_name: 'Heart Care',
-      consultation_fee: 1500,
-      bio: null,
-      timezone: 'Asia/Manila',
-    },
     doctor_availability: [
-      { day_of_week: 'Monday', start_time: '09:00:00', end_time: '12:00:00', is_available: true },
-      { day_of_week: 'Tuesday', start_time: '09:00:00', end_time: '12:00:00', is_available: false },
+      {
+        day_of_week: 'Monday',
+        start_time: '09:00:00',
+        end_time: '12:00:00',
+        is_available: true,
+      },
+      {
+        day_of_week: 'Tuesday',
+        start_time: '09:00:00',
+        end_time: '12:00:00',
+        is_available: false,
+      },
     ],
   };
 
-  it('maps a database row to the app Doctor, dropping windows that are switched off', () => {
-    const doctor = toDoctor(row);
-    expect(doctor).toMatchObject({
-      id: 'd1',
-      name: 'Maria Santos',
-      specialty: 'Cardiology',
-      fee: 1500,
-      clinicName: 'Heart Care',
-      timezone: 'Asia/Manila',
-    });
-    expect(doctor.bio).toBeUndefined();
-    expect(doctor.availabilities).toEqual([
-      { name: 'Maria Santos', timezone: 'Asia/Manila', day_of_week: 'Monday', available_at: '9:00AM', available_until: '12:00PM' },
+  it('drops windows that are switched off and converts to the generator format', () => {
+    expect(
+      toAvailabilities('Maria Santos', 'Asia/Manila', row.doctor_availability),
+    ).toEqual([
+      {
+        name: 'Maria Santos',
+        timezone: 'Asia/Manila',
+        day_of_week: 'Monday',
+        available_at: '9:00AM',
+        available_until: '12:00PM',
+      },
     ]);
   });
 
   it('produces windows the slot generator turns into 30-minute slots', () => {
-    const windows = toAvailabilities('Maria', 'Asia/Manila', row.doctor_availability);
+    const windows = toAvailabilities(
+      'Maria',
+      'Asia/Manila',
+      row.doctor_availability,
+    );
     // 2099-01-05 is a Monday
-    const slots = generateDoctorTimeSlots('d1', 'Maria', windows, new Date(2099, 0, 5), 1);
-    expect(slots.map(s => s.startTime)).toEqual(['09:00', '09:30', '10:00', '10:30', '11:00', '11:30']);
+    const slots = generateDoctorTimeSlots(
+      'd1',
+      'Maria',
+      windows,
+      new Date(2099, 0, 5),
+      1,
+    );
+    expect(slots.map(s => s.startTime)).toEqual([
+      '09:00',
+      '09:30',
+      '10:00',
+      '10:30',
+      '11:00',
+      '11:30',
+    ]);
   });
 });
 
@@ -71,7 +90,8 @@ describe('appointment mapping', () => {
   const base: AppointmentRow = {
     id: 'a1',
     doctor_id: 'd1',
-    patient_id: 'p1',
+    patient_name: 'Pat Patient',
+    patient_phone: '+639175550001',
     appointment_date: '2099-01-01',
     start_time: '09:00:00',
     end_time: '09:30:00',
@@ -80,8 +100,10 @@ describe('appointment mapping', () => {
     notes: 'bring results',
     created_at: '2026-01-01T00:00:00Z',
     updated_at: '2026-01-02T00:00:00Z',
-    doctor: { full_name: 'Maria Santos', doctor_profiles: { timezone: 'Asia/Manila' } },
-    patient: { full_name: 'Pat Patient' },
+    doctor: {
+      full_name: 'Maria Santos',
+      doctor_profiles: { timezone: 'Asia/Manila' },
+    },
   };
 
   it('maps to a Booking in the doctor time zone', () => {
@@ -90,6 +112,7 @@ describe('appointment mapping', () => {
       doctorId: 'd1',
       doctorName: 'Maria Santos',
       patientName: 'Pat Patient',
+      patientPhone: '+639175550001',
       date: '2099-01-01',
       startTime: '09:00',
       endTime: '09:30',
@@ -100,12 +123,8 @@ describe('appointment mapping', () => {
     });
   });
 
-  it('treats a legacy pending row as confirmed', () => {
-    expect(toBooking({ ...base, status: 'pending' }).status).toBe('confirmed');
-  });
-
   it('records when an appointment was cancelled and tolerates missing joins', () => {
-    const cancelled = toBooking({ ...base, status: 'cancelled', doctor: null, patient: null });
+    const cancelled = toBooking({ ...base, status: 'cancelled', doctor: null });
     expect(cancelled.cancelledAt).toBe('2026-01-02T00:00:00Z');
     expect(cancelled.doctorName).toBe('Doctor');
     expect(cancelled.timezone).toBe('UTC');
@@ -117,25 +136,43 @@ describe('mapSupabaseError', () => {
   it.each([
     ['Invalid login credentials', 'Invalid email or password.'],
     ['User already registered', 'An account with this email already exists.'],
-    ['Password should be at least 6 characters', 'Password must be at least 6 characters long.'],
+    [
+      'Password should be at least 6 characters',
+      'Password must be at least 6 characters long.',
+    ],
     ['Email not confirmed', 'Please confirm your email address, then sign in.'],
-    ['TypeError: Network request failed', 'Network error. Please check your internet connection.'],
+    [
+      'TypeError: Network request failed',
+      'Network error. Please check your internet connection.',
+    ],
     ['JWT expired', 'Your session has expired. Please sign in again.'],
-    ['new row violates row-level security policy', 'You do not have permission to do that.'],
-    ['appointment_date must be today or in the future', 'That time has already passed. Please choose a later slot.'],
+    [
+      'new row violates row-level security policy',
+      'You do not have permission to do that.',
+    ],
+    [
+      'appointment_date must be today or in the future',
+      'That time has already passed. Please choose a later slot.',
+    ],
   ])('maps "%s"', (message, expected) => {
     expect(mapSupabaseError({ message })).toBe(expected);
   });
 
   it('maps a unique-violation code to a friendly double-booking message', () => {
-    expect(mapSupabaseError({ message: 'whatever', code: '23505' })).toMatch(/just booked/);
+    expect(mapSupabaseError({ message: 'whatever', code: '23505' })).toMatch(
+      /just booked/,
+    );
   });
 
   it('never leaks raw database text for unknown errors', () => {
-    expect(mapSupabaseError({ message: 'relation "x" does not exist at position 14' })).toBe(
-      'Something went wrong. Please try again.'
+    expect(
+      mapSupabaseError({
+        message: 'relation "x" does not exist at position 14',
+      }),
+    ).toBe('Something went wrong. Please try again.');
+    expect(mapSupabaseError(undefined)).toBe(
+      'Something went wrong. Please try again.',
     );
-    expect(mapSupabaseError(undefined)).toBe('Something went wrong. Please try again.');
   });
 });
 

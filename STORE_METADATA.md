@@ -13,12 +13,12 @@ Docya
 
 ### Subtitle (iOS - 30 characters max)
 ```
-Doctor Appointments Made Simple
+Appointment Book for Doctors
 ```
 
 ### Short Description (Android - 80 characters max)
 ```
-Book doctor appointments easily. View availability and manage bookings.
+Appointment book for doctors: set your hours, schedule patients, stay organized.
 ```
 
 ---
@@ -26,31 +26,28 @@ Book doctor appointments easily. View availability and manage bookings.
 ## 📝 Full Description (Both Stores - 4000 characters max)
 
 ```
-Docya keeps your doctor appointments in one place.
+Docya is a simple appointment book for doctors.
 
-Your doctor schedules your visits and they show up in the app, already confirmed. Browse doctors, see their working hours, and cancel or add to your calendar when plans change.
+Set your weekly working hours, then book patients into open 30-minute slots in seconds. See what is coming up today and this week, cancel or complete visits, and keep private notes on each appointment.
 
 FEATURES:
-• Browse doctors and see their working hours
-• Appointments your doctor schedules appear automatically
-• Manage all bookings in one place
-• Cancel appointments anytime
-• Automatic appointment reminders and Add to Calendar
-• Doctor accounts to schedule patients and manage a calendar
-
-SIMPLE & FAST:
-No phone tag: your appointment is confirmed the moment your doctor schedules it.
+• Weekly working-hours editor
+• Book a patient by name and phone number
+• Calendar view with open and booked slots, no double-booking
+• Dashboard with today's and upcoming appointments
+• Cancel or complete appointments and add private notes
+• Your professional profile: specialization, clinic, fee, time zone
 
 PRIVACY FIRST:
-Your account and appointments are stored securely and visible only to you and your doctor. No ads, no tracking. Delete your account in the app any time.
+Your appointments are visible only to you. No ads, no tracking. Delete your account and all of its data in the app any time.
 
 HOW IT WORKS:
-1. Create your account with the email your doctor has
-2. Your doctor schedules your appointment
-3. It appears in My Bookings, confirmed
-4. Get a reminder before you go
+1. Create your doctor account
+2. Set your working hours
+3. Tap New appointment, enter the patient, pick a day and an open slot
+4. Manage your day from the dashboard
 
-Perfect for patients who value simplicity and privacy. Download Docya and simplify your healthcare appointments today!
+For doctors and clinicians. Patients do not need the app.
 ```
 
 ---
@@ -119,32 +116,27 @@ gentlyawesome@gmail.com
 
 ## 📸 Screenshot Descriptions
 
-### Screenshot 1: Doctors List
-**Title:** Find Your Doctor
-**Description:** Browse available doctors and search by location
+### Screenshot 1: Dashboard
+**Title:** Your Day at a Glance
+**Description:** Today's and upcoming appointments
 
-### Screenshot 2: Doctor Details
-**Title:** Know Your Doctor
-**Description:** Specialty, fee and working hours
+### Screenshot 2: New Appointment
+**Title:** Book in Seconds
+**Description:** Enter the patient, pick a day and an open slot
 
-### Screenshot 3: Doctor Schedules a Patient
-**Title:** Scheduled by Your Doctor
-**Description:** Doctors pick a patient and an open slot
+### Screenshot 3: Appointments
+**Title:** Every Visit in One Place
+**Description:** Upcoming and past appointments, cancel or complete
 
-### Screenshot 4: My Bookings
-**Title:** Manage All Appointments
-**Description:** View and cancel bookings in one place
+### Screenshot 4: Working Hours
+**Title:** Your Hours, Your Rules
+**Description:** Set the weekly schedule patients are booked into
 
-### Screenshot 5: Doctor Detail (Optional)
-**Title:** Easy Scheduling
-**Description:** Select date and time that works for you
-
----
 
 ## 🎯 Promotional Text (iOS - 170 characters, optional)
 
 ```
-Your doctor schedules your visits; you see, cancel and get reminded in one place. Private, ad-free, with in-app account deletion.
+A simple appointment book for doctors. Set your hours, book patients, stay organized. Private, ad-free, with in-app account deletion.
 ```
 
 ---
@@ -220,14 +212,12 @@ Welcome to Docya!
 🎉 Initial Release
 
 Features:
-• Browse doctors and their working hours
-• Appointments scheduled by your doctor
-• Manage all bookings
-• Cancel appointments anytime
-• Automatic reminders and Add to Calendar
-• Doctor accounts to schedule patients
+• Weekly working hours
+• Book patients by name into open slots
+• Cancel or complete appointments, with private notes
+• Dashboard for today and upcoming
 
-Simple, fast, and private doctor appointment booking.
+Simple, fast, and private appointment booking for doctors.
 ```
 
 ---

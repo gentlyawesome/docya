@@ -1,11 +1,12 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -24,19 +25,14 @@ import {
 } from '../../services/appointmentsService';
 import { listMyAvailability } from '../../services/availabilityService';
 import { AvailabilityRow, toAvailabilities } from '../../services/mappers';
-import {
-  FoundPatient,
-  findPatientByEmail,
-  getDoctorProfile,
-} from '../../services/userService';
+import { getDoctorProfile } from '../../services/userService';
 import {
   filterFutureSlots,
   formatTime12Hour,
   generateDoctorTimeSlots,
 } from '../../utils/timeSlotGenerator';
 import { formatDateWithDay } from '../../utils/dateHelpers';
-import { isValidEmail } from '../../utils/validation';
-import { Button } from '../../components/Button';
+import { isValidPhone } from '../../utils/validation';
 import { FormField } from '../../components/FormField';
 import { DoctorCalendar } from '../../components/DoctorCalendar';
 import { TimeSlotButton } from '../../components/TimeSlotButton';
@@ -50,10 +46,10 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
   const user = useAppSelector(selectUser);
   const doctorId = user?.id ?? '';
 
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [patient, setPatient] = useState<FoundPatient | null>(null);
-  const [searching, setSearching] = useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [nameError, setNameError] = useState<string | undefined>();
+  const [phoneError, setPhoneError] = useState<string | undefined>();
 
   const [availabilities, setAvailabilities] = useState<DoctorAvailability[]>(
     [],
@@ -64,8 +60,9 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(() =>
     format(new Date(), 'yyyy-MM-dd'),
   );
-  const [booking, setBooking] = useState(false);
-  const pickedByUser = useRef(false);
+  const [saving, setSaving] = useState(false);
+  const [pickedByUser, setPickedByUser] = useState(false);
+  const phoneRef = useRef<TextInput>(null);
 
   // Your working hours and the slots you already gave out; refreshed whenever the screen is focused
   useFocusEffect(
@@ -123,48 +120,29 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
     () => [...new Set(slots.filter(s => !s.isBooked).map(s => s.date))],
     [slots],
   );
-  // Open on the first day that has room, unless the doctor has already chosen a day
-  useEffect(() => {
-    if (!pickedByUser.current && availableDates.length > 0) {
-      setSelectedDate(availableDates[0]);
-    }
-  }, [availableDates]);
+
+  // Until the doctor picks a day, show the first day that still has slots to offer or that
+  // already holds one of theirs. Working it out while rendering avoids flashing today's slots first.
+  const firstDay = slots.map(x => x.date).sort()[0];
+  const shownDate = pickedByUser ? selectedDate : firstDay ?? selectedDate;
   const chooseDate = (date: string) => {
-    pickedByUser.current = true;
+    setPickedByUser(true);
     setSelectedDate(date);
   };
-  const daySlots = slots.filter(s => s.date === selectedDate);
-
-  const findPatient = async () => {
-    if (!isValidEmail(email)) {
-      setEmailError("Enter the patient's full email address");
-      return;
-    }
-    setSearching(true);
-    setEmailError(null);
-    try {
-      const found = await findPatientByEmail(email);
-      if (found) {
-        setPatient(found);
-      } else {
-        setEmailError(
-          'No patient with that email. They need to create a Docya account first.',
-        );
-      }
-    } catch (e) {
-      setEmailError(
-        e instanceof Error ? e.message : 'Could not look up the patient',
-      );
-    } finally {
-      setSearching(false);
-    }
-  };
+  const daySlots = slots.filter(s => s.date === shownDate);
 
   const schedule = (slot: TimeSlot) => {
-    if (!patient || slot.isBooked) return;
+    if (slot.isBooked) return;
+    const patientName = name.trim();
+    setNameError(patientName ? undefined : "Enter the patient's name");
+    setPhoneError(
+      isValidPhone(phone) ? undefined : 'Enter a valid phone number',
+    );
+    if (!patientName || !isValidPhone(phone)) return;
+
     Alert.alert(
       'Schedule appointment?',
-      `${patient.fullName}\n${formatDateWithDay(slot.date)}, ${formatTime12Hour(
+      `${patientName}\n${formatDateWithDay(slot.date)}, ${formatTime12Hour(
         slot.startTime,
       )}`,
       [
@@ -172,12 +150,12 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
         {
           text: 'Yes, schedule',
           onPress: async () => {
-            setBooking(true);
+            setSaving(true);
             try {
-              await createAppointment(slot, patient.id);
+              await createAppointment(slot, { name: patientName, phone });
               Alert.alert(
                 'Appointment scheduled ✅',
-                `${patient.fullName} will see it in their bookings.`,
+                `${patientName} is booked.`,
                 [{ text: 'OK', onPress: () => navigation.goBack() }],
               );
             } catch (e) {
@@ -186,7 +164,7 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
                 e instanceof Error ? e.message : 'Please try again.',
               );
             } finally {
-              setBooking(false);
+              setSaving(false);
             }
           },
         },
@@ -203,71 +181,57 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
         <Text style={styles.sectionTitle} accessibilityRole="header">
           Patient
         </Text>
-        {patient ? (
-          <View style={styles.found}>
-            <Text style={styles.foundName}>{patient.fullName}</Text>
-            <Button
-              title="Change patient"
-              variant="secondary"
-              onPress={() => setPatient(null)}
-            />
+        <FormField
+          label="Patient name"
+          value={name}
+          onChangeText={setName}
+          error={nameError}
+          autoCapitalize="words"
+          returnKeyType="next"
+          blurOnSubmit={false}
+          onSubmitEditing={() => phoneRef.current?.focus()}
+        />
+        <FormField
+          ref={phoneRef}
+          label="Phone (optional)"
+          value={phone}
+          onChangeText={setPhone}
+          error={phoneError}
+          keyboardType="phone-pad"
+          autoComplete="tel"
+        />
+
+        {loadError ? <Text style={styles.error}>{loadError}</Text> : null}
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          Select Date
+        </Text>
+        <DoctorCalendar
+          selectedDate={shownDate}
+          onDateSelect={chooseDate}
+          availableDates={availableDates}
+        />
+        <Text style={styles.sectionTitle} accessibilityRole="header">
+          Available Time Slots
+        </Text>
+        {availabilities.length === 0 && !loadError ? (
+          <Text style={styles.empty}>
+            Add your working hours in the Schedule tab first.
+          </Text>
+        ) : daySlots.length > 0 ? (
+          <View
+            style={[styles.slots, saving && styles.disabled]}
+            pointerEvents={saving ? 'none' : 'auto'}
+          >
+            {daySlots.map(slot => (
+              <TimeSlotButton
+                key={slot.id}
+                slot={slot}
+                onPress={() => schedule(slot)}
+              />
+            ))}
           </View>
         ) : (
-          <>
-            <FormField
-              label="Patient email"
-              value={email}
-              onChangeText={setEmail}
-              error={emailError ?? undefined}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              returnKeyType="search"
-              onSubmitEditing={findPatient}
-            />
-            <Button
-              title="Find patient"
-              onPress={findPatient}
-              loading={searching}
-            />
-          </>
-        )}
-
-        {patient && (
-          <>
-            {loadError ? <Text style={styles.error}>{loadError}</Text> : null}
-            <Text style={styles.sectionTitle} accessibilityRole="header">
-              Select Date
-            </Text>
-            <DoctorCalendar
-              selectedDate={selectedDate}
-              onDateSelect={chooseDate}
-              availableDates={availableDates}
-            />
-            <Text style={styles.sectionTitle} accessibilityRole="header">
-              Available Time Slots
-            </Text>
-            {availabilities.length === 0 && !loadError ? (
-              <Text style={styles.empty}>
-                Add your working hours in the Schedule tab first.
-              </Text>
-            ) : daySlots.length > 0 ? (
-              <View
-                style={[styles.slots, booking && styles.disabled]}
-                pointerEvents={booking ? 'none' : 'auto'}
-              >
-                {daySlots.map(slot => (
-                  <TimeSlotButton
-                    key={slot.id}
-                    slot={slot}
-                    onPress={() => schedule(slot)}
-                  />
-                ))}
-              </View>
-            ) : (
-              <Text style={styles.empty}>No available slots for this date</Text>
-            )}
-          </>
+          <Text style={styles.empty}>No available slots for this date</Text>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -282,13 +246,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.text,
     marginVertical: 12,
-  },
-  found: { backgroundColor: COLORS.card, borderRadius: 12, padding: 16 },
-  foundName: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: COLORS.text,
-    marginBottom: 8,
   },
   slots: { flexDirection: 'row', flexWrap: 'wrap' },
   disabled: { opacity: 0.5 },

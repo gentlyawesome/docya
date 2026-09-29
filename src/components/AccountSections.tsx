@@ -57,10 +57,6 @@ export const PersonalInfoSection: React.FC<{ user: User }> = ({ user }) => {
         <Text style={styles.readonlyLabel}>Email</Text>
         <Text style={styles.readonlyValue}>{user.email}</Text>
       </View>
-      <View style={styles.readonlyRow}>
-        <Text style={styles.readonlyLabel}>Account type</Text>
-        <Text style={styles.readonlyValue}>{user.role === 'doctor' ? 'Doctor' : 'Patient'}</Text>
-      </View>
       <FormField label="First name" value={firstName} onChangeText={setFirstName} error={errors.firstName} />
       <FormField label="Last name" value={lastName} onChangeText={setLastName} error={errors.lastName} />
       <FormField label="Phone" value={phone} onChangeText={setPhone} error={errors.phone} keyboardType="phone-pad" />

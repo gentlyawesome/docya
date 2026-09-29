@@ -1,13 +1,14 @@
-# As a signed-in doctor: schedule the first open slot for the seeded local test patient.
+# As a signed-in doctor: schedule the first open slot for a patient named "Pat Patient".
 # Picking the first open slot keeps flows independent of the time of day.
 appId: org.reactjs.native.example.DoctoraAppointments
 ---
 - tapOn: "Appointments, tab.*"
 - tapOn: "New appointment"
-- tapOn: "Patient email"
-- inputText: "patient1@doctora.test"
+- tapOn: "Patient name"
+- inputText: "Pat Patient"
 - pressKey: Enter
-- assertVisible: "Pat Patient"
+- inputText: "+639175550001"
+- pressKey: Enter
 - scrollUntilVisible:
     element: ".*, available"
     centerElement: true

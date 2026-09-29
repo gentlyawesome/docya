@@ -12,7 +12,6 @@ import {
 import * as appointments from '../src/services/appointmentsService';
 import * as availability from '../src/services/availabilityService';
 import * as users from '../src/services/userService';
-import { supabase } from '../src/config/supabase';
 import { DoctorNewAppointmentScreen } from '../src/screens/doctor/DoctorNewAppointmentScreen';
 import { DoctorAppointmentsScreen } from '../src/screens/doctor/DoctorAppointmentsScreen';
 import { booking, doctorUser, signedIn } from './helpers/testStore';
@@ -22,7 +21,6 @@ jest.mock('../src/utils/logger');
 jest.mock('../src/services/appointmentsService');
 jest.mock('../src/services/availabilityService');
 
-const rpc = supabase.rpc as unknown as jest.Mock;
 const svc = appointments as jest.Mocked<typeof appointments>;
 const avail = availability as jest.Mocked<typeof availability>;
 
@@ -62,37 +60,6 @@ beforeEach(() => {
   svc.listMyAppointments.mockResolvedValue([]);
 });
 
-describe('findPatientByEmail', () => {
-  it('asks the server for an exact email and returns only the id and name', async () => {
-    rpc.mockResolvedValue({
-      data: [{ id: 'p1', full_name: 'Pat Patient' }],
-      error: null,
-    });
-    expect(await users.findPatientByEmail(' Pat@Example.test ')).toEqual({
-      id: 'p1',
-      fullName: 'Pat Patient',
-    });
-    expect(rpc).toHaveBeenCalledWith('find_patient_by_email', {
-      p_email: 'Pat@Example.test',
-    });
-  });
-
-  it('returns null when there is no such patient', async () => {
-    rpc.mockResolvedValue({ data: [], error: null });
-    expect(await users.findPatientByEmail('nobody@example.test')).toBeNull();
-  });
-
-  it('turns a server failure into a readable error', async () => {
-    rpc.mockResolvedValue({
-      data: null,
-      error: { message: 'TypeError: Network request failed' },
-    });
-    await expect(users.findPatientByEmail('a@b.co')).rejects.toThrow(
-      'Network error',
-    );
-  });
-});
-
 // Render the screen and let its schedule finish loading, so no update lands after the test
 const openNewAppointment = async () => {
   withNav(<DoctorNewAppointmentScreen />);
@@ -101,55 +68,66 @@ const openNewAppointment = async () => {
 };
 
 describe('New appointment screen', () => {
-  const findPatient = async (email = 'pat@example.test') => {
-    fireEvent.changeText(screen.getByLabelText('Patient email'), email);
-    fireEvent.press(screen.getByText('Find patient'));
+  const fill = (name: string, phone = '') => {
+    fireEvent.changeText(screen.getByLabelText('Patient name'), name);
+    if (phone)
+      fireEvent.changeText(screen.getByLabelText('Phone (optional)'), phone);
   };
-
-  it('checks the email before searching', async () => {
-    await openNewAppointment();
-    await findPatient('not-an-email');
-    expect(
-      await screen.findByText("Enter the patient's full email address"),
-    ).toBeTruthy();
-    expect(rpc).not.toHaveBeenCalled();
-  });
-
-  it('explains when the patient has no account', async () => {
-    rpc.mockResolvedValue({ data: [], error: null });
-    await openNewAppointment();
-    await findPatient();
-    expect(await screen.findByText(/No patient with that email/)).toBeTruthy();
-    expect(screen.queryByText('Available Time Slots')).toBeNull();
-  });
-
-  it('schedules the chosen slot for the patient it found, after a confirmation', async () => {
-    rpc.mockResolvedValue({
-      data: [{ id: 'p1', full_name: 'Pat Patient' }],
-      error: null,
-    });
-    svc.createAppointment.mockResolvedValue(booking({ id: 'made' }));
-    await openNewAppointment();
-    await findPatient();
-
-    expect(await screen.findByText('Pat Patient')).toBeTruthy();
-    const slotButtons = await screen.findAllByLabelText(/, available/);
-    fireEvent.press(slotButtons[0]);
-
-    const [title, message, buttons] = (Alert.alert as jest.Mock).mock.calls[0];
-    expect(title).toBe('Schedule appointment?');
-    expect(message).toContain('Pat Patient');
-    expect(svc.createAppointment).not.toHaveBeenCalled(); // nothing happens until the doctor agrees
-
+  const pressFirstSlot = async () =>
+    fireEvent.press((await screen.findAllByLabelText(/, available/))[0]);
+  const confirm = async () => {
+    const buttons = (Alert.alert as jest.Mock).mock.calls[0][2];
     await act(async () => {
       await buttons
         .find((b: { text: string }) => b.text === 'Yes, schedule')
         .onPress();
     });
+  };
+
+  it('needs a patient name before anything is booked', async () => {
+    await openNewAppointment();
+    await pressFirstSlot();
+    expect(await screen.findByText("Enter the patient's name")).toBeTruthy();
+    expect(Alert.alert).not.toHaveBeenCalled();
+    expect(svc.createAppointment).not.toHaveBeenCalled();
+  });
+
+  it('rejects a phone number that is not a phone number', async () => {
+    await openNewAppointment();
+    fill('Pat Patient', 'call me maybe');
+    await pressFirstSlot();
+    expect(await screen.findByText('Enter a valid phone number')).toBeTruthy();
+    expect(Alert.alert).not.toHaveBeenCalled();
+  });
+
+  it('schedules the chosen slot for the named patient, after a confirmation', async () => {
+    svc.createAppointment.mockResolvedValue(booking({ id: 'made' }));
+    await openNewAppointment();
+    fill('  Pat Patient ', '+63 917 555 0001');
+    await pressFirstSlot();
+
+    const [title, message] = (Alert.alert as jest.Mock).mock.calls[0];
+    expect(title).toBe('Schedule appointment?');
+    expect(message).toContain('Pat Patient');
+    expect(svc.createAppointment).not.toHaveBeenCalled(); // nothing happens until the doctor agrees
+
+    await confirm();
     expect(svc.createAppointment).toHaveBeenCalledTimes(1);
-    const [slot, patientId] = svc.createAppointment.mock.calls[0];
-    expect(patientId).toBe('p1');
+    const [slot, patient] = svc.createAppointment.mock.calls[0];
+    expect(patient).toEqual({ name: 'Pat Patient', phone: '+63 917 555 0001' });
     expect(slot.doctorId).toBe('doctor-1');
+  });
+
+  it('works without a phone number', async () => {
+    svc.createAppointment.mockResolvedValue(booking({ id: 'made' }));
+    await openNewAppointment();
+    fill('Sam Sample');
+    await pressFirstSlot();
+    await confirm();
+    expect(svc.createAppointment.mock.calls[0][1]).toEqual({
+      name: 'Sam Sample',
+      phone: '',
+    });
   });
 
   it('does not offer a slot the doctor has already given out', async () => {
@@ -178,12 +156,7 @@ describe('New appointment screen', () => {
           endTime: '09:30',
         }),
       ]);
-      rpc.mockResolvedValue({
-        data: [{ id: 'p1', full_name: 'Pat Patient' }],
-        error: null,
-      });
       await openNewAppointment();
-      await findPatient();
       expect(await screen.findByLabelText('9:30 AM, available')).toBeTruthy();
       expect(screen.getByLabelText('9:00 AM, booked')).toBeTruthy();
       expect(screen.queryByLabelText('9:00 AM, available')).toBeNull();
@@ -194,36 +167,22 @@ describe('New appointment screen', () => {
 
   it('points a doctor without working hours to the Schedule tab', async () => {
     avail.listMyAvailability.mockResolvedValue([]);
-    rpc.mockResolvedValue({
-      data: [{ id: 'p1', full_name: 'Pat Patient' }],
-      error: null,
-    });
     await openNewAppointment();
-    await findPatient();
     expect(
       await screen.findByText(/Add your working hours in the Schedule tab/),
     ).toBeTruthy();
   });
 
   it('shows the server message if the slot was taken meanwhile', async () => {
-    rpc.mockResolvedValue({
-      data: [{ id: 'p1', full_name: 'Pat Patient' }],
-      error: null,
-    });
     svc.createAppointment.mockRejectedValue(
       new Error(
         'That time slot was just booked by someone else. Please choose another.',
       ),
     );
     await openNewAppointment();
-    await findPatient();
-    fireEvent.press((await screen.findAllByLabelText(/, available/))[0]);
-    const buttons = (Alert.alert as jest.Mock).mock.calls[0][2];
-    await act(async () => {
-      await buttons
-        .find((b: { text: string }) => b.text === 'Yes, schedule')
-        .onPress();
-    });
+    fill('Pat Patient');
+    await pressFirstSlot();
+    await confirm();
     await waitFor(() =>
       expect(
         (Alert.alert as jest.Mock).mock.calls.some(

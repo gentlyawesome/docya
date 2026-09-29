@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList, UserRole } from '../../types';
+import { AuthStackParamList } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   clearAuthMessages,
@@ -22,7 +22,6 @@ import {
   selectAuthNotice,
 } from '../../store/slices/authSlice';
 import { Button } from '../../components/Button';
-import { FilterChip } from '../../components/FilterChip';
 import { FormField } from '../../components/FormField';
 import { COLORS, PRIVACY_POLICY_URL } from '../../constants';
 import {
@@ -66,7 +65,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const passwordRef = useRef<TextInput>(null);
   const confirmRef = useRef<TextInput>(null);
 
-  const [role, setRole] = useState<UserRole>('patient');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -90,10 +88,8 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
       next.password = `Use at least ${MIN_PASSWORD_LENGTH} characters`;
     }
     if (confirm !== password) next.confirm = 'Passwords do not match';
-    if (role === 'doctor') {
-      if (!specialization.trim())
-        next.specialization = 'Enter your specialization';
-    }
+    if (!specialization.trim())
+      next.specialization = 'Enter your specialization';
     setErrors(next);
     if (Object.keys(next).length > 0) {
       return;
@@ -104,9 +100,8 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         password,
         firstName,
         lastName,
-        role,
         phone,
-        specialization: role === 'doctor' ? specialization : undefined,
+        specialization,
       }),
     );
   };
@@ -122,22 +117,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           keyboardShouldPersistTaps="handled"
           automaticallyAdjustKeyboardInsets
         >
-          <Text style={styles.label} accessibilityRole="header">
-            I am a
-          </Text>
-          <View style={styles.roleRow}>
-            <FilterChip
-              label="Patient"
-              selected={role === 'patient'}
-              onPress={() => setRole('patient')}
-            />
-            <FilterChip
-              label="Doctor"
-              selected={role === 'doctor'}
-              onPress={() => setRole('doctor')}
-            />
-          </View>
-
           {notice ? (
             <View style={styles.notice} accessibilityRole="alert">
               <Text style={styles.noticeText}>{notice}</Text>
@@ -194,27 +173,18 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             autoComplete="tel"
             returnKeyType="next"
             blurOnSubmit={false}
-            onSubmitEditing={() =>
-              (role === 'doctor'
-                ? specializationRef
-                : passwordRef
-              ).current?.focus()
-            }
+            onSubmitEditing={() => specializationRef.current?.focus()}
           />
-          {role === 'doctor' && (
-            <>
-              <FormField
-                ref={specializationRef}
-                label="Specialization"
-                value={specialization}
-                onChangeText={setSpecialization}
-                error={errors.specialization}
-                returnKeyType="next"
-                blurOnSubmit={false}
-                onSubmitEditing={() => passwordRef.current?.focus()}
-              />
-            </>
-          )}
+          <FormField
+            ref={specializationRef}
+            label="Specialization"
+            value={specialization}
+            onChangeText={setSpecialization}
+            error={errors.specialization}
+            returnKeyType="next"
+            blurOnSubmit={false}
+            onSubmitEditing={() => passwordRef.current?.focus()}
+          />
           <FormField
             ref={passwordRef}
             label="Password"
@@ -275,7 +245,6 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     marginBottom: 8,
   },
-  roleRow: { flexDirection: 'row', marginBottom: 16 },
   notice: {
     backgroundColor: '#E5F1FF',
     borderRadius: 10,

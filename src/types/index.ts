@@ -48,8 +48,8 @@ export interface Booking {
   bookedAt: string; // ISO timestamp
   status?: BookingStatus; // missing = 'confirmed'
   cancelledAt?: string; // ISO timestamp
-  patientId?: string;
   patientName?: string;
+  patientPhone?: string;
   reason?: string;
   notes?: string;
   reminderId?: string; // scheduled local notification (device-only)
@@ -66,23 +66,13 @@ export type DayOfWeek =
   | 'Sunday';
 
 // Accounts
-export type UserRole = 'patient' | 'doctor';
-
 export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   fullName: string;
-  role: UserRole;
   phone?: string;
-}
-
-export interface PatientProfile {
-  userId: string;
-  dateOfBirth?: string; // YYYY-MM-DD
-  gender?: string;
-  address?: string;
 }
 
 export interface DoctorProfile {
@@ -108,18 +98,6 @@ export interface AvailabilityWindow {
 export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
-};
-
-// Patient navigator (root stack over the patient tabs)
-export type RootStackParamList = {
-  MainTabs: undefined;
-  DoctorDetail: { doctor: Doctor };
-};
-
-export type MainTabParamList = {
-  DoctorsList: undefined;
-  MyBookings: undefined;
-  Profile: undefined;
 };
 
 export type DoctorStackParamList = {

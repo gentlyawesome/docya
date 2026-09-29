@@ -1,0 +1,26 @@
+# A doctor schedules a patient by name, sees it confirmed, cancels it, and finds it under Past.
+appId: org.reactjs.native.example.DoctoraAppointments
+name: Schedule a patient, then cancel
+---
+- launchApp:
+    clearState: true
+- runFlow: subflows/login-doctor.yaml
+- runFlow: subflows/schedule-patient.yaml
+- assertVisible: "Upcoming \\(1\\) filter"
+- assertVisible: "Pat Patient.*"
+- assertVisible: ".*Confirmed.*"
+# Details show the name and phone that were typed in
+- tapOn: "Pat Patient.*Open details"
+- assertVisible: "Pat Patient"
+- assertVisible: "\\+639175550001"
+- tapOn: "Back"
+- tapOn: "Cancel appointment with Pat Patient"
+- tapOn: "Yes, cancel"
+- assertVisible: "Upcoming \\(0\\) filter"
+- tapOn: "Past \\(1\\) filter"
+- assertVisible: ".*Cancelled.*"
+# The cancellation survives a restart
+- launchApp
+- tapOn: "Appointments, tab.*"
+- tapOn: "Past \\(1\\) filter"
+- assertVisible: ".*Cancelled.*"

@@ -8,10 +8,11 @@ name: Given-out slots are unavailable until cancelled
 - runFlow: subflows/schedule-patient.yaml
 # Scheduling again shows the slot we just gave out as booked
 - tapOn: "New appointment"
-- tapOn: "Patient email"
-- inputText: "patient1@doctora.test"
+- tapOn: "Patient name"
+- inputText: "Pat Patient"
+# Return twice: name -> phone -> closes the keyboard
 - pressKey: Enter
-- assertVisible: "Pat Patient"
+- pressKey: Enter
 - scrollUntilVisible:
     element: ".*, booked"
     centerElement: true
@@ -23,10 +24,11 @@ name: Given-out slots are unavailable until cancelled
 - assertVisible: "Upcoming \\(0\\) filter"
 # The slot is free again
 - tapOn: "New appointment"
-- tapOn: "Patient email"
-- inputText: "patient1@doctora.test"
+- tapOn: "Patient name"
+- inputText: "Pat Patient"
+# Return twice: name -> phone -> closes the keyboard
 - pressKey: Enter
-- assertVisible: "Pat Patient"
+- pressKey: Enter
 - scrollUntilVisible:
     element: ".*, available"
     centerElement: true

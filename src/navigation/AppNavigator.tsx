@@ -7,8 +7,6 @@ import {
   AuthStackParamList,
   DoctorStackParamList,
   DoctorTabParamList,
-  MainTabParamList,
-  RootStackParamList,
 } from '../types';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
@@ -19,10 +17,6 @@ import {
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { LoginScreen } from '../screens/auth/LoginScreen';
 import { RegisterScreen } from '../screens/auth/RegisterScreen';
-import { DoctorsListScreen } from '../screens/DoctorsListScreen';
-import { DoctorDetailScreen } from '../screens/DoctorDetailScreen';
-import { MyBookingsScreen } from '../screens/MyBookingsScreen';
-import { PatientProfileScreen } from '../screens/profile/PatientProfileScreen';
 import { DoctorProfileScreen } from '../screens/profile/DoctorProfileScreen';
 import { DoctorDashboardScreen } from '../screens/doctor/DoctorDashboardScreen';
 import { DoctorAppointmentsScreen } from '../screens/doctor/DoctorAppointmentsScreen';
@@ -32,8 +26,6 @@ import { DoctorAppointmentDetailScreen } from '../screens/doctor/DoctorAppointme
 import { COLORS } from '../constants';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
-const PatientStack = createNativeStackNavigator<RootStackParamList>();
-const PatientTab = createBottomTabNavigator<MainTabParamList>();
 const DoctorStack = createNativeStackNavigator<DoctorStackParamList>();
 const DoctorTab = createBottomTabNavigator<DoctorTabParamList>();
 
@@ -45,7 +37,6 @@ const TabIcon: React.FC<{ icon: string }> = ({ icon }) => (
   <Text style={styles.tabIcon}>{icon}</Text>
 );
 
-const renderDoctorsIcon = () => <TabIcon icon="👨‍⚕️" />;
 const renderBookingsIcon = () => <TabIcon icon="📅" />;
 const renderProfileIcon = () => <TabIcon icon="👤" />;
 const renderDashboardIcon = () => <TabIcon icon="🏠" />;
@@ -63,41 +54,6 @@ const stackOptions = {
   headerTintColor: COLORS.primary,
   headerTitleStyle: { fontWeight: 'bold' as const },
 };
-
-const PatientTabs = () => (
-  <PatientTab.Navigator screenOptions={tabOptions}>
-    <PatientTab.Screen
-      name="DoctorsList"
-      component={DoctorsListScreen}
-      options={{ tabBarLabel: 'Doctors', tabBarIcon: renderDoctorsIcon }}
-    />
-    <PatientTab.Screen
-      name="MyBookings"
-      component={MyBookingsScreen}
-      options={{ tabBarLabel: 'My Bookings', tabBarIcon: renderBookingsIcon }}
-    />
-    <PatientTab.Screen
-      name="Profile"
-      component={PatientProfileScreen}
-      options={{ tabBarLabel: 'Profile', tabBarIcon: renderProfileIcon }}
-    />
-  </PatientTab.Navigator>
-);
-
-const PatientNavigator = () => (
-  <PatientStack.Navigator screenOptions={stackOptions}>
-    <PatientStack.Screen
-      name="MainTabs"
-      component={PatientTabs}
-      options={{ headerShown: false }}
-    />
-    <PatientStack.Screen
-      name="DoctorDetail"
-      component={DoctorDetailScreen}
-      options={({ route }) => ({ title: route.params.doctor.name })}
-    />
-  </PatientStack.Navigator>
-);
 
 const DoctorTabs = () => (
   <DoctorTab.Navigator screenOptions={tabOptions}>
@@ -139,7 +95,7 @@ const DoctorNavigator = () => (
     <DoctorStack.Screen
       name="DoctorAppointmentDetail"
       component={DoctorAppointmentDetailScreen}
-      options={{ title: 'Appointment' }}
+      options={{ title: 'Appointment', headerBackTitle: 'Back' }}
     />
   </DoctorStack.Navigator>
 );
@@ -159,7 +115,7 @@ const AuthNavigator = () => (
   </AuthStack.Navigator>
 );
 
-// Signed out -> sign-in stack; signed in -> the app for the account's role
+// Signed out -> sign-in stack; signed in -> the doctor app
 export const AppNavigator = () => {
   const dispatch = useAppDispatch();
   const initialized = useAppSelector(selectAuthInitialized);
@@ -175,13 +131,7 @@ export const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      {!user ? (
-        <AuthNavigator />
-      ) : user.role === 'doctor' ? (
-        <DoctorNavigator />
-      ) : (
-        <PatientNavigator />
-      )}
+      {user ? <DoctorNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };

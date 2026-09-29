@@ -37,11 +37,12 @@ export const toAvailabilities = (
 export interface AppointmentRow {
   id: string;
   doctor_id: string;
-  patient_id: string;
+  patient_name: string;
+  patient_phone: string | null;
   appointment_date: string;
   start_time: string;
   end_time: string;
-  status: BookingStatus | 'pending';
+  status: BookingStatus;
   reason: string | null;
   notes: string | null;
   created_at: string;
@@ -50,7 +51,6 @@ export interface AppointmentRow {
     full_name: string | null;
     doctor_profiles?: { timezone: string } | null;
   } | null;
-  patient?: { full_name: string | null } | null;
 }
 
 export const toBooking = (row: AppointmentRow): Booking => ({
@@ -63,11 +63,10 @@ export const toBooking = (row: AppointmentRow): Booking => ({
   dayOfWeek: format(parseISO(row.appointment_date), 'EEEE'),
   timezone: row.doctor?.doctor_profiles?.timezone ?? 'UTC',
   bookedAt: row.created_at,
-  // Appointments are confirmed when a doctor creates them; older 'pending' rows count as confirmed
-  status: row.status === 'pending' ? 'confirmed' : row.status,
+  status: row.status,
   cancelledAt: row.status === 'cancelled' ? row.updated_at : undefined,
-  patientId: row.patient_id,
-  patientName: row.patient?.full_name ?? undefined,
+  patientName: row.patient_name,
+  patientPhone: row.patient_phone ?? undefined,
   reason: row.reason ?? undefined,
   notes: row.notes ?? undefined,
 });

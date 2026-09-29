@@ -4,29 +4,33 @@ import { AppointmentRow, toBooking } from './mappers';
 import { mapSupabaseError } from './supabaseErrors';
 
 const SELECT =
-  'id, doctor_id, patient_id, appointment_date, start_time, end_time, status, reason, notes, ' +
+  'id, doctor_id, patient_name, patient_phone, appointment_date, start_time, end_time, status, reason, notes, ' +
   'created_at, updated_at, ' +
-  'doctor:profiles!doctor_id(full_name, doctor_profiles(timezone)), ' +
-  'patient:profiles!patient_id(full_name)';
+  'doctor:profiles!doctor_id(full_name, doctor_profiles(timezone))';
 
 const fail = (error: unknown): never => {
   throw new Error(mapSupabaseError(error));
 };
 
+// The patient is just a name (and optionally a phone number) the doctor types in
+export interface PatientDetails {
+  name: string;
+  phone?: string;
+}
+
 export const createAppointment = async (
   slot: TimeSlot,
-  patientId: string,
-  reason?: string,
+  patient: PatientDetails,
 ): Promise<Booking> => {
   const { data, error } = await supabase
     .from('appointments')
     .insert({
       doctor_id: slot.doctorId,
-      patient_id: patientId,
+      patient_name: patient.name.trim(),
+      patient_phone: patient.phone?.trim() || null,
       appointment_date: slot.date,
       start_time: slot.startTime,
       end_time: slot.endTime,
-      reason: reason?.trim() || null,
     })
     .select(SELECT)
     .single();
@@ -36,7 +40,7 @@ export const createAppointment = async (
   return toBooking(data as unknown as AppointmentRow);
 };
 
-// Appointments where the signed-in user is the patient or the doctor (RLS limits the rows)
+// The signed-in doctor's appointments (row-level security limits the rows)
 export const listMyAppointments = async (): Promise<Booking[]> => {
   const { data, error } = await supabase
     .from('appointments')

@@ -1,4 +1,4 @@
-# Creating an account, editing the profile, and deleting the account (required by the App Store).
+# Creating a doctor account, editing the profile, and deleting the account (required by the App Store).
 appId: org.reactjs.native.example.DoctoraAppointments
 name: Register, edit profile, delete account
 ---
@@ -10,6 +10,7 @@ name: Register, edit profile, delete account
 - tapOn: "Create account"
 - assertVisible: "Enter your first name"
 - assertVisible: "Enter a valid email address"
+- assertVisible: "Enter your specialization"
 - tapOn: "First name"
 - inputText: "Eve"
 - pressKey: Enter
@@ -17,7 +18,9 @@ name: Register, edit profile, delete account
 - pressKey: Enter
 - inputText: "e2e-eve@doctora.test"
 - pressKey: Enter
-# (phone is optional) skip to the password
+# (phone is optional) skip to the specialization
+- pressKey: Enter
+- inputText: "Dermatology"
 - pressKey: Enter
 - inputText: "Password123!"
 - pressKey: Enter
@@ -28,8 +31,8 @@ name: Register, edit profile, delete account
 - eraseText: 30
 - inputText: "Password123!"
 - pressKey: Enter
-# Registered and signed in as a patient
-- assertVisible: "Find a Doctor"
+# Registered and signed in as a doctor
+- assertVisible: "Hello, Dr. Tester"
 - tapOn: "Profile, tab.*"
 - assertVisible: "My Profile"
 - assertVisible: "e2e-eve@doctora.test"

@@ -26,7 +26,7 @@ import {
 } from '../src/services/authService';
 import { LoginScreen } from '../src/screens/auth/LoginScreen';
 import { RegisterScreen } from '../src/screens/auth/RegisterScreen';
-import { doctorUser, makeStore, patient } from './helpers/testStore';
+import { doctorUser, makeStore } from './helpers/testStore';
 
 jest.mock('../src/utils/logger');
 
@@ -44,11 +44,10 @@ const profileQuery = (row: unknown, error: unknown = null) => {
 
 const profileRow = (over: Record<string, unknown> = {}) => ({
   id: 'u1',
-  email: 'pat@example.test',
-  first_name: 'Pat',
-  last_name: 'Patient',
-  full_name: 'Pat Patient',
-  role: 'patient',
+  email: 'doc@example.test',
+  first_name: 'Dana',
+  last_name: 'Doc',
+  full_name: 'Dana Doc',
   phone: null,
   ...over,
 });
@@ -58,12 +57,12 @@ beforeEach(() => {
 });
 
 describe('authService', () => {
-  it('signs in and loads the profile with its role', async () => {
+  it('signs in and loads the profile', async () => {
     auth.signInWithPassword.mockResolvedValue({
       data: { user: { id: 'u1' } },
       error: null,
     });
-    from.mockReturnValue(profileQuery(profileRow({ role: 'doctor' })));
+    from.mockReturnValue(profileQuery(profileRow()));
     const user = await login(' pat@example.test ', 'secret1');
     expect(auth.signInWithPassword).toHaveBeenCalledWith({
       email: 'pat@example.test',
@@ -71,8 +70,7 @@ describe('authService', () => {
     });
     expect(user).toMatchObject({
       id: 'u1',
-      role: 'doctor',
-      fullName: 'Pat Patient',
+      fullName: 'Dana Doc',
     });
   });
 
@@ -86,20 +84,17 @@ describe('authService', () => {
     );
   });
 
-  it('sends the role and doctor details as sign-up metadata', async () => {
+  it('sends the name and specialization as sign-up metadata, and never a role', async () => {
     auth.signUp.mockResolvedValue({
       data: { user: { id: 'u2' }, session: { access_token: 't' } },
       error: null,
     });
-    from.mockReturnValue(
-      profileQuery(profileRow({ id: 'u2', role: 'doctor' })),
-    );
+    from.mockReturnValue(profileQuery(profileRow({ id: 'u2' })));
     const result = await register({
       email: 'doc@example.test',
       password: 'secret1',
       firstName: ' Dana ',
       lastName: 'Doc',
-      role: 'doctor',
       specialization: 'Cardiology',
     });
     expect(result.status).toBe('signed_in');
@@ -107,9 +102,11 @@ describe('authService', () => {
       first_name: 'Dana',
       last_name: 'Doc',
       full_name: 'Dana Doc',
-      role: 'doctor',
       specialization: 'Cardiology',
     });
+    expect(auth.signUp.mock.calls[0][0].options.data).not.toHaveProperty(
+      'role',
+    );
   });
 
   it('reports when the project requires email confirmation first', async () => {
@@ -122,7 +119,6 @@ describe('authService', () => {
       password: 'secret1',
       firstName: 'A',
       lastName: 'B',
-      role: 'patient',
     });
     expect(result).toEqual({ status: 'confirm_email' });
   });
@@ -199,7 +195,6 @@ describe('auth state', () => {
         password: 'secret1',
         firstName: 'A',
         lastName: 'B',
-        role: 'patient',
       }),
     );
     expect(selectUser(store.getState())).toBeNull();
@@ -210,21 +205,13 @@ describe('auth state', () => {
     jest.spyOn(authService, 'deleteAccount').mockResolvedValue(undefined);
     const store = makeStore();
     store.dispatch(
-      loginUser.fulfilled(patient, 'req', {
-        email: patient.email,
+      loginUser.fulfilled(doctorUser, 'req', {
+        email: doctorUser.email,
         password: 'x',
       }),
     );
     await store.dispatch(deleteAccount());
     expect(selectUser(store.getState())).toBeNull();
-  });
-
-  it('tells patients and doctors apart', () => {
-    const store = makeStore();
-    store.dispatch(
-      loginUser.fulfilled(doctorUser, 'req', { email: 'd', password: 'x' }),
-    );
-    expect(selectUser(store.getState())?.role).toBe('doctor');
   });
 });
 
@@ -303,12 +290,11 @@ describe('register screen', () => {
     expect(auth.signUp).not.toHaveBeenCalled();
   });
 
-  it('asks doctors for a specialization, and patients for none', () => {
+  it('asks for a specialization, and offers no account-type choice or license field', () => {
     renderScreen();
-    expect(screen.queryByLabelText('Specialization')).toBeNull();
-    fireEvent.press(screen.getByRole('button', { name: 'Doctor filter' }));
-    expect(screen.getByLabelText('Specialization')).toBeTruthy();
+    expect(screen.queryByText('I am a')).toBeNull();
     expect(screen.queryByLabelText('License number')).toBeNull();
+    expect(screen.getByLabelText('Specialization')).toBeTruthy();
     fireEvent.press(screen.getByRole('button', { name: 'Create account' }));
     expect(screen.getByText('Enter your specialization')).toBeTruthy();
   });
@@ -323,6 +309,7 @@ describe('register screen', () => {
     fireEvent.changeText(screen.getByLabelText('First name'), 'Eve');
     fireEvent.changeText(screen.getByLabelText('Last name'), 'Tester');
     fireEvent.changeText(screen.getByLabelText('Email'), 'eve@example.test');
+    fireEvent.changeText(screen.getByLabelText('Specialization'), 'Cardiology');
     fireEvent.changeText(screen.getByLabelText('Password'), 'secret1');
     fireEvent.changeText(screen.getByLabelText('Confirm password'), 'secret1');
     fireEvent.press(screen.getByRole('button', { name: 'Create account' }));

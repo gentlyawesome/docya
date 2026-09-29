@@ -1,5 +1,5 @@
 import { supabase } from '../config/supabase';
-import { User, UserRole } from '../types';
+import { User } from '../types';
 import { mapSupabaseError } from './supabaseErrors';
 import { getUserProfile } from './userService';
 
@@ -8,7 +8,6 @@ export interface RegisterInput {
   password: string;
   firstName: string;
   lastName: string;
-  role: UserRole;
   phone?: string;
   specialization?: string;
 }
@@ -27,7 +26,6 @@ export const register = async (input: RegisterInput): Promise<RegisterResult> =>
         first_name: firstName,
         last_name: lastName,
         full_name: `${firstName} ${lastName}`.trim(),
-        role: input.role,
         phone: input.phone?.trim() || undefined,
         specialization: input.specialization?.trim() || undefined,
       },

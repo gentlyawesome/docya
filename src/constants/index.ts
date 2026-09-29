@@ -15,12 +15,6 @@ export const DAYS_OF_WEEK = [
   'Sunday',
 ] as const;
 
-export const STORAGE_KEYS = {
-  REMINDERS: '@doctora_reminders',
-  DOCTORS_CACHE: '@doctora_doctors_cache',
-  FAVORITES: '@doctora_favorites',
-} as const;
-
 export const COLORS = {
   primary: '#007AFF',
   secondary: '#5856D6',
@@ -35,5 +29,3 @@ export const COLORS = {
   border: '#C6C6C8',
   disabled: '#D1D1D6',
 } as const;
-
-export const DEFAULT_REMINDER_MINUTES = 60;

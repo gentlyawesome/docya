@@ -1,34 +1,23 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer, { loginUser } from '../../src/store/slices/authSlice';
-import bookingsReducer from '../../src/store/slices/bookingsSlice';
-import doctorsReducer from '../../src/store/slices/doctorsSlice';
-import favoritesReducer from '../../src/store/slices/favoritesSlice';
 import { Booking, TimeSlot, User } from '../../src/types';
 
 export const makeStore = () =>
-  configureStore({
-    reducer: {
-      auth: authReducer,
-      doctors: doctorsReducer,
-      bookings: bookingsReducer,
-      favorites: favoritesReducer,
-    },
-  });
+  configureStore({ reducer: { auth: authReducer } });
 
-export const patient: User = {
-  id: 'patient-1',
-  email: 'pat@example.test',
-  firstName: 'Pat',
-  lastName: 'Patient',
-  fullName: 'Pat Patient',
-  role: 'patient',
+export const doctorUser: User = {
+  id: 'doctor-1',
+  email: 'doc@example.test',
+  firstName: 'Dana',
+  lastName: 'Doc',
+  fullName: 'Dana Doc',
 };
 
-export const doctorUser: User = { ...patient, id: 'doctor-1', email: 'doc@example.test', firstName: 'Dana', lastName: 'Doc', fullName: 'Dana Doc', role: 'doctor' };
-
-export const signedIn = (user: User = patient) => {
+export const signedIn = (user: User = doctorUser) => {
   const store = makeStore();
-  store.dispatch(loginUser.fulfilled(user, 'req', { email: user.email, password: 'x' }));
+  store.dispatch(
+    loginUser.fulfilled(user, 'req', { email: user.email, password: 'x' }),
+  );
   return store;
 };
 
@@ -56,6 +45,6 @@ export const booking = (over: Partial<Booking> = {}): Booking => ({
   timezone: 'Australia/Perth',
   bookedAt: '2026-01-01T00:00:00Z',
   status: 'confirmed',
-  patientId: 'patient-1',
+  patientName: 'Pat Patient',
   ...over,
 });
