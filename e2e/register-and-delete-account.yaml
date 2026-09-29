@@ -56,9 +56,9 @@ name: Register, edit profile, delete account
 - tapOn: "Phone"
 - inputText: "+639171112222"
 - scrollUntilVisible:
-    element: "Save personal information"
+    element: "Save changes"
     centerElement: true
-- tapOn: "Save personal information"
+- tapOn: "Save changes"
 - assertVisible: "Your details were updated."
 - tapOn: "OK"
 # Delete the account
