@@ -210,7 +210,7 @@ describe('Reset password screen', () => {
     renderScreen();
     fireEvent.press(screen.getByRole('button', { name: 'Reset password' }));
     expect(
-      screen.getByText('Enter the 6-digit code from the email'),
+      screen.getByText('Enter the code from the email'),
     ).toBeTruthy();
     expect(screen.getByText('Use at least 6 characters')).toBeTruthy();
     fireEvent.changeText(screen.getByLabelText('Code'), '123456');
@@ -293,7 +293,7 @@ describe('Confirm email screen', () => {
     const store = renderScreen();
     fireEvent.press(screen.getByRole('button', { name: 'Confirm' }));
     expect(
-      screen.getByText('Enter the 6-digit code from the email'),
+      screen.getByText('Enter the code from the email'),
     ).toBeTruthy();
     expect(auth.verifyOtp).not.toHaveBeenCalled();
 

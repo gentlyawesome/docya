@@ -32,9 +32,9 @@ name: Register, edit profile, delete account
 - inputText: "Password123!"
 - pressKey: Enter
 # The account is confirmed with the code from the email (caught by the local mail catcher)
-- assertVisible: "We sent a 6-digit code.*"
+- assertVisible: "We sent a code to.*"
 - tapOn: "Confirm"
-- assertVisible: "Enter the 6-digit code from the email"
+- assertVisible: "Enter the code from the email"
 - tapOn: "Code"
 - inputText: "000000"
 - tapOn: "Confirm"

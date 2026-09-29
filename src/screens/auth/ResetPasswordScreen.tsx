@@ -49,7 +49,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ route }) => {
 
   const submit = () => {
     const next: Errors = {};
-    if (!isValidCode(code)) next.code = 'Enter the 6-digit code from the email';
+    if (!isValidCode(code)) next.code = 'Enter the code from the email';
     if (!isValidPassword(password))
       next.password = `Use at least ${MIN_PASSWORD_LENGTH} characters`;
     if (confirm !== password) next.confirm = 'Passwords do not match';

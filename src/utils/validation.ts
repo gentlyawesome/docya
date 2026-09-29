@@ -19,5 +19,5 @@ export const isValidTimezone = (timezone: string): boolean => {
 };
 
 
-// The emailed one-time code (6 digits by default; Supabase allows up to 10)
+// The emailed one-time code (6 digits locally; a hosted project may use up to 10)
 export const isValidCode = (code: string): boolean => /^\d{6,10}$/.test(code.trim());

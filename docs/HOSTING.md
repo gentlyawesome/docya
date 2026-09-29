@@ -28,19 +28,31 @@ Do **not** run `supabase/seed.sql` on a hosted project: it creates test doctors 
 
 ## 3. Configure sign-in (Dashboard > Authentication)
 
-- **Providers > Email**: enabled. Turn **Confirm email** ON. Minimum password length 6 (or more; the app
-  accepts anything the server accepts).
-- **Emails > Templates**: the app asks people to type a 6-digit code instead of clicking a link, so the
-  two templates must show `{{ .Token }}`. Paste these (subject and body) over the defaults:
-  - *Confirm signup*: subject `Your Docya confirmation code`, body from `supabase/templates/confirmation.html`
-  - *Reset password*: subject `Your Docya password reset code`, body from `supabase/templates/recovery.html`
-- **URL Configuration**: the Site URL is never opened by the app; set it to your privacy-policy site so
-  the field is not blank.
-- **Emails > SMTP Settings**: **set up your own SMTP provider before real users sign up.** Supabase's
-  built-in mail sender is for testing only: a handful of emails per hour, and only to your own team's
-  addresses. Use any transactional provider (Resend, Postmark, SendGrid, Amazon SES...), then check
-  **Authentication > Rate Limits** for how many emails per hour you want to allow.
+**Connect your own email provider first.** On a free project using Supabase's built-in mail sender, the
+dashboard and the CLI both refuse to change the email templates ("not available for free tier projects
+using the default email provider"), and that sender only allows a few emails an hour, only to your own
+team. So before real users: Authentication > Emails > **SMTP Settings**, enable custom SMTP with any
+transactional provider (Resend, Postmark, SendGrid, Amazon SES...). Then:
+
+- **Providers > Email**: enabled, **Confirm email ON**, minimum password length 6 or more.
+- **Emails > Templates**: the app asks people to type a code instead of clicking a link, so both
+  templates must show `{{ .Token }}`. Paste the subject and body from:
+  - *Confirm signup*: `supabase/templates/confirmation.html` (subject `Your Docya confirmation code`)
+  - *Reset password*: `supabase/templates/recovery.html` (subject `Your Docya password reset code`)
+- **Code length**: projects created before 2026 may send 8-digit codes; the app accepts 6 to 10 digits, so
+  either works. Set it to 6 if you want it to match the screens' wording elsewhere.
+- **URL Configuration**: the Site URL is never opened by the app; set it to your privacy-policy site
+  (`https://gentlyawesome.github.io/docya/`) and remove old entries such as `com.doctoraappointments://confirm`.
+- **Rate Limits**: decide how many emails per hour to allow.
 - Leave **anonymous sign-ins** off.
+
+Shortcut: once SMTP is on, `supabase config push` applies this repo's `[auth]` settings and templates in
+one go. It pushes the *whole* `[auth]` section of `supabase/config.toml`, including its local
+`site_url`, so read the diff it prints and change `site_url` in `config.toml` first (or decline and use
+the dashboard).
+
+**Until SMTP is connected** the hosted project still works for sign-up (no code is asked) but the
+"Forgot password" code email cannot be sent in the app's format.
 
 ## 4. Point a release build at it
 
@@ -60,6 +72,8 @@ Do **not** run `supabase/seed.sql` on a hosted project: it creates test doctors 
 
 Use a real address you can read:
 
+0. `npm run hosted:smoke` (reads `.env.production`) registers a temporary doctor, checks the main rules and
+   deletes the account again. It stops early if sign-up needs an emailed code.
 1. Create an account: the app shows the code screen; the email arrives; the code signs you in.
 2. Sign out, choose **Forgot password?**, request a code, set a new password, sign in with it.
 3. Set working hours, schedule a patient, cancel it.

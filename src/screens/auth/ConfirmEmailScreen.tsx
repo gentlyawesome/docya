@@ -39,7 +39,7 @@ export const ConfirmEmailScreen: React.FC<Props> = ({ route }) => {
 
   const submit = () => {
     if (!isValidCode(code)) {
-      setCodeError('Enter the 6-digit code from the email');
+      setCodeError('Enter the code from the email');
       return;
     }
     setCodeError(undefined);
@@ -60,8 +60,7 @@ export const ConfirmEmailScreen: React.FC<Props> = ({ route }) => {
         automaticallyAdjustKeyboardInsets
       >
         <Text style={styles.intro}>
-          We sent a 6-digit code to {email}. Enter it to finish creating your
-          account.
+          We sent a code to {email}. Enter it to finish creating your account.
         </Text>
         {resent ? (
           <View style={styles.infoBox} accessibilityRole="alert">
