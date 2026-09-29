@@ -1,5 +1,4 @@
--- Simplification: doctors are no longer asked for a license number. Approval (see the previous
--- migration) is now the operator's own judgement.
+-- Simplification: doctors are no longer asked for a license number.
 
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger

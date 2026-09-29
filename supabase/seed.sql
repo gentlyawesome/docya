@@ -40,17 +40,14 @@ SELECT pg_temp.seed_user('d3c4e5f6-7a8b-4c9d-9e2f-3a4b5c6d7e8f', 'angela.reyes@d
   'Angela', 'Reyes', 'doctor', '+639173456789', 'Dermatology');
 
 UPDATE public.doctor_profiles SET
-  verification_status = 'approved', verified_at = now(),
   clinic_name = 'Heart Care Medical Center', consultation_fee = 1500, timezone = 'Asia/Manila',
   bio = 'Cardiologist focused on preventive cardiology and long-term heart health.'
 WHERE user_id = 'b1a2c3d4-5e6f-4a8b-9c0d-1e2f3a4b5c6d';
 UPDATE public.doctor_profiles SET
-  verification_status = 'approved', verified_at = now(),
   clinic_name = 'Children''s Health Clinic', consultation_fee = 1200, timezone = 'Asia/Manila',
   bio = 'Pediatrician caring for infants, children and teenagers.'
 WHERE user_id = 'c2b3d4e5-6f7a-4b9c-8d1e-2f3a4b5c6d7e';
 UPDATE public.doctor_profiles SET
-  verification_status = 'approved', verified_at = now(),
   clinic_name = 'Skin Health Center', consultation_fee = 1300, timezone = 'Asia/Manila',
   bio = 'Dermatologist for medical and cosmetic skin care, including skin-cancer screening.'
 WHERE user_id = 'd3c4e5f6-7a8b-4c9d-9e2f-3a4b5c6d7e8f';

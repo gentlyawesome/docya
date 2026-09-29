@@ -16,7 +16,6 @@ import {
   Section,
 } from '../../components/AccountSections';
 import { Button } from '../../components/Button';
-import { ApprovalBanner } from '../../components/ApprovalBanner';
 import { FormField } from '../../components/FormField';
 import { COLORS, CURRENCY_SYMBOL } from '../../constants';
 import { isValidFee, isValidTimezone } from '../../utils/validation';
@@ -97,7 +96,6 @@ const ProfessionalSection: React.FC<{ userId: string }> = ({ userId }) => {
 
   return (
     <Section title="Professional details">
-      <ApprovalBanner userId={userId} />
       {loadError ? <Text style={styles.error}>{loadError}</Text> : null}
       <FormField
         label="Specialization"
