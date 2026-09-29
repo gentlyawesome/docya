@@ -1,34 +1,26 @@
-# Docya - App Store Metadata
+# Docya - App Store Metadata (iPhone)
 
-**Ready to copy/paste into App Store Connect and Google Play Console**
-
----
-
-## 📱 Basic Information
-
-### App Name
-```
-Docya
-```
-
-### Subtitle (iOS - 30 characters max)
-```
-Appointment Book for Doctors
-```
-
-### Short Description (Android - 80 characters max)
-```
-Appointment book for doctors: set your hours, schedule patients, stay organized.
-```
+Copy these into App Store Connect. Docya is an **iPhone-only** app; there is no Android or iPad version.
+Character limits are checked below. Last reviewed: September 29, 2026.
 
 ---
 
-## 📝 Full Description (Both Stores - 4000 characters max)
+## Basic information
 
+**App name** (30 max) - `Docya`
+
+**Subtitle** (30 max) - `Appointment Book for Doctors` (28)
+
+**Promotional text** (170 max, can be changed without a new build)
+```
+A simple appointment book for doctors. Set your hours, book patients, get reminders, stay organized. Private, ad-free, with in-app account deletion.
+```
+
+**Description** (4000 max)
 ```
 Docya is a simple appointment book for doctors.
 
-Set your weekly working hours, then book patients into open 30-minute slots in seconds. See what is coming up today and this week, cancel or complete visits, and keep private notes on each appointment.
+Set your weekly working hours, then book patients into open 30-minute slots in seconds. See what is coming up today and this week, get a reminder before each visit, cancel or complete visits, and keep private notes on each appointment.
 
 FEATURES:
 • Weekly working-hours editor
@@ -40,7 +32,7 @@ FEATURES:
 • Your profile: name, specialization, time zone
 
 PRIVACY FIRST:
-Your appointments are visible only to you. No ads, no tracking. Delete your account and all of its data in the app any time.
+Your appointments are visible only to you. No ads, no tracking. Reminders are created on your phone and do not include patient names unless you choose to. Delete your account and all of its data in the app any time.
 
 HOW IT WORKS:
 1. Create your doctor account
@@ -51,290 +43,132 @@ HOW IT WORKS:
 For doctors and clinicians. Patients do not need the app.
 ```
 
----
-
-## 🔑 Keywords (100 characters max)
-
-### iOS App Store
+**Keywords** (100 max, comma separated, no spaces) - 87 characters
 ```
 doctor,appointment,booking,medical,health,schedule,calendar,clinic,healthcare,physician
 ```
 
-### Google Play Store
-```
-doctor appointment booking medical health schedule calendar clinic healthcare physician
-```
-
----
-
-## 📂 Categories
-
-### Primary Category
-```
-Medical
-```
-
-### Secondary Category (iOS)
-```
-Health & Fitness
-```
-
----
-
-## 🔗 URLs
-
-### Privacy Policy URL
-```
-https://gentlyawesome.github.io/docya/privacy-policy.html
-```
-*(Update with your actual GitHub Pages URL after enabling it)*
-
-### Support URL
-```
-https://github.com/gentlyawesome/docya
-```
-
-### Marketing URL (Optional)
-```
-https://github.com/gentlyawesome/docya
-```
-
----
-
-## 📧 Contact Information
-
-### Support Email
-```
-gentlyawesome@gmail.com
-```
-
-### Developer Name
-```
-[Your Name or Company Name]
-```
-
----
-
-## 📸 Screenshot Descriptions
-
-### Screenshot 1: Dashboard
-**Title:** Your Day at a Glance
-**Description:** Today's and upcoming appointments
-
-### Screenshot 2: New Appointment
-**Title:** Book in Seconds
-**Description:** Enter the patient, pick a day and an open slot
-
-### Screenshot 3: Appointments
-**Title:** Every Visit in One Place
-**Description:** Upcoming and past appointments, cancel or complete
-
-### Screenshot 4: Working Hours
-**Title:** Your Hours, Your Rules
-**Description:** Set the weekly schedule patients are booked into
-
-
-## 🎯 Promotional Text (iOS - 170 characters, optional)
-
-```
-A simple appointment book for doctors. Set your hours, book patients, stay organized. Private, ad-free, with in-app account deletion.
-```
-
----
-
-## 🏷️ App Store Specific
-
-### Age Rating
-```
-4+ (No objectionable content)
-```
-
-### Content Rights
-```
-I have the rights to use all content in this app
-```
-
-### Export Compliance
-```
-No - This app does not use encryption
-```
-
-### Advertising Identifier (IDFA)
-```
-No - This app does not use the Advertising Identifier
-```
-
----
-
-## 🤖 Google Play Specific
-
-### Content Rating
-**Target Audience:**
-- Everyone
-
-**Questionnaire Answers:**
-- Violence: No
-- Sexual Content: No
-- Profanity: No
-- Controlled Substances: No
-- Gambling: No
-- User Interaction: No
-- Shares Location: No
-- Shares Personal Info: No
-
-### App Access
-```
-This app does not require special access or login credentials for review
-```
-
-### Target SDK
-```
-34 (Android 14)
-```
-
-### App Category
-```
-Medical
-```
-
-### Tags
-```
-health, medical, appointments, doctors, healthcare
-```
-
----
-
-## 📋 What's New (Version 1.0.0)
-
-### Release Notes
+**What's New** (version 1.0)
 ```
 Welcome to Docya!
 
-🎉 Initial Release
-
-Features:
 • Weekly working hours
 • Book patients by name into open slots
 • Reminders before each appointment
 • Cancel or complete appointments, with private notes
 • Dashboard for today and upcoming
-
-Simple, fast, and private appointment booking for doctors.
 ```
 
 ---
 
-## 🎨 App Icon Requirements
+## Categories, rating and URLs
 
-### iOS
-- **App Store:** 1024x1024px (already in `AppIcons/appstore.png`)
-- **All device sizes:** Already copied to project
+| Field | Value |
+|---|---|
+| Primary category | Medical |
+| Secondary category | Productivity |
+| Age rating | 4+ (answer the questionnaire honestly: no medical or treatment advice, no user-to-user content) |
+| Price | Free |
+| Privacy Policy URL | https://gentlyawesome.github.io/docya/privacy-policy.html |
+| Support URL | https://gentlyawesome.github.io/docya/ (the page has the contact email) |
+| Marketing URL (optional) | https://gentlyawesome.github.io/docya/ |
+| Support email | gentlyawesome@gmail.com |
+| Copyright | `2026 <your name or company>` |
 
-### Android
-- **Play Store:** 512x512px (already in `AppIcons/playstore.png`)
-- **All densities:** Already copied to project
-
----
-
-## 📱 Screenshot Sizes Required
-
-### iOS
-**iPhone 6.7" (iPhone 14 Pro Max, 15 Pro Max)**
-- Size: 1290 x 2796 pixels
-- Minimum: 3 screenshots
-- Maximum: 10 screenshots
-
-**iPhone 6.5" (iPhone 11 Pro Max, XS Max)**
-- Size: 1242 x 2688 pixels
-- Minimum: 3 screenshots
-
-**iPhone 5.5" (iPhone 8 Plus)**
-- Size: 1242 x 2208 pixels
-- Minimum: 3 screenshots
-
-### Android
-**Phone**
-- Minimum: 320px
-- Maximum: 3840px
-- Recommended: 1080 x 1920 pixels
-- Minimum: 2 screenshots
-- Maximum: 8 screenshots
-
-**7" Tablet (Optional)**
-- Recommended: 1024 x 600 pixels
-
-**10" Tablet (Optional)**
-- Recommended: 1280 x 800 pixels
+The privacy policy URL goes into App Store Connect only; nothing needs to be added to `Info.plist`.
 
 ---
 
-## ✅ Pre-Submission Checklist
+## App Privacy ("nutrition label") - suggested answers, please review
 
-### Content Ready
-- [x] App name: Docya
-- [x] Description written
-- [x] Keywords selected
-- [x] Privacy policy created
-- [ ] Screenshots taken (need to run app and capture)
-- [ ] Support email set up
-- [x] App icons ready
+Docya has a server (Supabase), so it does collect data. Apple wants every type below listed, all **linked to the user's identity** and **not used for tracking**. Processors that only store data for us (Supabase, our email sender) do not count as "sharing".
 
-### Technical Ready
-- [x] App name updated in code
-- [x] Icons copied to project
-- [x] Version set to 1.0.0
-- [ ] iOS build created
-- [ ] Android build created
+| Data type (Apple's wording) | What it is in Docya | Purpose |
+|---|---|---|
+| Contact Info - Name | Doctor's name; patient names typed into appointments | App Functionality |
+| Contact Info - Email Address | Doctor's sign-in email | App Functionality, account management |
+| Contact Info - Phone Number | Doctor's optional phone; patient phones typed into appointments | App Functionality |
+| Health & Fitness - Health | Appointment notes may contain health information the doctor chooses to write | App Functionality |
+| User Content - Other User Content | Appointment notes | App Functionality |
+| Identifiers - User ID | Account ID | App Functionality |
 
-### Legal Ready
-- [x] Privacy policy hosted
-- [ ] Privacy policy URL added to Info.plist
-- [ ] Terms of service (optional - not required)
+Answer **No** to: tracking, advertising, analytics, diagnostics/crash data, location, contacts, purchases, browsing history.
+
+Note: the patient's own details are typed in by the doctor without the patient using the app. The privacy policy makes the doctor responsible for that. Have the wording of both reviewed before submitting.
 
 ---
 
-## 📝 Notes for Submission
+## Compliance answers
 
-### iOS App Store Connect
-1. Create new app in App Store Connect
-2. Fill in all metadata from this document
-3. Upload screenshots (take from simulator)
-4. Add build from Xcode
-5. Answer export compliance questions
-6. Submit for review
-
-### Google Play Console
-1. Create new app in Play Console
-2. Fill in store listing from this document
-3. Upload screenshots
-4. Complete content rating questionnaire
-5. Upload AAB file
-6. Submit for review
-
-### Review Timeline
-- **iOS:** Typically 1-2 days
-- **Android:** Typically 1-3 days
+- **Encryption**: the app only uses standard HTTPS, which is exempt. `ITSAppUsesNonExemptEncryption` is set to `false` in `Info.plist`, so App Store Connect will not ask for every build.
+- **Advertising Identifier (IDFA)**: not used.
+- **Account deletion**: available in the app (Profile > Delete account), as App Review requires for apps that create accounts.
+- **Sign in with Apple**: not needed; the app has no third-party sign-in.
+- **Content rights**: no third-party content.
+- **Notifications**: reminders are local notifications, asked for the first time a reminder is scheduled.
 
 ---
 
-## 🎯 Tips for Approval
+## Notes for App Review
 
-### Do's ✅
-- Use clear, accurate screenshots
-- Write honest, straightforward description
-- Ensure privacy policy is accessible
-- Test app thoroughly before submission
-- Respond quickly to reviewer questions
+Put these in the "App Review Information" fields (never in this file):
 
-### Don'ts ❌
-- Don't use misleading screenshots
-- Don't promise features not in the app
-- Don't use copyrighted content
-- Don't include placeholder text
-- Don't submit with known bugs
+- **Demo account**: create a dedicated doctor account on the hosted project (with working hours set for the coming weekdays), and enter its email and password in the review fields. Reviewers cannot use a sign-up code sent to a mailbox they cannot read.
+- **Notes to reviewer** (suggested text):
+```
+Docya is an appointment book for doctors. Sign in with the demo account. Tap "New appointment", type any patient name, pick a day and an open time slot and confirm. Reminders can be set in the Profile tab; they are local notifications. Patients do not use the app: the doctor types the patient's name and optional phone number. Account deletion is in Profile > Delete account.
+```
 
 ---
 
-**Created:** March 10, 2026  
-**Version:** 1.0.0  
-**Status:** Ready for Submission 🚀
+## Screenshots (iPhone only)
+
+Take them from a **Release** build, on a simulator sized for the largest iPhone (iPhone 17 Pro Max or 16 Pro Max, 6.9" display, 1320 x 2868). App Store Connect scales them for smaller iPhones; check its upload page for the current required sizes. Minimum 1, up to 10; use 4 to 6.
+
+1. **Your Day at a Glance** - Dashboard with a few appointments
+2. **Book in Seconds** - New appointment: patient entered, day picked, open slots showing
+3. **Every Visit in One Place** - Appointments list (Upcoming)
+4. **Your Hours, Your Rules** - Schedule tab with working hours
+5. **Reminders** - Profile > Reminders card (optional)
+
+Use invented patients ("Pat Patient"), never real names.
+
+---
+
+## App icon
+
+Source: the 1024 x 1024 artwork in `ios/DoctoraAppointments/Images.xcassets/AppIcon.appiconset/icon-1024.png` (no transparency, as App Store Connect requires; Xcode builds every smaller size from it). It is a rounded tile on a white square, so on the home screen it shows a thin white border; a full-bleed version of the artwork would look better.
+
+---
+
+## Before submission
+
+### Ready
+- [x] App name, subtitle, description, keywords, promotional text
+- [x] Privacy policy written and published (GitHub Pages, built from `develop` /docs)
+- [x] App icon in the app (1024 x 1024, no alpha)
+- [x] Display name "Docya", iPhone only, encryption flag set
+- [x] Account deletion in the app; reminders permission asked in context
+
+### Still to do
+- [ ] **Your own bundle ID** (it is still the template `org.reactjs.native.example.DoctoraAppointments`), an explicit App ID and a distribution profile
+- [ ] Hosted Supabase: connect an email provider (SMTP), turn on the sign-up code and the two email templates (`docs/HOSTING.md`)
+- [ ] Decide who may register as a doctor (open sign-up today)
+- [ ] Legal review of the privacy policy
+- [ ] Demo account for App Review
+- [ ] Screenshots from a Release build
+- [ ] Archive, upload with Xcode, TestFlight test on a real iPhone
+- [ ] Enter the App Privacy answers above in App Store Connect
+- [ ] Developer name / copyright line
+
+### Version
+1.0 (build 1)
+
+---
+
+## Tips for approval
+
+- Use accurate screenshots; do not promise features the app does not have.
+- Keep the privacy policy reachable and consistent with the App Privacy answers.
+- Answer reviewer questions quickly; typical review time is 1 to 2 days.
+- Do not submit with placeholder text or test data visible.
