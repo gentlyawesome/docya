@@ -13,7 +13,13 @@ export interface Doctor {
   name: string;
   timezone: string;
   availabilities: DoctorAvailability[];
+  specialty?: string;
+  rating?: number;
+  reviewCount?: number;
+  fee?: number;
 }
+
+export type DoctorProfile = Pick<Doctor, 'specialty' | 'rating' | 'reviewCount' | 'fee'>;
 
 export interface TimeSlot {
   id: string;
@@ -37,7 +43,14 @@ export interface Booking {
   dayOfWeek: string;
   timezone: string;
   bookedAt: string; // ISO timestamp
+  status?: BookingStatus; // missing on bookings saved before status existed = 'confirmed'
+  cancelledAt?: string; // ISO timestamp
+  reminderId?: string; // id of the scheduled local notification
+  reminderLeadMinutes?: number;
 }
+
+export type BookingStatus = 'confirmed' | 'cancelled';
+export type BookingPhase = 'upcoming' | 'completed' | 'cancelled';
 
 export type DayOfWeek = 
   | 'Monday' 

@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import doctorsReducer from './slices/doctorsSlice';
 import bookingsReducer from './slices/bookingsSlice';
+import favoritesReducer from './slices/favoritesSlice';
 
 export const store = configureStore({
   reducer: {
     doctors: doctorsReducer,
     bookings: bookingsReducer,
+    favorites: favoritesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

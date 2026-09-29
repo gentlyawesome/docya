@@ -1,7 +1,8 @@
 import { format, parse, addMinutes, isBefore, isEqual } from 'date-fns';
-import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 import { DoctorAvailability, TimeSlot, Booking } from '../types';
 import { SLOT_DURATION_MINUTES } from '../constants';
+import { logError } from './logger';
+import { fromZonedTime } from 'date-fns-tz';
 
 /**
  * Parse time string (e.g., " 9:00AM", "10:00AM") to 24-hour format
@@ -12,7 +13,7 @@ export const parseTimeString = (timeStr: string): string => {
     const parsed = parse(cleaned, 'h:mma', new Date());
     return format(parsed, 'HH:mm');
   } catch (error) {
-    console.error('Error parsing time:', timeStr, error);
+    logError(`Error parsing time: ${timeStr}`, error);
     return '00:00';
   }
 };
@@ -143,3 +144,11 @@ export const formatTime12Hour = (time24: string): string => {
     return time24;
   }
 };
+
+/**
+ * Slots that have not started yet, judged in the doctor's time zone
+ */
+export const filterFutureSlots = (slots: TimeSlot[], now: number = Date.now()): TimeSlot[] =>
+  slots.filter(
+    slot => fromZonedTime(`${slot.date}T${slot.startTime}:00`, slot.timezone).getTime() > now
+  );

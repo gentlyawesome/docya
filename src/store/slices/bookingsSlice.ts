@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import { Booking, TimeSlot } from '../../types';
 import * as storage from '../../services/storage';
+import { cancelReminder, scheduleReminder, ReminderResult } from '../../services/reminders';
 
 interface BookingsState {
   bookings: Booking[];
@@ -32,7 +33,10 @@ export const loadBookingsFromStorage = createAsyncThunk(
 // Async thunk to create a booking
 export const createBooking = createAsyncThunk(
   'bookings/create',
-  async (timeSlot: TimeSlot, { rejectWithValue }) => {
+  async (
+    { timeSlot, reminderLeadMinutes = null }: { timeSlot: TimeSlot; reminderLeadMinutes?: number | null },
+    { rejectWithValue }
+  ) => {
     try {
       // Check if slot is already booked
       const isBooked = await storage.isSlotBooked(
@@ -59,8 +63,20 @@ export const createBooking = createAsyncThunk(
       };
       
       // Save to storage
-      const updatedBookings = await storage.addBooking(booking);
-      return updatedBookings;
+      let updatedBookings = await storage.addBooking(booking);
+
+      // A reminder problem must never undo or fail the booking itself
+      let reminder: ReminderResult | null = null;
+      if (reminderLeadMinutes !== null) {
+        reminder = await scheduleReminder(booking, reminderLeadMinutes);
+        if (reminder.status === 'scheduled') {
+          updatedBookings = await storage.updateBooking(booking.id, {
+            reminderId: reminder.reminderId,
+            reminderLeadMinutes: reminder.leadMinutes,
+          });
+        }
+      }
+      return { bookings: updatedBookings, reminder };
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : 'Failed to create booking'
@@ -74,7 +90,11 @@ export const cancelBooking = createAsyncThunk(
   'bookings/cancel',
   async (bookingId: string, { rejectWithValue }) => {
     try {
-      const updatedBookings = await storage.removeBooking(bookingId);
+      const existing = (await storage.loadBookings()).find(b => b.id === bookingId);
+      if (existing?.reminderId) {
+        await cancelReminder(existing.reminderId);
+      }
+      const updatedBookings = await storage.cancelBookingById(bookingId);
       return updatedBookings;
     } catch (error) {
       return rejectWithValue(
@@ -115,7 +135,7 @@ const bookingsSlice = createSlice({
       })
       .addCase(createBooking.fulfilled, (state, action) => {
         state.loading = false;
-        state.bookings = action.payload;
+        state.bookings = action.payload.bookings;
         state.error = null;
       })
       .addCase(createBooking.rejected, (state, action) => {
@@ -146,34 +166,9 @@ export const selectAllBookings = (state: { bookings: BookingsState }) => state.b
 export const selectBookingsLoading = (state: { bookings: BookingsState }) => state.bookings.loading;
 export const selectBookingsError = (state: { bookings: BookingsState }) => state.bookings.error;
 
-// Get bookings sorted by date and time (upcoming first)
-export const selectUpcomingBookings = (state: { bookings: BookingsState }) => {
-  const now = new Date();
-  const currentDate = now.toISOString().split('T')[0];
-  
-  return [...state.bookings.bookings]
-    .filter(booking => booking.date >= currentDate)
-    .sort((a, b) => {
-      if (a.date !== b.date) {
-        return a.date.localeCompare(b.date);
-      }
-      return a.startTime.localeCompare(b.startTime);
-    });
-};
-
-// Get past bookings
-export const selectPastBookings = (state: { bookings: BookingsState }) => {
-  const now = new Date();
-  const currentDate = now.toISOString().split('T')[0];
-  
-  return [...state.bookings.bookings]
-    .filter(booking => booking.date < currentDate)
-    .sort((a, b) => {
-      if (a.date !== b.date) {
-        return b.date.localeCompare(a.date);
-      }
-      return b.startTime.localeCompare(a.startTime);
-    });
-};
+// Bookings that still occupy a slot (cancelled ones free it up)
+export const selectActiveBookings = createSelector([selectAllBookings], bookings =>
+  bookings.filter(booking => booking.status !== 'cancelled')
+);
 
 export default bookingsSlice.reducer;

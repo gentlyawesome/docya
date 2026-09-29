@@ -1,18 +1,22 @@
 import axios from 'axios';
 import { DoctorAvailability, Doctor } from '../types';
-import { API_URL } from '../constants';
+import { logError } from '../utils/logger';
+import { parseDoctorAvailability } from './schemas';
+import { API_URL, SAMPLE_DOCTOR_PROFILES, SHOW_SAMPLE_DOCTOR_PROFILES } from '../constants';
 
 /**
  * Fetch doctor availability data from API
  */
 export const fetchDoctorAvailability = async (): Promise<DoctorAvailability[]> => {
+  let data: unknown;
   try {
-    const response = await axios.get<DoctorAvailability[]>(API_URL);
-    return response.data;
+    const response = await axios.get<unknown>(API_URL);
+    data = response.data;
   } catch (error) {
-    console.error('Error fetching doctor availability:', error);
+    logError('Error fetching doctor availability:', error);
     throw new Error('Failed to fetch doctor availability. Please check your internet connection.');
   }
+  return parseDoctorAvailability(data);
 };
 
 /**
@@ -41,6 +45,7 @@ export const transformToDoctors = (availabilities: DoctorAvailability[]): Doctor
       name,
       timezone,
       availabilities,
+      ...(SHOW_SAMPLE_DOCTOR_PROFILES ? SAMPLE_DOCTOR_PROFILES[id] : undefined),
     });
   });
   

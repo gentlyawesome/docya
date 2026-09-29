@@ -1,5 +1,5 @@
 import { format, parseISO, startOfWeek, addDays } from 'date-fns';
-import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+import { toZonedTime } from 'date-fns-tz';
 
 /**
  * Format date for display
@@ -57,7 +57,7 @@ export const getNextDays = (numberOfDays: number = 7): Date[] => {
  * Convert time to timezone
  */
 export const convertToTimezone = (date: Date, timezone: string): Date => {
-  return utcToZonedTime(date, timezone);
+  return toZonedTime(date, timezone);
 };
 
 /**
