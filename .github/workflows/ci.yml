@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [develop, main]
+
+# A newer push to the same branch replaces a run that is still going
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Types, lint and the unit tests (Supabase is mocked, so no keys or network are needed)
+  checks:
+    name: Types, lint and unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test -- --ci
+
+  # Starts the real database and auth server from supabase/migrations and runs the security checks
+  # against them (who can see, create and change what, and the sign-up and password-reset codes)
+  backend:
+    name: Database and security rules
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.113.0
+      - name: Start local Supabase (applies every migration and the seed)
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor,postgres-meta
+      - name: Point the checks at it
+        run: |
+          eval "$(supabase status -o env)"
+          printf 'SUPABASE_URL=%s\nSUPABASE_ANON_KEY=%s\n' "$API_URL" "$ANON_KEY" > .env
+      - run: npm run backend:check
+      - name: Show service logs if it failed
+        if: failure()
+        run: docker ps -a && docker logs supabase_auth_docya --tail 60 || true
