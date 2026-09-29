@@ -28,7 +28,7 @@ Book doctor appointments easily. View availability and manage bookings.
 ```
 Docya makes booking doctor appointments incredibly simple.
 
-Browse available doctors, view their schedules, and book appointments in seconds. No account required, no hassle.
+Browse available doctors, view their schedules, and request appointments in seconds. Doctors confirm from their own dashboard.
 
 FEATURES:
 • Browse doctors by location
@@ -36,20 +36,21 @@ FEATURES:
 • Book 30-minute appointment slots
 • Manage all bookings in one place
 • Cancel appointments anytime
-• Works offline
+• Appointment reminders and Add to Calendar
+• Doctor accounts to confirm or decline requests
 
 SIMPLE & FAST:
 Book an appointment in under 2 minutes. No phone calls, no waiting, no complex forms.
 
 PRIVACY FIRST:
-All data stored locally on your device. No cloud sync, no tracking, no data collection.
+Your account and appointments are stored securely and visible only to you and your doctor. No ads, no tracking. Delete your account in the app any time.
 
 HOW IT WORKS:
 1. Browse available doctors
 2. View their calendar
 3. Select an open time slot
-4. Confirm your booking
-5. View in My Bookings
+4. Request the appointment
+5. Track it in My Bookings until your doctor confirms
 
 Perfect for patients who value simplicity and privacy. Download Docya and simplify your healthcare appointments today!
 ```
@@ -145,7 +146,7 @@ gentlyawesome@gmail.com
 ## 🎯 Promotional Text (iOS - 170 characters, optional)
 
 ```
-Book doctor appointments in seconds! No account needed. All data stays on your device. Simple, fast, and private healthcare scheduling.
+Request doctor appointments in seconds and track confirmation in one place. Private, ad-free, with in-app account deletion.
 ```
 
 ---
@@ -226,7 +227,8 @@ Features:
 • Book 30-minute appointments
 • Manage all bookings
 • Cancel appointments anytime
-• Offline support
+• Appointment reminders and Add to Calendar
+• Doctor accounts to confirm requests
 
 Simple, fast, and private doctor appointment booking.
 ```

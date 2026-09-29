@@ -42,79 +42,66 @@
 </head>
 <body>
     <h1>Privacy Policy for Docya</h1>
-    <p class="last-updated">Last updated: March 10, 2026</p>
+    <p class="last-updated">Last updated: September 29, 2026</p>
 
     <h2>1. Introduction</h2>
-    <p>Welcome to Docya. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we handle your information when you use our mobile application.</p>
+    <p>Docya lets patients request appointments with doctors, and lets doctors confirm them. This policy explains what we collect, why, and the choices you have.</p>
 
-    <h2>2. Data Collection</h2>
-    <p><strong>Docya collects NO personal information.</strong> All data is stored locally on your device only.</p>
-
-    <h2>3. What We Store Locally</h2>
-    <p>The following information is stored on your device using local storage (AsyncStorage):</p>
+    <h2>2. What We Collect</h2>
+    <p>You create an account with an email address and password. We store on our servers:</p>
     <ul>
-        <li><strong>Appointment bookings</strong> - Date, time, and doctor information for appointments you create</li>
-        <li><strong>Doctor availability data</strong> - Retrieved from our public API for display purposes</li>
+        <li><strong>Account and profile:</strong> email, first and last name, role (patient or doctor), and optional details you add such as phone number, date of birth, and gender</li>
+        <li><strong>Doctors only:</strong> specialization, license number, clinic name, consultation fee, bio, time zone, and weekly availability</li>
+        <li><strong>Appointments:</strong> doctor, patient, date and time, status (pending, confirmed, cancelled, completed), and the optional reason or notes you enter</li>
     </ul>
-    <p><strong>Important:</strong> This data never leaves your device and is not transmitted to our servers or any third parties.</p>
+    <p>Appointment reasons and notes may contain health information you choose to share. Please share only what you are comfortable with.</p>
 
-    <h2>4. What We DON'T Collect</h2>
+    <h2>3. Who Can See Your Data</h2>
     <ul>
-        <li>❌ No personal health information</li>
-        <li>❌ No names, emails, or phone numbers</li>
-        <li>❌ No payment information</li>
-        <li>❌ No location data or GPS tracking</li>
-        <li>❌ No tracking cookies or analytics</li>
-        <li>❌ No advertising identifiers</li>
-        <li>❌ No device identifiers</li>
+        <li>Patients see their own profile and appointments, and the public details of doctors.</li>
+        <li>A doctor sees appointments booked with them and the profile of patients who booked with them.</li>
+        <li>Other patients can only see that a time slot is taken, never who booked it.</li>
+        <li>We do not sell your data or share it for advertising.</li>
     </ul>
 
-    <h2>5. Third-Party Services</h2>
-    <p>Docya uses the following third-party service:</p>
+    <h2>4. Stored on Your Device</h2>
     <ul>
-        <li><strong>Doctor Data API:</strong> We retrieve doctor availability information from a public API endpoint: <code>https://raw.githubusercontent.com/suyogshiftcare/jsontest/main/available.json</code></li>
+        <li>Your sign-in session, so you stay signed in</li>
+        <li>A cache of the doctor list, your favourite doctors, and appointment reminder settings</li>
     </ul>
-    <p>This API does not collect or store any personal information about you.</p>
+    <p>Reminders are local notifications scheduled on your device; they are not sent through our servers.</p>
 
-    <h2>6. Data Storage and Security</h2>
+    <h2>5. What We Don't Collect</h2>
     <ul>
-        <li>All data is stored locally on your device using AsyncStorage</li>
-        <li>Data is sandboxed and encrypted by iOS/Android operating systems</li>
-        <li>No cloud backup or synchronization</li>
-        <li>No server-side storage</li>
-        <li>Data is automatically deleted when you uninstall the app</li>
+        <li>No payment information</li>
+        <li>No location or GPS data</li>
+        <li>No analytics, advertising identifiers, or tracking</li>
     </ul>
+
+    <h2>6. Service Providers</h2>
+    <p>Accounts, database, and authentication are provided by Supabase, which processes and stores data on our behalf. Data is encrypted in transit and access is restricted by row-level security rules.</p>
 
     <h2>7. Your Rights and Control</h2>
-    <p>You have complete control over your data:</p>
     <ul>
-        <li><strong>Delete all data:</strong> Uninstall the app to remove all stored information</li>
-        <li><strong>No account required:</strong> Use the app without creating an account or providing personal information</li>
-        <li><strong>Cancel bookings:</strong> Delete individual appointments at any time within the app</li>
+        <li><strong>Edit:</strong> update your profile any time from the Profile tab</li>
+        <li><strong>Cancel:</strong> cancel appointments from My Bookings</li>
+        <li><strong>Delete:</strong> use "Delete account" in the Profile tab to permanently delete your account, profile, and appointments. You can also email us to request deletion.</li>
     </ul>
 
-    <h2>8. Children's Privacy</h2>
-    <p>Docya does not knowingly collect information from children under 13 years of age. The app does not require any personal information and is safe for all ages to use.</p>
+    <h2>8. Retention</h2>
+    <p>We keep your data while your account exists. When you delete your account, your profile and appointments are removed from our systems, except for routine backups that expire on their normal schedule.</p>
 
-    <h2>9. Changes to This Policy</h2>
-    <p>We may update this privacy policy from time to time to reflect changes in our practices or for legal reasons. We will notify you of any significant changes by:</p>
-    <ul>
-        <li>Updating the "Last updated" date at the top of this policy</li>
-        <li>Posting the new policy in the app (if applicable)</li>
-    </ul>
-    <p>Your continued use of Docya after any changes indicates your acceptance of the updated policy.</p>
+    <h2>9. Children's Privacy</h2>
+    <p>Docya is not directed at children under 13, and we do not knowingly collect their information. If you believe a child has created an account, contact us and we will delete it.</p>
 
-    <h2>10. No Tracking or Analytics</h2>
-    <p>Docya does not use any analytics, tracking, or crash reporting services in the current version. We do not monitor your usage or collect any behavioral data.</p>
+    <h2>10. Changes to This Policy</h2>
+    <p>We may update this policy. We will change the "Last updated" date and, for significant changes, notify you in the app. Continued use means you accept the updated policy.</p>
 
     <h2>11. International Users</h2>
-    <p>Docya can be used anywhere in the world. Since all data is stored locally on your device, there are no international data transfers or cross-border data processing concerns.</p>
-
-    <h2>12. Legal Basis for Processing</h2>
-    <p>Since Docya does not collect or process personal data, no legal basis for data processing is required. The app functions entirely on your device without transmitting data to external servers.</p>
+    <p>Your data is processed on servers that may be located outside your country. By using Docya you consent to this transfer.</p>
 
     <div class="contact">
-        <h2>13. Contact Us</h2>
+        <h2>12. Contact Us</h2>
         <p>If you have any questions about this privacy policy or Docya's privacy practices, please contact us:</p>
         <ul>
             <li><strong>Email:</strong> gentlyawesome@gmail.com</li>
@@ -125,7 +112,7 @@
     <hr style="margin-top: 40px; border: none; border-top: 1px solid #ddd;">
     <p style="text-align: center; color: #666; font-size: 14px;">
         © 2026 Docya. All rights reserved.<br>
-        This privacy policy is effective as of March 10, 2026.
+        This privacy policy is effective as of September 29, 2026.
     </p>
 </body>
 </html>
