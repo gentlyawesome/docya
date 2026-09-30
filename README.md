@@ -16,19 +16,30 @@ React Native 0.84 (bare, TypeScript) · Redux Toolkit (auth only) · React Navig
 
 ## Getting started
 
-Prerequisites: Node, Xcode, CocoaPods, Docker, the [Supabase CLI](https://supabase.com/docs/guides/cli), and [Maestro](https://maestro.mobile.dev) for E2E.
+Prerequisites: Node, Xcode, CocoaPods, the [Supabase CLI](https://supabase.com/docs/guides/cli) (logged in with `supabase login`), and [Maestro](https://maestro.mobile.dev) for E2E. **No Docker needed.**
 
 ```bash
 npm install
 cd ios && LANG=en_US.UTF-8 pod install && cd ..
 
-supabase start                # applies supabase/migrations and supabase/seed.sql
-cp .env.example .env          # then paste the API URL and anon/publishable key from `supabase status`
+cp .env.example .env          # then fill in the URL and anon key of the Docya Dev project (see below)
+supabase link --project-ref <dev project ref>
 npm start -- --reset-cache    # restart Metro whenever .env changes
 npm run ios
 ```
 
-Seed accounts (local only, password `Password123!`): doctors `maria.santos@`, `juan.delacruz@`, `angela.reyes@doctora.test`.
+### Two hosted projects, no Docker
+
+| Project | Used by | Settings file |
+|---|---|---|
+| **Docya Dev** (`fhmtibdtvlpiculqkqco`) | development, the simulator, `backend:check`, `e2e`, the demo data | `.env` |
+| **Docya** (production, ref in `supabase/production-ref`) | Release builds, TestFlight, App Store | `.env.production` |
+
+The scripts that create or delete data (`backend:check`, `e2e`, `dev:reset`, `store/demo-data.mjs`) read `.env`, and **refuse to run if it points at the production project** or if the CLI is linked to a different project than `.env`.
+
+`npm run dev:reset` wipes the dev project, re-applies every migration and loads the sample doctors (`maria.santos@`, `juan.delacruz@`, `angela.reyes@doctora.test`, password `Password123!`; dev project only). To create your own dev project: make a free project in the Supabase dashboard, put its URL and anon key in `.env`, run `supabase link --project-ref <ref>`, then `npm run dev:reset`. On the dev project, turn **Confirm email** off (Authentication > Sign In / Providers > Email) so test accounts can sign in without an emailed code.
+
+Docker is optional now: `supabase start` still gives a full local copy with a mail catcher (`.env` pointing at `http://127.0.0.1:54321`), which is the only place the emailed-code checks run on your machine. GitHub's CI uses its own throwaway copy, so those checks run on every pull request anyway.
 
 ## Going online
 
@@ -63,11 +74,12 @@ e2e/                      Maestro flows + run.mjs (resets the local DB per flow)
 ```bash
 npm run typecheck && npm run lint
 npm test                 # unit tests (Supabase mocked at the client boundary)
-npm run backend:check    # API checks against the local Supabase (wipes local appointments)
+npm run backend:check    # API security checks against the dev project (deletes its appointments)
 npm run e2e              # all Maestro flows on the booted iOS simulator (needs Metro + Debug build)
+npm run dev:reset        # clean slate for the dev project
 ```
 
-Every pull request runs the type check, lint and unit tests, and starts a throwaway local Supabase to run `backend:check` (see `.github/workflows/ci.yml`). The E2E flows are not in CI: they need a macOS runner with an iOS simulator, so run `npm run e2e` yourself before merging UI changes.
+Every pull request runs the type check, lint and unit tests, and starts a throwaway Supabase (in GitHub's cloud, not on your machine) to run `backend:check` (see `.github/workflows/ci.yml`). The E2E flows are not in CI: they need a macOS runner with an iOS simulator, so run `npm run e2e` yourself before merging UI changes.
 
 E2E flows: sign in/out, schedule a patient and cancel, slot availability, calendar navigation, register and delete account. `npm run e2e` refuses to run unless `.env` points at a local Supabase.
 

@@ -30,7 +30,7 @@ retake the 6.9" pictures, remake the 6.5" ones from them (resize to 1284 wide, c
 
 1. Boot an **iPhone 17 Pro Max** (or 16 Pro Max) simulator and shut the others down. Make the status bar tidy:
    `xcrun simctl status_bar booted override --time "9:41" --batteryState charged --batteryLevel 100 --cellularMode active --cellularBars 4 --wifiBars 3`
-2. Install a Debug build and start Metro (`npm start`). Point `.env` at the local Supabase (`supabase start`, `supabase db reset`).
+2. Install a Debug build and start Metro (`npm start`). Point `.env` at the Docya Dev project (`npm run dev:reset` for a clean start).
 3. `node store/demo-data.mjs` fills the local database with invented appointments for the seeded doctor
    Maria Santos and puts her in a time zone where it is mid-morning (`America/New_York`; change `ZONE` in
    the script if you shoot at another time of day).
@@ -39,7 +39,7 @@ retake the 6.9" pictures, remake the 6.5" ones from them (resize to 1284 wide, c
 5. Copy the `0*.png` files from the newest folder in `~/.maestro/tests/` into `store/screenshots/iphone-6.9/`.
 6. Clear the status bar override afterwards: `xcrun simctl status_bar booted clear`.
 
-Never use real patient names or real accounts, and do not run this against the hosted project.
+Never use real patient names or real accounts. `demo-data.mjs` refuses the production project.
 
 ## iPad set (`ipad-13/`) - only if the app ships with iPad support
 

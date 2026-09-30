@@ -64,7 +64,7 @@ the dashboard).
    SUPABASE_ANON_KEY=<anon key>
    ```
 3. Release bundles (Xcode "Release" configuration, `NODE_ENV=production`) read `.env.production`;
-   `npm start` and Debug builds keep reading `.env` (the local stack). A release build that points at a
+   `npm start` and Debug builds keep reading `.env` (the Docya Dev project). A release build that points at a
    local address refuses to start.
 4. Restart Metro with `--reset-cache` when you change either file.
 
@@ -115,3 +115,18 @@ Use a real address you can read:
 - Anyone can register as a doctor. If that should not be open, add a step before opening the app to the
   public (for example disable sign-ups in Authentication > Sign In / Providers and invite doctors).
 - Changing a migration after it is applied: add a new migration, never edit an old one.
+
+## The development project
+
+Development and tests never touch the production project. A second, free project, **Docya Dev**, stands in
+for it:
+
+- It has the same migrations and the sample doctors from `supabase/seed.sql` (a known password, so it must never
+  hold real data).
+- **Confirm email is off** there, so test accounts sign in straight away. Supabase's built-in mail sender is
+  too limited to send test codes.
+- `npm run dev:reset` puts it back to a clean state. `npm run backend:check` and `npm run e2e` run against it.
+- Scripts that write data read `.env`, and stop if it names the production project (its ref is in
+  `supabase/production-ref`) or if `supabase link` points at a different project than `.env`.
+- To change production deliberately, relink first: `supabase link --project-ref <production ref>`, run the
+  command, then relink to the dev project.

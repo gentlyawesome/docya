@@ -1,9 +1,8 @@
-// Fills the LOCAL database with invented appointments for the seeded doctor Maria Santos, so the
+// Fills the DEVELOPMENT database (Docker copy or hosted dev project) with invented appointments for the seeded doctor Maria Santos, so the
 // App Store screenshots look like a real working day. Run: node store/demo-data.mjs
-// Refuses anything but the local database. Undo with: supabase db reset
-import { execFileSync } from 'node:child_process';
+// Refuses the production project. Undo with: npm run dev:reset (or `supabase db reset` for the Docker copy)
+import { sql as run, target } from '../supabase/tools/target.mjs'; // refuses the production project
 
-const DB = 'postgresql://postgres:postgres@127.0.0.1:54322/postgres'; // the local Supabase, never a hosted one
 const DOCTOR = 'b1a2c3d4-5e6f-4a8b-9c0d-1e2f3a4b5c6d'; // Maria Santos in supabase/seed.sql
 const ZONE = 'America/New_York'; // pick a zone where it is mid-morning while you take the pictures
 
@@ -55,5 +54,5 @@ const sql = [
       `insert into public.appointments (doctor_id, appointment_date, start_time, end_time, status, patient_name, patient_phone, notes) values ('${DOCTOR}', '${days[offset]}', '${hm}', '${addHalfHour(hm)}', 'confirmed', ${q(name)}, ${q(phone)}, ${q(note)})`,
   ),
 ];
-execFileSync('psql', [DB, '-X', '-q', '-c', sql.join(';\n')], { stdio: 'inherit' });
-console.log(`Doctor time zone ${ZONE}, now ${now.hour}:${now.minute}. Added ${rows.length} appointments.`);
+run(sql.join(';\n'));
+console.log(`Filled the ${target.label}. Doctor time zone ${ZONE}, now ${now.hour}:${now.minute}. Added ${rows.length} appointments.`);
