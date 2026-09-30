@@ -1,22 +1,13 @@
-// Exercises the local Supabase backend through its real HTTP API as different users.
-// Prereqs: `supabase start` (applies migrations + seed.sql) and a .env with the local URL/anon key.
-// Run: npm run backend:check   (wipes appointments in the LOCAL database first)
-import { readFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { sql, target } from '../tools/target.mjs';
 
-const env = Object.fromEntries(
-  readFileSync(new URL('../../.env', import.meta.url), 'utf8')
-    .split('\n')
-    .filter(l => l.includes('='))
-    .map(l => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1)])
-);
-const URL_ = env.SUPABASE_URL;
-const KEY = env.SUPABASE_ANON_KEY;
-if (!URL_?.includes('127.0.0.1') && !URL_?.includes('localhost')) {
-  throw new Error('Refusing to run: this check wipes data and only runs against a local Supabase.');
-}
-const DB = 'postgresql://postgres:postgres@127.0.0.1:54322/postgres';
+// Exercises a Supabase backend through its real HTTP API as different users.
+// Works against the local Docker copy or a hosted DEVELOPMENT project (chosen by .env); the shared helper
+// refuses the production project. It deletes appointments and creates and removes a few test accounts.
+// Run: npm run backend:check
+const URL_ = target.url;
+const KEY = target.key;
 const PASSWORD = 'Password123!';
+console.log(`Checking the ${target.label}\n`);
 
 let failures = 0;
 const check = (name, ok, detail = '') => {
@@ -57,7 +48,7 @@ const nextWeekday = () => {
   return d.toISOString().slice(0, 10);
 };
 
-const psql = sql => execFileSync('psql', [DB, '-X', '-q', '-c', sql]);
+const psql = query => { sql(query); };
 psql('delete from public.appointments');
 
 const maria = await signIn('maria.santos@doctora.test');
@@ -132,7 +123,10 @@ check("another doctor cannot change this doctor's details", r.status === 200 && 
 r = await call(`/rest/v1/doctor_profiles?user_id=eq.${maria.id}`, { method: 'PATCH', token: maria.token, body: { timezone: 'Mars/Olympus' } });
 check('an unknown time zone is rejected', r.status >= 400, `${r.status}`);
 
-// --- Accounts: everyone who registers is a doctor, and confirms their email with a code
+// --- Accounts: everyone who registers is a doctor
+// Emailed codes (confirming a sign-up, resetting a password) can only be read from the local mail catcher.
+// On a hosted development project email confirmation is switched off, so those checks are skipped there;
+// CI runs them on a throwaway copy of the database.
 const mailbox = async (to) => {
   for (let i = 0; i < 20; i++) {
     const res = await fetch(`http://127.0.0.1:54324/api/v1/search?query=${encodeURIComponent('to:' + to)}`);
@@ -146,52 +140,71 @@ const mailbox = async (to) => {
   return undefined;
 };
 const clearMailbox = () => fetch('http://127.0.0.1:54324/api/v1/messages', { method: 'DELETE' });
+const signupBody = (address, extra = {}) => ({ email: address, password: PASSWORD, data: { first_name: 'Temp', last_name: 'Doc', specialization: 'Neurology', ...extra } });
 
-await clearMailbox();
 const email = `delete-me-${Date.now()}@doctora.test`;
-r = await call('/auth/v1/signup', { method: 'POST', body: { email, password: PASSWORD, data: { first_name: 'Temp', last_name: 'Doc', specialization: 'Neurology' } } });
-check('registering sends a code instead of signing in', r.status === 200 && !r.json.access_token, JSON.stringify(r.json).slice(0, 100));
-r = await call('/auth/v1/token?grant_type=password', { method: 'POST', body: { email, password: PASSWORD } });
-check('an unconfirmed account cannot sign in', r.status === 400 && /not confirmed/i.test(JSON.stringify(r.json)), `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
-r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'signup', email, token: '000000' } });
-check('a wrong confirmation code is refused', r.status >= 400, `${r.status}`);
-const signupCode = await mailbox(email);
-r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'signup', email, token: signupCode } });
-check('the emailed code confirms the account and signs in', r.status === 200 && !!r.json.access_token, JSON.stringify(r.json).slice(0, 100));
-const temp = r.json;
+let temp;
+if (target.hasMailCatcher) {
+  await clearMailbox();
+  r = await call('/auth/v1/signup', { method: 'POST', body: signupBody(email) });
+  check('registering sends a code instead of signing in', r.status === 200 && !r.json.access_token, JSON.stringify(r.json).slice(0, 100));
+  r = await call('/auth/v1/token?grant_type=password', { method: 'POST', body: { email, password: PASSWORD } });
+  check('an unconfirmed account cannot sign in', r.status === 400 && /not confirmed/i.test(JSON.stringify(r.json)), `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+  r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'signup', email, token: '000000' } });
+  check('a wrong confirmation code is refused', r.status >= 400, `${r.status}`);
+  const signupCode = await mailbox(email);
+  r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'signup', email, token: signupCode } });
+  check('the emailed code confirms the account and signs in', r.status === 200 && !!r.json.access_token, JSON.stringify(r.json).slice(0, 100));
+  temp = r.json;
+} else {
+  console.log('NOTE  no mail catcher here: the emailed-code checks (sign-up code, password reset) are skipped\n');
+  r = await call('/auth/v1/signup', { method: 'POST', body: signupBody(email) });
+  check('a new doctor can register and is signed in straight away', r.status === 200 && !!r.json.access_token, `${r.status} ${JSON.stringify(r.json).slice(0, 120)}`);
+  temp = r.json;
+}
 r = await call('/rest/v1/doctor_profiles?select=specialization', { token: temp.access_token });
 check('registration created the doctor profile row', r.status === 200 && r.json.length === 1 && r.json[0].specialization === 'Neurology', JSON.stringify(r.json));
 r = await call('/rest/v1/profiles?select=role', { token: temp.access_token });
 check('the account role is doctor', r.json?.[0]?.role === 'doctor', JSON.stringify(r.json));
 
-// --- Password reset by code
-await clearMailbox();
-r = await call('/auth/v1/recover', { method: 'POST', body: { email } });
-check('a reset code can be requested', r.status === 200, `${r.status}`);
-r = await call('/auth/v1/recover', { method: 'POST', body: { email: `nobody-${Date.now()}@doctora.test` } });
-check('asking for a code for an unknown email looks the same (no account enumeration)', r.status === 200, `${r.status} ${JSON.stringify(r.json).slice(0, 80)}`);
-r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'recovery', email, token: '000000' } });
-check('a wrong reset code is refused', r.status >= 400, `${r.status}`);
-const resetCode = await mailbox(email);
-r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'recovery', email, token: resetCode } });
-check('the emailed reset code opens a recovery session', r.status === 200 && !!r.json.access_token, JSON.stringify(r.json).slice(0, 100));
-const recovery = r.json;
-r = await call('/auth/v1/user', { method: 'PUT', token: recovery.access_token, body: { password: 'BrandNew456!' } });
-check('the new password can be set', r.status === 200, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
-r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'recovery', email, token: resetCode } });
-check('a reset code cannot be used twice', r.status >= 400, `${r.status}`);
-r = await call('/auth/v1/token?grant_type=password', { method: 'POST', body: { email, password: PASSWORD } });
-check('the old password stops working', r.status === 400, `${r.status}`);
-r = await call('/auth/v1/token?grant_type=password', { method: 'POST', body: { email, password: 'BrandNew456!' } });
-check('the new password works', r.status === 200 && !!r.json.access_token, `${r.status}`);
-temp.access_token = r.json.access_token;
+if (target.hasMailCatcher) {
+  // --- Password reset by code
+  await clearMailbox();
+  r = await call('/auth/v1/recover', { method: 'POST', body: { email } });
+  check('a reset code can be requested', r.status === 200, `${r.status}`);
+  r = await call('/auth/v1/recover', { method: 'POST', body: { email: `nobody-${Date.now()}@doctora.test` } });
+  check('asking for a code for an unknown email looks the same (no account enumeration)', r.status === 200, `${r.status} ${JSON.stringify(r.json).slice(0, 80)}`);
+  r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'recovery', email, token: '000000' } });
+  check('a wrong reset code is refused', r.status >= 400, `${r.status}`);
+  const resetCode = await mailbox(email);
+  r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'recovery', email, token: resetCode } });
+  check('the emailed reset code opens a recovery session', r.status === 200 && !!r.json.access_token, JSON.stringify(r.json).slice(0, 100));
+  const recovery = r.json;
+  r = await call('/auth/v1/user', { method: 'PUT', token: recovery.access_token, body: { password: 'BrandNew456!' } });
+  check('the new password can be set', r.status === 200, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
+  r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'recovery', email, token: resetCode } });
+  check('a reset code cannot be used twice', r.status >= 400, `${r.status}`);
+  r = await call('/auth/v1/token?grant_type=password', { method: 'POST', body: { email, password: PASSWORD } });
+  check('the old password stops working', r.status === 400, `${r.status}`);
+  r = await call('/auth/v1/token?grant_type=password', { method: 'POST', body: { email, password: 'BrandNew456!' } });
+  check('the new password works', r.status === 200 && !!r.json.access_token, `${r.status}`);
+  temp.access_token = r.json.access_token;
+}
 
 const patientTry = `patient-try-${Date.now()}@doctora.test`;
-await clearMailbox();
-r = await call('/auth/v1/signup', { method: 'POST', body: { email: patientTry, password: PASSWORD, data: { first_name: 'Pat', last_name: 'Try', role: 'patient' } } });
-const patientCode = await mailbox(patientTry);
-r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'signup', email: patientTry, token: patientCode } });
-r = await call('/rest/v1/profiles?select=role', { token: r.json.access_token });
+const claimBody = signupBody(patientTry, { first_name: 'Pat', last_name: 'Try', role: 'patient' });
+let claimToken;
+if (target.hasMailCatcher) {
+  await clearMailbox();
+  await call('/auth/v1/signup', { method: 'POST', body: claimBody });
+  const patientCode = await mailbox(patientTry);
+  r = await call('/auth/v1/verify', { method: 'POST', body: { type: 'signup', email: patientTry, token: patientCode } });
+  claimToken = r.json.access_token;
+} else {
+  r = await call('/auth/v1/signup', { method: 'POST', body: claimBody });
+  claimToken = r.json.access_token;
+}
+r = await call('/rest/v1/profiles?select=role', { token: claimToken });
 check('claiming to be a patient at sign-up does nothing (no patient role exists)', r.json?.[0]?.role === 'doctor', JSON.stringify(r.json));
 psql(`delete from auth.users where email = '${patientTry}'`);
 

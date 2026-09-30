@@ -31,22 +31,27 @@ name: Register, edit profile, delete account
 - eraseText: 30
 - inputText: "Password123!"
 - pressKey: Enter
-# The account is confirmed with the code from the email (caught by the local mail catcher)
-- assertVisible: "We sent a code to.*"
-- tapOn: "Confirm"
-- assertVisible: "Enter the code from the email"
-- tapOn: "Code"
-- inputText: "000000"
-- tapOn: "Confirm"
-- assertVisible: "That code is wrong or has expired.*"
-- runScript:
-    file: scripts/latest-code.js
-    env:
-      EMAIL: "e2e-eve@doctora.test"
-- tapOn: "Code"
-- eraseText: 10
-- inputText: ${output.code}
-- tapOn: "Confirm"
+# Where sign-up needs an emailed code (the local Docker copy), confirm it with the code from the local mail
+# catcher. The hosted development project has email confirmation off and signs straight in.
+- runFlow:
+    when:
+      visible: "We sent a code to.*"
+    commands:
+      - assertVisible: "We sent a code to.*"
+      - tapOn: "Confirm"
+      - assertVisible: "Enter the code from the email"
+      - tapOn: "Code"
+      - inputText: "000000"
+      - tapOn: "Confirm"
+      - assertVisible: "That code is wrong or has expired.*"
+      - runScript:
+          file: scripts/latest-code.js
+          env:
+            EMAIL: "e2e-eve@doctora.test"
+      - tapOn: "Code"
+      - eraseText: 10
+      - inputText: ${output.code}
+      - tapOn: "Confirm"
 # Registered and signed in as a doctor
 - assertVisible: "Hello, Dr. Tester"
 - tapOn: "Profile, tab.*"
