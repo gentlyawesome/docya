@@ -1,5 +1,5 @@
 # A slot the doctor has given out is unavailable to them, and cancelling frees it again.
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 name: Given-out slots are unavailable until cancelled
 ---
 - launchApp:

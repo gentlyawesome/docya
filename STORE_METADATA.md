@@ -162,7 +162,7 @@ Source: the 1024 x 1024 artwork in `ios/DoctoraAppointments/Images.xcassets/AppI
 - [x] Account deletion in the app; reminders permission asked in context
 
 ### Still to do
-- [ ] **Your own bundle ID** (it is still the template `org.reactjs.native.example.DoctoraAppointments`), an explicit App ID and a distribution profile
+- [x] Bundle ID `org.reactjs.native.example.Docya` (matches the App Store Connect app; it still has the template prefix `org.reactjs.native.example`, so move to your own domain, for example `com.yourname.docya`, only if you create a new app record). Version 1.8, build 8; raise the build number for every upload
 - [ ] Hosted Supabase: connect an email provider (SMTP), turn on the sign-up code and the two email templates (`docs/HOSTING.md`)
 - [ ] Decide who may register as a doctor (open sign-up today)
 - [ ] Legal review of the privacy policy

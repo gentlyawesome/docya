@@ -1,6 +1,6 @@
 # Reminder settings: pick a lead time (iOS asks for permission), see it kept after a restart,
 # and switch patient names on.
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 name: Appointment reminders
 ---
 # (launchApp grants notification permission, so iOS's prompt is answered by Maestro; the screens

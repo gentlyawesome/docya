@@ -1,5 +1,5 @@
 # Validation, wrong password, sign in, session restored after restart, sign out.
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 name: Sign in and sign out
 ---
 - launchApp:

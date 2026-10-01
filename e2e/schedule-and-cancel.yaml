@@ -1,5 +1,5 @@
 # A doctor schedules a patient by name, sees it confirmed, cancels it, and finds it under Past.
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 name: Schedule a patient, then cancel
 ---
 - launchApp:

@@ -91,7 +91,7 @@ the dashboard).
      && node ../../node_modules/react-native/scripts/replace-rncore-version.js -c Debug -r 0.84.1 -p "$PWD"
    ```
 
-The app currently uses the template bundle id `org.reactjs.native.example.DoctoraAppointments` and a
+The app uses the bundle id `org.reactjs.native.example.Docya` (the one App Store Connect has) and a
 wildcard development profile. That is fine for your own phone, but the App Store needs your own bundle id
 (for example `com.yourname.docya`), an explicit App ID and a distribution profile.
 

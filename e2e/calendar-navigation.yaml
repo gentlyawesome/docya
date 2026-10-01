@@ -1,6 +1,6 @@
 # Month arrows work (they are drawn by the app; the library's own images do not load in Metro).
 # Date-independent: reads the month shown, moves forward and back, and checks the title each time.
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 name: Calendar month navigation
 ---
 - launchApp:
