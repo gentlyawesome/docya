@@ -1,5 +1,5 @@
 # Step 2: take the five App Store screenshots. Run capture-warmup.yaml first. See store/README.md.
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 ---
 - launchApp
 - assertVisible: "Hello, Dr. Santos"

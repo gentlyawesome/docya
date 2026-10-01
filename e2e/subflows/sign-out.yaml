@@ -1,5 +1,5 @@
 # From any signed-in tab: open Profile and sign out.
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 ---
 - tapOn: "Profile, tab.*"
 - scrollUntilVisible:

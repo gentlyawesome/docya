@@ -1,5 +1,5 @@
 # Creating a doctor account, editing the profile, and deleting the account (required by the App Store).
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 name: Register, edit profile, delete account
 ---
 - launchApp:

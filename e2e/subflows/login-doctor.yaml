@@ -1,5 +1,5 @@
 # Signs in as a seeded LOCAL test doctor (supabase/seed.sql; never a real account).
-appId: org.reactjs.native.example.DoctoraAppointments
+appId: org.reactjs.native.example.Docya
 ---
 - assertVisible: "Welcome to Docya"
 - tapOn: "Email"
