@@ -1,6 +1,6 @@
 # Docya - App Store Metadata (iPhone)
 
-Copy these into App Store Connect. Docya is an **iPhone-only** app; there is no Android or iPad version.
+Copy these into App Store Connect. Docya ships as a universal iOS build (iPhone and iPad), because Apple does not allow an update to drop devices an earlier version supported. There is no Android version.
 Character limits are checked below. Last reviewed: September 29, 2026.
 
 ---
@@ -127,11 +127,7 @@ Docya is an appointment book for doctors. Sign in with the demo account. Tap "Ne
 bar. `store/screenshots/iphone-6.9/` (1320 x 2868) fits the **6.9" Display** slot; `store/screenshots/iphone-6.5/`
 (1284 x 2778, same pictures) fits the **6.5" Display** slot. Use whichever slot App Store Connect shows.
 
-**iPad**: the app is iPhone-only, so no iPad screenshots are needed once an iPhone-only build is selected in
-App Store Connect. `store/screenshots/ipad-13/` (2064 x 2752) is a spare set, only for shipping a universal
-build; see `store/README.md`.
-App Store Connect scales them for smaller iPhones; check its upload page for the current required sizes.
-`store/README.md` explains how to retake them.
+**iPad**: upload `store/screenshots/ipad-13/` (2064 x 2752) as the iPad 13" set. They show the phone layout stretched across the tablet, which is acceptable for review; an iPad layout is future work.
 
 Upload in this order, with these captions if you add text overlays (plain screenshots are also fine):
 

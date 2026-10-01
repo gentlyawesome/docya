@@ -43,10 +43,9 @@ Never use real patient names or real accounts. `demo-data.mjs` refuses the produ
 
 ## iPad set (`ipad-13/`) - only if the app ships with iPad support
 
-The project is **iPhone-only** (`TARGETED_DEVICE_FAMILY = 1`), so App Store Connect asks for no iPad
-screenshots once a build from this code is selected. `ipad-13/` exists in case you decide to ship a universal
-build: the same five screens, taken on an iPad Pro 13" simulator (2064 x 2752). They show the phone layout
-stretched across the tablet, so they look sparse; if you go universal, design an iPad layout first.
+The project is universal (`TARGETED_DEVICE_FAMILY = "1,2"`) because Apple rejects an update that drops devices earlier
+versions supported (QA1623), so App Store Connect requires these iPad screenshots. They are the same five screens, taken
+on an iPad Pro 13" simulator (2064 x 2752), and show the phone layout stretched across the tablet.
 
 To retake them without changing the project: build a temporary iPad-capable copy
 `xcodebuild ... -derivedDataPath build-ipad TARGETED_DEVICE_FAMILY="1,2" build`, install it on the iPad simulator,
