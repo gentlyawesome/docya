@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from './Button';
-import { COLORS } from '../constants';
+import { COLORS, FONTS } from '../constants';
 
 const CARDS = [
   {
@@ -96,8 +96,9 @@ const styles = StyleSheet.create({
   },
   icon: { fontSize: 48, textAlign: 'center', marginBottom: 12 },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
     textAlign: 'center',
     marginBottom: 8,

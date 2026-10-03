@@ -24,7 +24,7 @@ import { updateOnboarding } from '../../services/onboarding';
 import { Button } from '../../components/Button';
 import { FilterChip } from '../../components/FilterChip';
 import { FormField } from '../../components/FormField';
-import { COLORS, DAYS_OF_WEEK, RADIUS, SHADOW } from '../../constants';
+import { COLORS, DAYS_OF_WEEK, RADIUS, CARD, FONTS } from '../../constants';
 import { formatTime12Hour } from '../../utils/timeSlotGenerator';
 
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -217,6 +217,7 @@ export const DoctorScheduleScreen: React.FC = () => {
                 </Text>
                 <Switch
                   value={w.isAvailable}
+                  trackColor={{ true: COLORS.primary }}
                   onValueChange={value => toggle(w, value)}
                   accessibilityLabel={`${d.name} ${formatTime12Hour(
                     w.startTime,
@@ -277,10 +278,11 @@ export const DoctorScheduleScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
-  content: { padding: 16, paddingBottom: 32 },
+  content: { padding: 20, paddingBottom: 32 },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
     marginBottom: 4,
   },
@@ -290,7 +292,12 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 16,
   },
-  summaryHours: { fontSize: 36, fontWeight: 'bold', color: '#FFFFFF' },
+  summaryHours: {
+    fontSize: 38,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
+    color: '#FFFFFF',
+  },
   summarySlots: { fontSize: 15, color: 'rgba(255,255,255,0.75)', marginTop: 2 },
   summaryDays: { flexDirection: 'row', marginTop: 16 },
   summaryDay: { flex: 1, alignItems: 'center' },
@@ -301,7 +308,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: COLORS.navySoft,
   },
-  summaryBarOn: { backgroundColor: '#34D399' },
+  summaryBarOn: { backgroundColor: '#9AD4BC' },
   summaryLetter: {
     fontSize: 12,
     fontWeight: '600',
@@ -316,7 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.card,
     padding: 16,
     marginBottom: 12,
-    ...SHADOW,
+    ...CARD,
   },
   dayName: {
     fontSize: 17,

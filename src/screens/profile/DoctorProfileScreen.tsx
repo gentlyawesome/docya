@@ -11,7 +11,7 @@ import {
 import { ProfileForm } from '../../components/ProfileForm';
 import { ReminderSettings } from '../../components/ReminderSettings';
 import { Avatar } from '../../components/Avatar';
-import { COLORS, RADIUS, SHADOW } from '../../constants';
+import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 
 export const DoctorProfileScreen: React.FC = () => {
   const user = useAppSelector(selectUser);
@@ -54,16 +54,22 @@ export const DoctorProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { paddingBottom: 32 },
-  title: { fontSize: 30, fontWeight: 'bold', color: COLORS.text, margin: 16 },
+  title: {
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
+    color: COLORS.text,
+    margin: 20,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.card,
     borderRadius: RADIUS.card,
     padding: 16,
-    marginHorizontal: 16,
+    marginHorizontal: 20,
     marginBottom: 16,
-    ...SHADOW,
+    ...CARD,
   },
   headerText: { flex: 1, marginLeft: 14 },
   name: { fontSize: 18, fontWeight: '700', color: COLORS.text },

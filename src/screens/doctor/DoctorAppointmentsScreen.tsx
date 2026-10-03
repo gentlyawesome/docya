@@ -21,7 +21,7 @@ import { StatusBadge, statusLabel } from '../../components/StatusBadge';
 import { FilterChip } from '../../components/FilterChip';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
-import { COLORS, RADIUS, SHADOW } from '../../constants';
+import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay } from '../../utils/dateHelpers';
 import { formatTime12Hour } from '../../utils/timeSlotGenerator';
@@ -225,23 +225,24 @@ export const DoctorAppointmentsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
-  header: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 4 },
+  header: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 4 },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
     marginBottom: 8,
   },
   newButton: { marginBottom: 12 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', paddingBottom: 4 },
   error: { color: COLORS.danger, marginTop: 8 },
-  list: { padding: 16 },
+  list: { padding: 20 },
   card: {
     backgroundColor: COLORS.card,
     borderRadius: RADIUS.card,
     padding: 14,
     marginBottom: 12,
-    ...SHADOW,
+    ...CARD,
   },
   cardHeader: { flexDirection: 'row', alignItems: 'center' },
   cardText: { flex: 1, marginHorizontal: 12 },

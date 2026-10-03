@@ -17,7 +17,8 @@ import { Button } from './Button';
 import {
   COLORS,
   RADIUS,
-  SHADOW,
+  CARD,
+  FONTS,
   PRIVACY_POLICY_URL,
   USER_GUIDE_URL,
 } from '../constants';
@@ -105,13 +106,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.card,
     borderRadius: RADIUS.card,
     padding: 16,
-    marginHorizontal: 16,
+    marginHorizontal: 20,
     marginBottom: 16,
-    ...SHADOW,
+    ...CARD,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
     marginBottom: 12,
   },

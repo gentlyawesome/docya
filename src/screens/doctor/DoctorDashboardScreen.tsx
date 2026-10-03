@@ -25,7 +25,7 @@ import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { GettingStarted } from '../../components/GettingStarted';
 import { WelcomeCards } from '../../components/WelcomeCards';
-import { COLORS, RADIUS, SHADOW } from '../../constants';
+import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay } from '../../utils/dateHelpers';
 import { formatTime12Hour } from '../../utils/timeSlotGenerator';
@@ -223,7 +223,7 @@ export const DoctorDashboardScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
-  content: { padding: 16 },
+  content: { padding: 20 },
   eyebrow: {
     fontSize: 12,
     fontWeight: '700',
@@ -231,16 +231,18 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
     marginTop: 2,
     marginBottom: 20,
   },
   error: { color: COLORS.danger, marginBottom: 8 },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 20,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
     marginBottom: 10,
   },
@@ -257,8 +259,9 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.7)',
   },
   heroTime: {
-    fontSize: 40,
-    fontWeight: 'bold',
+    fontSize: 42,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: '#FFFFFF',
     marginTop: 4,
   },
@@ -285,9 +288,14 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.card,
     padding: 16,
     marginHorizontal: 4,
-    ...SHADOW,
+    ...CARD,
   },
-  statValue: { fontSize: 30, fontWeight: 'bold', color: COLORS.text },
+  statValue: {
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
+    color: COLORS.text,
+  },
   statLabel: { fontSize: 13, color: COLORS.textSecondary, marginTop: 2 },
   empty: { color: COLORS.textSecondary, marginBottom: 16 },
 });

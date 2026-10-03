@@ -98,7 +98,7 @@ const tabOptions = {
     borderRadius: 24,
     backgroundColor: COLORS.card,
     ...SHADOW,
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.1,
   },
   tabBarItemStyle: { paddingVertical: 6 },
   tabBarLabelStyle: { fontSize: 11, fontWeight: '600' as const },
@@ -107,8 +107,8 @@ const tabOptions = {
 
 const stackOptions = {
   headerStyle: { backgroundColor: COLORS.card },
-  headerTintColor: COLORS.primary,
-  headerTitleStyle: { fontWeight: 'bold' as const },
+  headerTintColor: COLORS.text,
+  headerTitleStyle: { fontWeight: '600' as const },
 };
 
 const DoctorTabs = () => (

@@ -21,7 +21,7 @@ import {
 } from '../../store/slices/authSlice';
 import { Button } from '../../components/Button';
 import { FormField } from '../../components/FormField';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 import { isValidEmail } from '../../utils/validation';
 
 interface Props {
@@ -139,14 +139,15 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { padding: 24, paddingTop: 48 },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
     marginBottom: 6,
   },
   subtitle: { fontSize: 16, color: COLORS.textSecondary, marginBottom: 24 },
   errorBox: {
-    backgroundColor: '#FFEBEE',
+    backgroundColor: COLORS.dangerSoft,
     borderRadius: 10,
     padding: 12,
     marginBottom: 16,

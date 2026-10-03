@@ -118,6 +118,7 @@ export const ReminderSettings: React.FC = () => {
           </Text>
         </View>
         <Switch
+          trackColor={{ true: COLORS.primary }}
           value={settings.showPatientName}
           onValueChange={value =>
             apply({ ...settings, showPatientName: value })

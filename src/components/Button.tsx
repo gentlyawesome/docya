@@ -57,22 +57,26 @@ export const Button: React.FC<ButtonProps> = ({
 const styles = StyleSheet.create({
   base: {
     borderRadius: 14,
-    paddingVertical: 14,
+    paddingVertical: 15,
     paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 48,
+    minHeight: 50,
     marginTop: 8,
   },
   primary: { backgroundColor: COLORS.primary },
   secondary: {
     backgroundColor: COLORS.card,
-    borderWidth: 1.5,
-    borderColor: COLORS.primary,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
-  danger: { backgroundColor: COLORS.dangerSoft },
+  danger: {
+    backgroundColor: COLORS.card,
+    borderWidth: 1,
+    borderColor: '#EBCFCB',
+  },
   inactive: { opacity: 0.55 },
   text: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
-  textSecondary: { color: COLORS.primary },
+  textSecondary: { color: COLORS.text },
   textDanger: { color: COLORS.danger },
 });
