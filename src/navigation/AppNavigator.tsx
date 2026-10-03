@@ -63,6 +63,7 @@ const tabOptions = {
     height: 68,
     paddingTop: 0,
     paddingBottom: 0,
+    paddingHorizontal: 6,
     borderTopWidth: 0,
     borderRadius: 24,
     backgroundColor: COLORS.card,
