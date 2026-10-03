@@ -25,7 +25,6 @@ import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { GettingStarted } from '../../components/GettingStarted';
 import { WelcomeCards } from '../../components/WelcomeCards';
-import { StatusBadge } from '../../components/StatusBadge';
 import { COLORS, RADIUS, SHADOW } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay } from '../../utils/dateHelpers';

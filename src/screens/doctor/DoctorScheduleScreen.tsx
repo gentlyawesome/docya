@@ -24,7 +24,7 @@ import { updateOnboarding } from '../../services/onboarding';
 import { Button } from '../../components/Button';
 import { FilterChip } from '../../components/FilterChip';
 import { FormField } from '../../components/FormField';
-import { COLORS, DAYS_OF_WEEK } from '../../constants';
+import { COLORS, DAYS_OF_WEEK, RADIUS, SHADOW } from '../../constants';
 import { formatTime12Hour } from '../../utils/timeSlotGenerator';
 
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -72,6 +72,25 @@ export const DoctorScheduleScreen: React.FC = () => {
       })).filter(d => d.windows.length > 0),
     [windows],
   );
+
+  // Weekly summary for the card at the top: hours you take patients, and which days
+  const summary = useMemo(() => {
+    const minutes = (t: string) =>
+      Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
+    const open = windows.filter(w => w.isAvailable);
+    const total = open.reduce(
+      (sum, w) => sum + minutes(w.endTime) - minutes(w.startTime),
+      0,
+    );
+    return {
+      hours: Math.round((total / 60) * 10) / 10,
+      slots: Math.floor(total / 30),
+      days: DAYS_OF_WEEK.map(name => ({
+        name,
+        on: open.some(w => w.dayOfWeek === name),
+      })),
+    };
+  }, [windows]);
 
   const add = async () => {
     if (!user) return;
@@ -159,6 +178,27 @@ export const DoctorScheduleScreen: React.FC = () => {
         </Text>
         {loadError ? <Text style={styles.error}>{loadError}</Text> : null}
 
+        <View
+          style={styles.summary}
+          accessible
+          accessibilityLabel={`${summary.hours} hours a week, ${summary.slots} slots`}
+        >
+          <Text style={styles.summaryHours}>{summary.hours} hrs</Text>
+          <Text style={styles.summarySlots}>
+            {summary.slots} slots open each week
+          </Text>
+          <View style={styles.summaryDays}>
+            {summary.days.map(d => (
+              <View key={d.name} style={styles.summaryDay}>
+                <View
+                  style={[styles.summaryBar, d.on && styles.summaryBarOn]}
+                />
+                <Text style={styles.summaryLetter}>{d.name[0]}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
         {byDay.length === 0 && !loadError ? (
           <Text style={styles.empty}>
             No availability yet. Add your first window below.
@@ -239,19 +279,44 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { padding: 16, paddingBottom: 32 },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 4,
+  },
+  summary: {
+    backgroundColor: COLORS.navy,
+    borderRadius: RADIUS.card,
+    padding: 20,
+    marginBottom: 16,
+  },
+  summaryHours: { fontSize: 36, fontWeight: 'bold', color: '#FFFFFF' },
+  summarySlots: { fontSize: 15, color: 'rgba(255,255,255,0.75)', marginTop: 2 },
+  summaryDays: { flexDirection: 'row', marginTop: 16 },
+  summaryDay: { flex: 1, alignItems: 'center' },
+  summaryBar: {
+    height: 22,
+    alignSelf: 'stretch',
+    marginHorizontal: 3,
+    borderRadius: 6,
+    backgroundColor: COLORS.navySoft,
+  },
+  summaryBarOn: { backgroundColor: '#34D399' },
+  summaryLetter: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: 'rgba(255,255,255,0.75)',
+    marginTop: 6,
   },
   hint: { color: COLORS.textSecondary, marginBottom: 16 },
   error: { color: COLORS.danger, marginBottom: 8 },
   empty: { color: COLORS.textSecondary, marginBottom: 16 },
   card: {
     backgroundColor: COLORS.card,
-    borderRadius: 12,
+    borderRadius: RADIUS.card,
     padding: 16,
     marginBottom: 12,
+    ...SHADOW,
   },
   dayName: {
     fontSize: 17,

@@ -2,6 +2,8 @@
 appId: org.reactjs.native.example.Docya
 ---
 - launchApp
+# The first-time welcome cards would cover the dashboard
+- runFlow: ../e2e/subflows/dismiss-welcome.yaml
 - assertVisible: "Hello, Dr. Santos"
 - waitForAnimationToEnd:
     timeout: 3000

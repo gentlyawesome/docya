@@ -57,7 +57,7 @@ export const GettingStarted: React.FC<Props> = ({ steps, onHide }) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.card,
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 20,
   },
