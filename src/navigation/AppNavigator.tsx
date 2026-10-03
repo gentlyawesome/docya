@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -37,24 +38,54 @@ const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const DoctorStack = createNativeStackNavigator<DoctorStackParamList>();
 const DoctorTab = createBottomTabNavigator<DoctorTabParamList>();
 
-const renderBookingsIcon = ({ color }: { color: string }) => (
-  <CalendarIcon color={color} />
+// The current tab's icon sits on a soft blue circle
+const TabIconCircle: React.FC<{
+  focused: boolean;
+  children: React.ReactNode;
+}> = ({ focused, children }) => (
+  <View style={[styles.iconCircle, focused && styles.iconCircleActive]}>
+    {children}
+  </View>
 );
-const renderProfileIcon = ({ color }: { color: string }) => (
-  <UserIcon color={color} />
+
+type IconArgs = { color: string; focused: boolean };
+
+const renderBookingsIcon = ({ color, focused }: IconArgs) => (
+  <TabIconCircle focused={focused}>
+    <CalendarIcon color={color} />
+  </TabIconCircle>
 );
-const renderDashboardIcon = ({ color }: { color: string }) => (
-  <HomeIcon color={color} />
+const renderProfileIcon = ({ color, focused }: IconArgs) => (
+  <TabIconCircle focused={focused}>
+    <UserIcon color={color} />
+  </TabIconCircle>
 );
-const renderScheduleIcon = ({ color }: { color: string }) => (
-  <ClockIcon color={color} />
+const renderDashboardIcon = ({ color, focused }: IconArgs) => (
+  <TabIconCircle focused={focused}>
+    <HomeIcon color={color} />
+  </TabIconCircle>
 );
+const renderScheduleIcon = ({ color, focused }: IconArgs) => (
+  <TabIconCircle focused={focused}>
+    <ClockIcon color={color} />
+  </TabIconCircle>
+);
+
+const styles = StyleSheet.create({
+  iconCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconCircleActive: { backgroundColor: COLORS.primarySoft },
+});
 
 // A rounded bar that floats above the bottom edge, with the current tab on a soft blue pill
 const tabOptions = {
   tabBarActiveTintColor: COLORS.primary,
   tabBarInactiveTintColor: COLORS.textSecondary,
-  tabBarActiveBackgroundColor: COLORS.primarySoft,
   tabBarStyle: {
     position: 'absolute' as const,
     left: 12,
@@ -63,14 +94,13 @@ const tabOptions = {
     height: 68,
     paddingTop: 0,
     paddingBottom: 0,
-    paddingHorizontal: 6,
     borderTopWidth: 0,
     borderRadius: 24,
     backgroundColor: COLORS.card,
     ...SHADOW,
     shadowOpacity: 0.12,
   },
-  tabBarItemStyle: { borderRadius: 18, marginVertical: 8, marginHorizontal: 4 },
+  tabBarItemStyle: { paddingVertical: 6 },
   tabBarLabelStyle: { fontSize: 11, fontWeight: '600' as const },
   headerShown: false,
 };
