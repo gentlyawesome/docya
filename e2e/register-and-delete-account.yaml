@@ -53,6 +53,7 @@ name: Register, edit profile, delete account
       - inputText: ${output.code}
       - tapOn: "Confirm"
 # Registered and signed in as a doctor
+- runFlow: subflows/dismiss-welcome.yaml
 - assertVisible: "Hello, Dr. Tester"
 - tapOn: "Profile, tab.*"
 - assertVisible: "My Profile"

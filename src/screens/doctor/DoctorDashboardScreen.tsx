@@ -14,7 +14,15 @@ import { useAppSelector } from '../../store/hooks';
 import { useTabBarInset } from '../../hooks/useTabBarInset';
 import { selectUser } from '../../store/slices/authSlice';
 import { listMyAppointments } from '../../services/appointmentsService';
+import {
+  OnboardingState,
+  loadOnboarding,
+  updateOnboarding,
+} from '../../services/onboarding';
+import { getPermission, loadSettings } from '../../services/reminders';
 import { Button } from '../../components/Button';
+import { GettingStarted } from '../../components/GettingStarted';
+import { WelcomeCards } from '../../components/WelcomeCards';
 import { StatusBadge } from '../../components/StatusBadge';
 import { COLORS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
@@ -40,6 +48,8 @@ export const DoctorDashboardScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(() => Date.now());
+  const [onboarding, setOnboarding] = useState<OnboardingState | null>(null);
+  const [remindersOn, setRemindersOn] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -47,12 +57,23 @@ export const DoctorDashboardScreen: React.FC = () => {
     try {
       setAppointments(await listMyAppointments());
       setNow(Date.now());
+      if (user) {
+        const [state, settings, permission] = await Promise.all([
+          loadOnboarding(user.id),
+          loadSettings(),
+          getPermission(),
+        ]);
+        setOnboarding(state);
+        setRemindersOn(
+          settings.leadMinutes !== null && permission === 'granted',
+        );
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not load appointments');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   useFocusEffect(
     useCallback(() => {
@@ -75,8 +96,45 @@ export const DoctorDashboardScreen: React.FC = () => {
     };
   }, [appointments, now]);
 
+  const patchOnboarding = (patch: Partial<OnboardingState>) => {
+    if (!user) {
+      return;
+    }
+    setOnboarding(current => (current ? { ...current, ...patch } : current));
+    updateOnboarding(user.id, patch);
+  };
+
+  const steps = [
+    {
+      key: 'hours',
+      label: 'Review your working hours',
+      done: !!onboarding?.hoursReviewed,
+      onPress: () => navigation.navigate('DoctorSchedule'),
+    },
+    {
+      key: 'patient',
+      label: 'Book your first patient',
+      done: appointments.length > 0,
+      onPress: () => navigation.navigate('DoctorNewAppointment'),
+    },
+    {
+      key: 'reminders',
+      label: 'Turn on appointment reminders',
+      done: remindersOn,
+      onPress: () => navigation.navigate('DoctorProfile'),
+    },
+  ];
+  const showChecklist =
+    !!onboarding &&
+    !onboarding.checklistHidden &&
+    !steps.every(s => s.done);
+
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <WelcomeCards
+        visible={!!onboarding && !onboarding.welcomeSeen}
+        onFinish={() => patchOnboarding({ welcomeSeen: true })}
+      />
       <ScrollView
         contentContainerStyle={[
           styles.content,
@@ -94,6 +152,13 @@ export const DoctorDashboardScreen: React.FC = () => {
           Hello, Dr. {user?.lastName || user?.fullName}
         </Text>
         {error ? <Text style={styles.error}>{error}</Text> : null}
+
+        {showChecklist ? (
+          <GettingStarted
+            steps={steps}
+            onHide={() => patchOnboarding({ checklistHidden: true })}
+          />
+        ) : null}
 
         <View style={styles.stats}>
           <Stat label="Today" value={today} />

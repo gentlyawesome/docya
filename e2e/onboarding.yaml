@@ -1,0 +1,28 @@
+# First-time guidance: the welcome cards (shown once) and the "Getting started" checklist on the dashboard.
+appId: org.reactjs.native.example.Docya
+name: Welcome cards and getting-started checklist
+---
+- launchApp:
+    clearState: true
+- runFlow:
+    file: subflows/login-doctor-keep-welcome.yaml
+# Welcome cards
+- assertVisible: "Welcome to Docya"
+- tapOn: "Next"
+- assertVisible: "Set your working hours"
+- tapOn: "Next"
+- assertVisible: "Book your first patient"
+- tapOn: "Get started"
+# Checklist: the seeded doctor already has hours, but has not looked at them or booked anyone
+- assertVisible: "Getting started.*"
+- tapOn: "Review your working hours.*"
+- assertVisible: "My Schedule"
+- tapOn: "Dashboard, tab.*"
+- assertVisible: "Getting started \\(1 of 3\\)"
+# The welcome cards do not come back
+- launchApp
+- assertVisible: "Hello, Dr. Santos"
+- assertNotVisible: "Get started"
+# The checklist can be hidden
+- tapOn: "Hide getting started"
+- assertNotVisible: "Getting started.*"

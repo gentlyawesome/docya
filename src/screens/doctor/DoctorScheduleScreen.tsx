@@ -20,6 +20,7 @@ import {
   listMyAvailability,
   setAvailabilityEnabled,
 } from '../../services/availabilityService';
+import { updateOnboarding } from '../../services/onboarding';
 import { Button } from '../../components/Button';
 import { FilterChip } from '../../components/FilterChip';
 import { FormField } from '../../components/FormField';
@@ -54,7 +55,11 @@ export const DoctorScheduleScreen: React.FC = () => {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, [load]),
+      // Looking at the working hours counts as reviewing them (checked off on the dashboard)
+      if (user) {
+        updateOnboarding(user.id, { hoursReviewed: true });
+      }
+    }, [load, user]),
   );
 
   const byDay = useMemo(

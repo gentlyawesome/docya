@@ -2,6 +2,8 @@ export const SLOT_DURATION_MINUTES = 30;
 
 export const PRIVACY_POLICY_URL = 'https://gentlyawesome.github.io/docya/privacy-policy.html';
 
+export const USER_GUIDE_URL = 'https://gentlyawesome.github.io/docya/user-guide.html';
+
 export const DAYS_OF_WEEK = [
   'Monday',
   'Tuesday',

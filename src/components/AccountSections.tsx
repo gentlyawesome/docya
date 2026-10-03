@@ -14,7 +14,7 @@ import {
   selectAuthLoading,
 } from '../store/slices/authSlice';
 import { Button } from './Button';
-import { COLORS, PRIVACY_POLICY_URL } from '../constants';
+import { COLORS, PRIVACY_POLICY_URL, USER_GUIDE_URL } from '../constants';
 
 export const Section: React.FC<{
   title: string;
@@ -30,6 +30,14 @@ export const Section: React.FC<{
 
 export const AboutSection: React.FC = () => (
   <Section title="About">
+    <TouchableOpacity
+      style={styles.linkRow}
+      onPress={() => Linking.openURL(USER_GUIDE_URL)}
+      accessibilityRole="link"
+      accessibilityLabel="User guide"
+    >
+      <Text style={styles.linkText}>User guide</Text>
+    </TouchableOpacity>
     <TouchableOpacity
       style={styles.linkRow}
       onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
