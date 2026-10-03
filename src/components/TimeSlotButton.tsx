@@ -10,7 +10,10 @@ interface TimeSlotButtonProps {
   onPress: () => void;
 }
 
-export const TimeSlotButton: React.FC<TimeSlotButtonProps> = ({ slot, onPress }) => {
+export const TimeSlotButton: React.FC<TimeSlotButtonProps> = ({
+  slot,
+  onPress,
+}) => {
   const isBooked = slot.isBooked;
 
   const handlePress = () => {
@@ -20,15 +23,14 @@ export const TimeSlotButton: React.FC<TimeSlotButtonProps> = ({ slot, onPress })
 
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        isBooked && styles.buttonBooked,
-      ]}
+      style={[styles.button, isBooked && styles.buttonBooked]}
       onPress={handlePress}
       disabled={isBooked}
       activeOpacity={0.7}
       accessibilityRole="button"
-      accessibilityLabel={`${formatTime12Hour(slot.startTime)}${isBooked ? ', booked' : ', available'}`}
+      accessibilityLabel={`${formatTime12Hour(slot.startTime)}${
+        isBooked ? ', booked' : ', available'
+      }`}
       accessibilityState={{ disabled: isBooked }}
     >
       <Text style={[styles.time, isBooked && styles.timeBooked]}>
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.card,
     borderWidth: 1,
     borderColor: COLORS.primary,
-    borderRadius: 8,
+    borderRadius: 12,
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginRight: 8,
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonBooked: {
-    backgroundColor: COLORS.disabled,
+    backgroundColor: COLORS.background,
     borderColor: COLORS.border,
   },
   time: {
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
   },
   timeBooked: {
     color: COLORS.textSecondary,
+    textDecorationLine: 'line-through',
   },
   bookedLabel: {
     fontSize: 10,

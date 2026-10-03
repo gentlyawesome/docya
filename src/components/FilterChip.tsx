@@ -9,7 +9,11 @@ interface FilterChipProps {
   onPress: () => void;
 }
 
-export const FilterChip: React.FC<FilterChipProps> = ({ label, selected, onPress }) => (
+export const FilterChip: React.FC<FilterChipProps> = ({
+  label,
+  selected,
+  onPress,
+}) => (
   <TouchableOpacity
     style={[styles.chip, selected && styles.chipSelected]}
     onPress={() => {
@@ -20,15 +24,17 @@ export const FilterChip: React.FC<FilterChipProps> = ({ label, selected, onPress
     accessibilityLabel={`${label} filter`}
     accessibilityState={{ selected }}
   >
-    <Text style={[styles.label, selected && styles.labelSelected]}>{label}</Text>
+    <Text style={[styles.label, selected && styles.labelSelected]}>
+      {label}
+    </Text>
   </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
   chip: {
     paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 16,
+    paddingHorizontal: 16,
+    borderRadius: 999,
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.card,

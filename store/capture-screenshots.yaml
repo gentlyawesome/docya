@@ -2,6 +2,13 @@
 appId: org.reactjs.native.example.Docya
 ---
 - launchApp
+# The first-time welcome cards would cover the dashboard
+- runFlow: ../e2e/subflows/dismiss-welcome.yaml
+- assertVisible: "Hello, Dr. Santos"
+# Looking at the working hours completes the "Getting started" checklist, which then hides itself
+- tapOn: "Schedule, tab.*"
+- assertVisible: "My Schedule"
+- tapOn: "Dashboard, tab.*"
 - assertVisible: "Hello, Dr. Santos"
 - waitForAnimationToEnd:
     timeout: 3000

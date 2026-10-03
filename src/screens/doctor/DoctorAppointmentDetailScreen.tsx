@@ -113,7 +113,6 @@ export const DoctorAppointmentDetailScreen: React.FC<Props> = ({ route }) => {
             {formatTime12Hour(appointment.endTime)} (
             {formatTimezone(appointment.timezone)} time)
           </Text>
-
         </View>
 
         {phase === 'upcoming' && appointment.status === 'confirmed' && (
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { padding: 16, paddingBottom: 32 },
   message: { textAlign: 'center', color: COLORS.textSecondary, marginTop: 48 },
-  card: { backgroundColor: COLORS.card, borderRadius: 12, padding: 16 },
+  card: { backgroundColor: COLORS.card, borderRadius: 16, padding: 16 },
   notesCard: { marginTop: 16 },
   notesInput: { minHeight: 90, textAlignVertical: 'top' },
   label: { fontSize: 13, color: COLORS.textSecondary, marginTop: 14 },

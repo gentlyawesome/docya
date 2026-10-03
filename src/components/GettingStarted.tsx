@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from '../constants';
+import { COLORS, FONTS } from '../constants';
 
 export interface Step {
   key: string;
@@ -57,7 +57,7 @@ export const GettingStarted: React.FC<Props> = ({ steps, onHide }) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.card,
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     marginBottom: 20,
   },
@@ -67,7 +67,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 4,
   },
-  title: { fontSize: 18, fontWeight: '600', color: COLORS.text, flexShrink: 1 },
+  title: {
+    fontSize: 20,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
+    color: COLORS.text,
+    flexShrink: 1,
+  },
   hide: {
     minHeight: 44,
     minWidth: 44,

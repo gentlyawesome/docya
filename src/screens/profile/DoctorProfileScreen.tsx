@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppSelector } from '../../store/hooks';
 import { useTabBarInset } from '../../hooks/useTabBarInset';
@@ -10,7 +10,8 @@ import {
 } from '../../components/AccountSections';
 import { ProfileForm } from '../../components/ProfileForm';
 import { ReminderSettings } from '../../components/ReminderSettings';
-import { COLORS } from '../../constants';
+import { Avatar } from '../../components/Avatar';
+import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 
 export const DoctorProfileScreen: React.FC = () => {
   const user = useAppSelector(selectUser);
@@ -32,6 +33,15 @@ export const DoctorProfileScreen: React.FC = () => {
         <Text style={styles.title} accessibilityRole="header">
           My Profile
         </Text>
+        <View style={styles.header}>
+          <Avatar name={user.fullName} size={56} />
+          <View style={styles.headerText}>
+            <Text style={styles.name} numberOfLines={1}>
+              Dr. {user.fullName}
+            </Text>
+            <Text style={styles.email}>Your Docya account</Text>
+          </View>
+        </View>
         <ProfileForm user={user} />
         <ReminderSettings />
         <AboutSection />
@@ -44,5 +54,24 @@ export const DoctorProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { paddingBottom: 32 },
-  title: { fontSize: 28, fontWeight: 'bold', color: COLORS.text, margin: 16 },
+  title: {
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
+    color: COLORS.text,
+    margin: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.card,
+    padding: 16,
+    marginHorizontal: 20,
+    marginBottom: 16,
+    ...CARD,
+  },
+  headerText: { flex: 1, marginLeft: 14 },
+  name: { fontSize: 18, fontWeight: '700', color: COLORS.text },
+  email: { fontSize: 14, color: COLORS.textSecondary, marginTop: 2 },
 });

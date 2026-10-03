@@ -8,14 +8,14 @@ export const authStyles = StyleSheet.create({
   content: { padding: 24 },
   intro: { fontSize: 16, color: COLORS.textSecondary, marginBottom: 20 },
   errorBox: {
-    backgroundColor: '#FFEBEE',
+    backgroundColor: COLORS.dangerSoft,
     borderRadius: 10,
     padding: 12,
     marginBottom: 16,
   },
   errorText: { color: COLORS.danger, fontSize: 14 },
   infoBox: {
-    backgroundColor: '#E5F1FF',
+    backgroundColor: COLORS.primarySoft,
     borderRadius: 10,
     padding: 12,
     marginBottom: 16,

@@ -14,7 +14,14 @@ import {
   selectAuthLoading,
 } from '../store/slices/authSlice';
 import { Button } from './Button';
-import { COLORS, PRIVACY_POLICY_URL, USER_GUIDE_URL } from '../constants';
+import {
+  COLORS,
+  RADIUS,
+  CARD,
+  FONTS,
+  PRIVACY_POLICY_URL,
+  USER_GUIDE_URL,
+} from '../constants';
 
 export const Section: React.FC<{
   title: string;
@@ -97,14 +104,16 @@ export const AccountActionsSection: React.FC = () => {
 const styles = StyleSheet.create({
   section: {
     backgroundColor: COLORS.card,
-    borderRadius: 12,
+    borderRadius: RADIUS.card,
     padding: 16,
-    marginHorizontal: 16,
+    marginHorizontal: 20,
     marginBottom: 16,
+    ...CARD,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
     marginBottom: 12,
   },

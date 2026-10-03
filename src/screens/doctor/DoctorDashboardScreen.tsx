@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,11 +21,11 @@ import {
   updateOnboarding,
 } from '../../services/onboarding';
 import { getPermission, loadSettings } from '../../services/reminders';
+import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { GettingStarted } from '../../components/GettingStarted';
 import { WelcomeCards } from '../../components/WelcomeCards';
-import { StatusBadge } from '../../components/StatusBadge';
-import { COLORS } from '../../constants';
+import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay } from '../../utils/dateHelpers';
 import { formatTime12Hour } from '../../utils/timeSlotGenerator';
@@ -43,7 +44,9 @@ const Stat: React.FC<{ label: string; value: number }> = ({ label, value }) => (
 export const DoctorDashboardScreen: React.FC = () => {
   const user = useAppSelector(selectUser);
   const tabBarInset = useTabBarInset();
-  const navigation = useNavigation<{ navigate: (name: string) => void }>();
+  const navigation = useNavigation<{
+    navigate: (name: string, params?: object) => void;
+  }>();
   const [appointments, setAppointments] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -125,9 +128,7 @@ export const DoctorDashboardScreen: React.FC = () => {
     },
   ];
   const showChecklist =
-    !!onboarding &&
-    !onboarding.checklistHidden &&
-    !steps.every(s => s.done);
+    !!onboarding && !onboarding.checklistHidden && !steps.every(s => s.done);
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
@@ -148,6 +149,9 @@ export const DoctorDashboardScreen: React.FC = () => {
           />
         }
       >
+        <Text style={styles.eyebrow}>
+          {format(new Date(now), 'EEEE, MMM d').toUpperCase()}
+        </Text>
         <Text style={styles.title} accessibilityRole="header">
           Hello, Dr. {user?.lastName || user?.fullName}
         </Text>
@@ -160,31 +164,48 @@ export const DoctorDashboardScreen: React.FC = () => {
           />
         ) : null}
 
-        <View style={styles.stats}>
-          <Stat label="Today" value={today} />
-          <Stat label="Upcoming" value={upcoming} />
-        </View>
-
         <Text style={styles.sectionTitle} accessibilityRole="header">
           Next appointment
         </Text>
         {next ? (
-          <View style={styles.card}>
-            <View style={styles.row}>
-              <Text style={styles.patient}>
+          <TouchableOpacity
+            style={styles.hero}
+            activeOpacity={0.85}
+            onPress={() =>
+              navigation.navigate('DoctorAppointmentDetail', {
+                appointmentId: next.id,
+              })
+            }
+            accessibilityRole="button"
+            accessibilityLabel={`Next appointment: ${
+              next.patientName ?? 'Patient'
+            }, ${formatDateWithDay(next.date)}, ${formatTime12Hour(
+              next.startTime,
+            )}. Open details`}
+          >
+            <Text style={styles.heroWhen}>{formatDateWithDay(next.date)}</Text>
+            <Text style={styles.heroTime}>
+              {formatTime12Hour(next.startTime)}
+              <Text style={styles.heroEnd}>
+                {' '}
+                - {formatTime12Hour(next.endTime)}
+              </Text>
+            </Text>
+            <View style={styles.heroPatient}>
+              <Avatar name={next.patientName} dark />
+              <Text style={styles.heroName} numberOfLines={1}>
                 {next.patientName ?? 'Patient'}
               </Text>
-              <StatusBadge phase="upcoming" />
             </View>
-            <Text style={styles.when}>{formatDateWithDay(next.date)}</Text>
-            <Text style={styles.time}>
-              {formatTime12Hour(next.startTime)} -{' '}
-              {formatTime12Hour(next.endTime)}
-            </Text>
-          </View>
+          </TouchableOpacity>
         ) : (
           <Text style={styles.empty}>No upcoming appointments.</Text>
         )}
+
+        <View style={styles.stats}>
+          <Stat label="Today" value={today} />
+          <Stat label="Upcoming" value={upcoming} />
+        </View>
 
         <Button
           title="New appointment"
@@ -202,56 +223,79 @@ export const DoctorDashboardScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
-  content: { padding: 16 },
+  content: { padding: 20 },
+  eyebrow: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.8,
+    color: COLORS.textSecondary,
+  },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
-    marginBottom: 16,
+    marginTop: 2,
+    marginBottom: 20,
   },
   error: { color: COLORS.danger, marginBottom: 8 },
-  stats: { flexDirection: 'row', marginBottom: 20 },
+  sectionTitle: {
+    fontSize: 20,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
+    color: COLORS.text,
+    marginBottom: 10,
+  },
+  hero: {
+    backgroundColor: COLORS.navy,
+    borderRadius: RADIUS.card,
+    padding: 20,
+    marginBottom: 16,
+  },
+  heroWhen: {
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    color: 'rgba(255,255,255,0.7)',
+  },
+  heroTime: {
+    fontSize: 42,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
+    color: '#FFFFFF',
+    marginTop: 4,
+  },
+  heroEnd: { fontSize: 18, fontWeight: '500', color: 'rgba(255,255,255,0.75)' },
+  heroPatient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.navySoft,
+    borderRadius: RADIUS.control,
+    padding: 10,
+    marginTop: 16,
+  },
+  heroName: {
+    flexShrink: 1,
+    marginLeft: 12,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  stats: { flexDirection: 'row', marginHorizontal: -4, marginBottom: 12 },
   stat: {
     flex: 1,
     backgroundColor: COLORS.card,
-    borderRadius: 12,
-    padding: 14,
-    alignItems: 'center',
-    marginHorizontal: 4,
-  },
-  statValue: { fontSize: 28, fontWeight: 'bold', color: COLORS.primary },
-  statLabel: { fontSize: 13, color: COLORS.textSecondary, marginTop: 2 },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.text,
-    marginBottom: 8,
-  },
-  card: {
-    backgroundColor: COLORS.card,
-    borderRadius: 12,
+    borderRadius: RADIUS.card,
     padding: 16,
-    marginBottom: 12,
+    marginHorizontal: 4,
+    ...CARD,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  patient: {
-    fontSize: 18,
-    fontWeight: '600',
+  statValue: {
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
-    flexShrink: 1,
-    marginRight: 8,
   },
-  when: { fontSize: 15, color: COLORS.text },
-  time: {
-    fontSize: 15,
-    color: COLORS.primary,
-    fontWeight: '600',
-    marginTop: 2,
-  },
-  empty: { color: COLORS.textSecondary, marginBottom: 12 },
+  statLabel: { fontSize: 13, color: COLORS.textSecondary, marginTop: 2 },
+  empty: { color: COLORS.textSecondary, marginBottom: 16 },
 });

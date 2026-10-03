@@ -53,7 +53,11 @@ export const DoctorCalendar: React.FC<DoctorCalendarProps> = ({
         }}
         disableAllTouchEventsForDisabledDays
         renderArrow={direction => (
-          <Text style={styles.arrow} accessibilityElementsHidden importantForAccessibility="no">
+          <Text
+            style={styles.arrow}
+            accessibilityElementsHidden
+            importantForAccessibility="no"
+          >
             {direction === 'left' ? '‹' : '›'}
           </Text>
         )}
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: COLORS.card,
-    borderRadius: 12,
+    borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: COLORS.border,

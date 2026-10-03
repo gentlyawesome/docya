@@ -19,8 +19,9 @@ import {
 } from '../../services/appointmentsService';
 import { StatusBadge, statusLabel } from '../../components/StatusBadge';
 import { FilterChip } from '../../components/FilterChip';
+import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
-import { COLORS } from '../../constants';
+import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay } from '../../utils/dateHelpers';
 import { formatTime12Hour } from '../../utils/timeSlotGenerator';
@@ -118,14 +119,19 @@ export const DoctorAppointmentsScreen: React.FC = () => {
           )}. Open details`}
         >
           <View style={styles.cardHeader}>
-            <Text style={styles.patient}>{who}</Text>
+            <Avatar name={item.patientName} />
+            <View style={styles.cardText}>
+              <Text style={styles.patient} numberOfLines={1}>
+                {who}
+              </Text>
+              <Text style={styles.when}>{formatDateWithDay(item.date)}</Text>
+              <Text style={styles.time}>
+                {formatTime12Hour(item.startTime)} -{' '}
+                {formatTime12Hour(item.endTime)}
+              </Text>
+            </View>
             <StatusBadge phase={phase} />
           </View>
-          <Text style={styles.when}>{formatDateWithDay(item.date)}</Text>
-          <Text style={styles.time}>
-            {formatTime12Hour(item.startTime)} -{' '}
-            {formatTime12Hour(item.endTime)}
-          </Text>
         </TouchableOpacity>
 
         {phase === 'upcoming' && item.status === 'confirmed' && (
@@ -219,42 +225,29 @@ export const DoctorAppointmentsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
-  header: {
-    backgroundColor: COLORS.card,
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
+  header: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 4 },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontFamily: FONTS.serif,
+    fontWeight: '400',
     color: COLORS.text,
-    marginBottom: 12,
-  },
-  newButton: { marginBottom: 16 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', paddingBottom: 4 },
-  error: { color: COLORS.danger, marginTop: 8 },
-  list: { padding: 16 },
-  card: {
-    backgroundColor: COLORS.card,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: 8,
   },
-  patient: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: COLORS.text,
-    flexShrink: 1,
-    marginRight: 8,
+  newButton: { marginBottom: 12 },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', paddingBottom: 4 },
+  error: { color: COLORS.danger, marginTop: 8 },
+  list: { padding: 20 },
+  card: {
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.card,
+    padding: 14,
+    marginBottom: 12,
+    ...CARD,
   },
-  when: { fontSize: 15, color: COLORS.text },
+  cardHeader: { flexDirection: 'row', alignItems: 'center' },
+  cardText: { flex: 1, marginHorizontal: 12 },
+  patient: { fontSize: 17, fontWeight: '700', color: COLORS.text },
+  when: { fontSize: 14, color: COLORS.textSecondary, marginTop: 2 },
   time: {
     fontSize: 15,
     color: COLORS.primary,
