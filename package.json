@@ -30,6 +30,7 @@
     "react-native-haptic-feedback": "^3.0.0",
     "react-native-safe-area-context": "^5.7.0",
     "react-native-screens": "^4.24.0",
+    "react-native-svg": "^15.15.5",
     "react-native-url-polyfill": "^4.0.0",
     "react-redux": "^9.2.0"
   },

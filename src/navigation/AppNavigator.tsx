@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -27,23 +26,29 @@ import { DoctorScheduleScreen } from '../screens/doctor/DoctorScheduleScreen';
 import { DoctorNewAppointmentScreen } from '../screens/doctor/DoctorNewAppointmentScreen';
 import { DoctorAppointmentDetailScreen } from '../screens/doctor/DoctorAppointmentDetailScreen';
 import { COLORS, SHADOW } from '../constants';
+import {
+  CalendarIcon,
+  ClockIcon,
+  HomeIcon,
+  UserIcon,
+} from '../components/TabIcons';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const DoctorStack = createNativeStackNavigator<DoctorStackParamList>();
 const DoctorTab = createBottomTabNavigator<DoctorTabParamList>();
 
-const styles = StyleSheet.create({
-  tabIcon: { fontSize: 22 },
-});
-
-const TabIcon: React.FC<{ icon: string }> = ({ icon }) => (
-  <Text style={styles.tabIcon}>{icon}</Text>
+const renderBookingsIcon = ({ color }: { color: string }) => (
+  <CalendarIcon color={color} />
 );
-
-const renderBookingsIcon = () => <TabIcon icon="📅" />;
-const renderProfileIcon = () => <TabIcon icon="👤" />;
-const renderDashboardIcon = () => <TabIcon icon="🏠" />;
-const renderScheduleIcon = () => <TabIcon icon="🗓️" />;
+const renderProfileIcon = ({ color }: { color: string }) => (
+  <UserIcon color={color} />
+);
+const renderDashboardIcon = ({ color }: { color: string }) => (
+  <HomeIcon color={color} />
+);
+const renderScheduleIcon = ({ color }: { color: string }) => (
+  <ClockIcon color={color} />
+);
 
 // A rounded bar that floats above the bottom edge, with the current tab on a soft blue pill
 const tabOptions = {
