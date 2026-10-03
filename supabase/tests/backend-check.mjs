@@ -166,6 +166,8 @@ r = await call('/rest/v1/doctor_profiles?select=specialization', { token: temp.a
 check('registration created the doctor profile row', r.status === 200 && r.json.length === 1 && r.json[0].specialization === 'Neurology', JSON.stringify(r.json));
 r = await call('/rest/v1/profiles?select=role', { token: temp.access_token });
 check('the account role is doctor', r.json?.[0]?.role === 'doctor', JSON.stringify(r.json));
+r = await call('/rest/v1/doctor_availability?select=day_of_week,start_time,end_time', { token: temp.access_token });
+check('a new doctor starts with Monday-Friday 9 to 5 working hours', r.json?.length === 5 && r.json.every(h => h.start_time === '09:00:00' && h.end_time === '17:00:00'), JSON.stringify(r.json));
 
 if (target.hasMailCatcher) {
   // --- Password reset by code

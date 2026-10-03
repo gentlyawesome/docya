@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -220,9 +221,21 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
           Available Time Slots
         </Text>
         {availabilities.length === 0 && !loadError ? (
-          <Text style={styles.empty}>
-            Add your working hours in the Schedule tab first.
-          </Text>
+          <View>
+            <Text style={styles.empty}>
+              You have no working hours yet, so there are no slots to book.
+            </Text>
+            <TouchableOpacity
+              style={styles.hoursButton}
+              onPress={() =>
+                navigation.navigate('DoctorTabs', { screen: 'DoctorSchedule' })
+              }
+              accessibilityRole="button"
+              accessibilityLabel="Set my working hours"
+            >
+              <Text style={styles.hoursButtonText}>Set my working hours</Text>
+            </TouchableOpacity>
+          </View>
         ) : daySlots.length > 0 ? (
           <View
             style={[styles.slots, saving && styles.disabled]}
@@ -255,6 +268,15 @@ const styles = StyleSheet.create({
   },
   slots: { flexDirection: 'row', flexWrap: 'wrap' },
   disabled: { opacity: 0.5 },
+  hoursButton: {
+    alignSelf: 'center',
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    backgroundColor: COLORS.primary,
+  },
+  hoursButtonText: { color: '#FFFFFF', fontWeight: '600', fontSize: 16 },
   empty: { color: COLORS.textSecondary, textAlign: 'center', padding: 24 },
   error: { color: COLORS.danger, marginTop: 8 },
 });

@@ -10,11 +10,17 @@ if (target.kind !== 'hosted') {
 console.log(`Resetting ${target.label} ...`);
 
 sql(`
+  drop policy if exists "Users can view their own files" on storage.objects;
+  drop policy if exists "Users can upload files to their own folder" on storage.objects;
+  drop policy if exists "Users can update their own files" on storage.objects;
+  drop policy if exists "Users can delete their own files" on storage.objects;
   drop schema public cascade;
   create schema public;
   grant usage on schema public to postgres, anon, authenticated, service_role;
   grant all on schema public to postgres, service_role;
   delete from auth.users;
+  create schema if not exists supabase_migrations;
+  create table if not exists supabase_migrations.schema_migrations (version text primary key, statements text[], name text);
   delete from supabase_migrations.schema_migrations;
 `);
 

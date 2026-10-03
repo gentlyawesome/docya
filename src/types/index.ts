@@ -1,3 +1,4 @@
+import type { NavigatorScreenParams } from '@react-navigation/native';
 // Weekly availability window in the format the slot generator reads (e.g. " 9:00AM")
 export interface DoctorAvailability {
   name: string;
@@ -88,7 +89,7 @@ export type AuthStackParamList = {
 };
 
 export type DoctorStackParamList = {
-  DoctorTabs: undefined;
+  DoctorTabs: NavigatorScreenParams<DoctorTabParamList> | undefined;
   DoctorNewAppointment: undefined;
   DoctorAppointmentDetail: { appointmentId: string };
 };

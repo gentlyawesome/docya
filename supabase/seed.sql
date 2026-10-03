@@ -46,7 +46,8 @@ WHERE user_id = 'c2b3d4e5-6f7a-4b9c-8d1e-2f3a4b5c6d7e';
 UPDATE public.doctor_profiles SET timezone = 'Asia/Manila'
 WHERE user_id = 'd3c4e5f6-7a8b-4c9d-9e2f-3a4b5c6d7e8f';
 
--- Weekly availability (doctor's local time)
+-- Weekly availability (doctor's local time); replaces the default 9-17 hours new accounts get
+DELETE FROM public.doctor_availability;
 INSERT INTO public.doctor_availability (doctor_id, day_of_week, start_time, end_time)
 SELECT d.id, day, d.start_time, d.end_time
 FROM (VALUES

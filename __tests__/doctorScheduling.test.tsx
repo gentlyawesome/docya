@@ -170,8 +170,9 @@ describe('New appointment screen', () => {
     avail.listMyAvailability.mockResolvedValue([]);
     await openNewAppointment();
     expect(
-      await screen.findByText(/Add your working hours in the Schedule tab/),
+      await screen.findByText(/You have no working hours yet/),
     ).toBeTruthy();
+    expect(screen.getByLabelText('Set my working hours')).toBeTruthy();
   });
 
   it('shows the server message if the slot was taken meanwhile', async () => {
