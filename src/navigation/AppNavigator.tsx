@@ -26,14 +26,14 @@ import { DoctorAppointmentsScreen } from '../screens/doctor/DoctorAppointmentsSc
 import { DoctorScheduleScreen } from '../screens/doctor/DoctorScheduleScreen';
 import { DoctorNewAppointmentScreen } from '../screens/doctor/DoctorNewAppointmentScreen';
 import { DoctorAppointmentDetailScreen } from '../screens/doctor/DoctorAppointmentDetailScreen';
-import { COLORS } from '../constants';
+import { COLORS, SHADOW } from '../constants';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const DoctorStack = createNativeStackNavigator<DoctorStackParamList>();
 const DoctorTab = createBottomTabNavigator<DoctorTabParamList>();
 
 const styles = StyleSheet.create({
-  tabIcon: { fontSize: 24 },
+  tabIcon: { fontSize: 22 },
 });
 
 const TabIcon: React.FC<{ icon: string }> = ({ icon }) => (
@@ -45,10 +45,27 @@ const renderProfileIcon = () => <TabIcon icon="👤" />;
 const renderDashboardIcon = () => <TabIcon icon="🏠" />;
 const renderScheduleIcon = () => <TabIcon icon="🗓️" />;
 
+// A rounded bar that floats above the bottom edge, with the current tab on a soft blue pill
 const tabOptions = {
   tabBarActiveTintColor: COLORS.primary,
   tabBarInactiveTintColor: COLORS.textSecondary,
-  tabBarStyle: { backgroundColor: COLORS.card, borderTopColor: COLORS.border },
+  tabBarActiveBackgroundColor: COLORS.primarySoft,
+  tabBarStyle: {
+    position: 'absolute' as const,
+    left: 12,
+    right: 12,
+    bottom: 12,
+    height: 68,
+    paddingTop: 0,
+    paddingBottom: 0,
+    borderTopWidth: 0,
+    borderRadius: 24,
+    backgroundColor: COLORS.card,
+    ...SHADOW,
+    shadowOpacity: 0.12,
+  },
+  tabBarItemStyle: { borderRadius: 18, marginVertical: 8, marginHorizontal: 4 },
+  tabBarLabelStyle: { fontSize: 11, fontWeight: '600' as const },
   headerShown: false,
 };
 

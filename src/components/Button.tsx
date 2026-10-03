@@ -1,5 +1,10 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { COLORS } from '../constants';
 
 interface ButtonProps {
@@ -31,9 +36,17 @@ export const Button: React.FC<ButtonProps> = ({
       accessibilityState={{ disabled: inactive, busy: loading }}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'primary' ? '#FFFFFF' : COLORS.primary} />
+        <ActivityIndicator
+          color={variant === 'primary' ? '#FFFFFF' : COLORS.primary}
+        />
       ) : (
-        <Text style={[styles.text, variant === 'secondary' && styles.textSecondary, variant === 'danger' && styles.textDanger]}>
+        <Text
+          style={[
+            styles.text,
+            variant === 'secondary' && styles.textSecondary,
+            variant === 'danger' && styles.textDanger,
+          ]}
+        >
           {title}
         </Text>
       )}
@@ -43,7 +56,7 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: 10,
+    borderRadius: 14,
     paddingVertical: 14,
     paddingHorizontal: 16,
     alignItems: 'center',
@@ -52,8 +65,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   primary: { backgroundColor: COLORS.primary },
-  secondary: { backgroundColor: COLORS.card, borderWidth: 1, borderColor: COLORS.primary },
-  danger: { backgroundColor: '#FFEBEE', borderWidth: 1, borderColor: '#FFCDD2' },
+  secondary: {
+    backgroundColor: COLORS.card,
+    borderWidth: 1.5,
+    borderColor: COLORS.primary,
+  },
+  danger: { backgroundColor: COLORS.dangerSoft },
   inactive: { opacity: 0.55 },
   text: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
   textSecondary: { color: COLORS.primary },

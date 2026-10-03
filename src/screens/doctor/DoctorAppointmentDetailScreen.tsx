@@ -113,7 +113,6 @@ export const DoctorAppointmentDetailScreen: React.FC<Props> = ({ route }) => {
             {formatTime12Hour(appointment.endTime)} (
             {formatTimezone(appointment.timezone)} time)
           </Text>
-
         </View>
 
         {phase === 'upcoming' && appointment.status === 'confirmed' && (
