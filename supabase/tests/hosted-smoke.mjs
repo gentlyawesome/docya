@@ -57,7 +57,11 @@ r = await call('/rest/v1/doctor_profiles?select=specialization', { token });
 check('their doctor profile exists', r.json?.[0]?.specialization === 'Testing', JSON.stringify(r.json));
 
 const me = r.json && (await call('/auth/v1/user', { token })).json?.id;
+r = await call('/rest/v1/doctor_availability?select=day_of_week,start_time,end_time', { token });
+check('a new doctor starts with Monday-Friday 9 to 5 working hours', r.json?.length === 5 && r.json.every(h => h.start_time === '09:00:00' && h.end_time === '17:00:00'), JSON.stringify(r.json));
 r = await call('/rest/v1/doctor_availability', { method: 'POST', token, body: { doctor_id: me, day_of_week: 'Monday', start_time: '09:00', end_time: '12:00' } });
+check('a window overlapping the default hours is refused', r.status === 400, `${r.status}`);
+r = await call('/rest/v1/doctor_availability', { method: 'POST', token, body: { doctor_id: me, day_of_week: 'Saturday', start_time: '09:00', end_time: '12:00' } });
 check('they can set working hours', r.status === 201, `${r.status} ${JSON.stringify(r.json).slice(0, 100)}`);
 
 const date = (() => { const d = new Date(); do { d.setDate(d.getDate() + 1); } while (d.getDay() === 0 || d.getDay() === 6); return d.toISOString().slice(0, 10); })();
