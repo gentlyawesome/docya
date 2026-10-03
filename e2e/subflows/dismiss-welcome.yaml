@@ -1,0 +1,8 @@
+# The first-time welcome cards cover the dashboard until they are skipped; do nothing if they are not showing.
+appId: org.reactjs.native.example.Docya
+---
+- runFlow:
+    when:
+      visible: "Skip"
+    commands:
+      - tapOn: "Skip"

@@ -1,4 +1,4 @@
-# Signs in as a seeded LOCAL test doctor (supabase/seed.sql; never a real account).
+# Signs in as a seeded test doctor without dismissing the first-time welcome cards.
 appId: org.reactjs.native.example.Docya
 ---
 - assertVisible: "Welcome to Docya"
@@ -7,11 +7,8 @@ appId: org.reactjs.native.example.Docya
 - pressKey: Enter
 - inputText: "Password123!"
 - pressKey: Enter
-# iOS may offer to save the password
 - runFlow:
     when:
       visible: "Save Password.*"
     commands:
       - tapOn: "Not Now"
-- runFlow: dismiss-welcome.yaml
-- assertVisible: "Hello, Dr. Santos"

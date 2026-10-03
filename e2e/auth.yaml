@@ -27,9 +27,11 @@ name: Sign in and sign out
       visible: "Save Password.*"
     commands:
       - tapOn: "Not Now"
+- runFlow: subflows/dismiss-welcome.yaml
 - assertVisible: "Hello, Dr. Santos"
 # The session survives an app restart
 - launchApp
+- runFlow: subflows/dismiss-welcome.yaml
 - assertVisible: "Hello, Dr. Santos"
 - runFlow: subflows/sign-out.yaml
 # ...and is gone after signing out
