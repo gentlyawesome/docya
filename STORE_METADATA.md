@@ -48,15 +48,15 @@ For doctors and clinicians. Patients do not need the app.
 doctor,appointment,booking,medical,health,schedule,calendar,clinic,healthcare,physician
 ```
 
-**What's New** (version 1.0)
+**What's New** (version 1.9)
 ```
-Welcome to Docya!
+A fresh new look, and an easier start.
 
-• Weekly working hours
-• Book patients by name into open slots
-• Reminders before each appointment
-• Cancel or complete appointments, with private notes
-• Dashboard for today and upcoming
+• Clean new design with an ivory and evergreen palette and new icons
+• New doctors start with Monday to Friday, 9 to 5 working hours
+• A short welcome and a getting-started checklist on the dashboard
+• A user guide in Profile > About
+• Fixes and improvements
 ```
 
 ---
@@ -158,7 +158,7 @@ Source: the 1024 x 1024 artwork in `ios/DoctoraAppointments/Images.xcassets/AppI
 - [x] Account deletion in the app; reminders permission asked in context
 
 ### Still to do
-- [x] Bundle ID `org.reactjs.native.example.Docya` (matches the App Store Connect app; it still has the template prefix `org.reactjs.native.example`, so move to your own domain, for example `com.yourname.docya`, only if you create a new app record). Version 1.8, build 8; raise the build number for every upload
+- [x] Bundle ID `org.reactjs.native.example.Docya` (matches the App Store Connect app; it still has the template prefix `org.reactjs.native.example`, so move to your own domain, for example `com.yourname.docya`, only if you create a new app record). Version 1.9, build 10 (1.8 is already approved, so the next upload needs a higher version); raise the build number for every upload
 - [ ] Hosted Supabase: connect an email provider (SMTP), turn on the sign-up code and the two email templates (`docs/HOSTING.md`)
 - [ ] Decide who may register as a doctor (open sign-up today)
 - [ ] Legal review of the privacy policy
