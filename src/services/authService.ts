@@ -32,6 +32,7 @@ export const register = async (
         full_name: `${firstName} ${lastName}`.trim(),
         phone: input.phone?.trim() || undefined,
         specialization: input.specialization?.trim() || undefined,
+        terms_accepted_at: new Date().toISOString(),
       },
     },
   });

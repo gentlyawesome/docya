@@ -7,7 +7,7 @@ import { fromZonedTime } from 'date-fns-tz';
 import { Booking } from '../types';
 import { getBookingPhase } from '../utils/bookingPhases';
 import { formatDateWithDay, formatTimezone } from '../utils/dateHelpers';
-import { formatTime12Hour } from '../utils/timeSlotGenerator';
+import { formatTime } from '../utils/timeSlotGenerator';
 import { logError } from '../utils/logger';
 
 // Reminders are local notifications on the doctor's own phone; nothing about them is sent to a server.
@@ -140,7 +140,7 @@ const contentFor = (
     showPatientName && booking.patientName
       ? `Appointment with ${booking.patientName}`
       : 'Upcoming appointment',
-  body: `In ${describeLead(leadMinutes)}: ${formatTime12Hour(
+  body: `In ${describeLead(leadMinutes)}: ${formatTime(
     booking.startTime,
   )}, ${formatDateWithDay(booking.date)} (${formatTimezone(
     booking.timezone,

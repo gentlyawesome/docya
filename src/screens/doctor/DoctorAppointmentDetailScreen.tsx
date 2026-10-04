@@ -14,7 +14,7 @@ import { StatusBadge } from '../../components/StatusBadge';
 import { COLORS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay, formatTimezone } from '../../utils/dateHelpers';
-import { formatTime12Hour } from '../../utils/timeSlotGenerator';
+import { formatTime } from '../../utils/timeSlotGenerator';
 
 interface Props {
   route: RouteProp<DoctorStackParamList, 'DoctorAppointmentDetail'>;
@@ -109,8 +109,8 @@ export const DoctorAppointmentDetailScreen: React.FC<Props> = ({ route }) => {
             {formatDateWithDay(appointment.date)}
           </Text>
           <Text style={styles.time}>
-            {formatTime12Hour(appointment.startTime)} -{' '}
-            {formatTime12Hour(appointment.endTime)} (
+            {formatTime(appointment.startTime)} -{' '}
+            {formatTime(appointment.endTime)} (
             {formatTimezone(appointment.timezone)} time)
           </Text>
         </View>

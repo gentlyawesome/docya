@@ -23,7 +23,7 @@ import {
 } from '../../store/slices/authSlice';
 import { Button } from '../../components/Button';
 import { FormField } from '../../components/FormField';
-import { COLORS, PRIVACY_POLICY_URL } from '../../constants';
+import { COLORS, PRIVACY_POLICY_URL, TERMS_URL } from '../../constants';
 import {
   isValidEmail,
   isValidPassword,
@@ -47,7 +47,8 @@ type Errors = Partial<
     | 'phone'
     | 'password'
     | 'confirm'
-    | 'specialization',
+    | 'specialization'
+    | 'terms',
     string
   >
 >;
@@ -71,6 +72,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [specialization, setSpecialization] = useState('');
+  const [agreed, setAgreed] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
 
   // Start each visit without another screen's error
@@ -92,6 +94,8 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     if (confirm !== password) next.confirm = 'Passwords do not match';
     if (!specialization.trim())
       next.specialization = 'Enter your specialization';
+    if (!agreed)
+      next.terms = 'Agree to the Terms and Privacy Policy to continue';
     setErrors(next);
     if (Object.keys(next).length > 0) {
       return;
@@ -215,6 +219,25 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             onSubmitEditing={submit}
           />
 
+          <TouchableOpacity
+            style={styles.agree}
+            onPress={() => setAgreed(!agreed)}
+            accessibilityRole="checkbox"
+            accessibilityLabel="I agree to the Terms of Service and Privacy Policy"
+            accessibilityState={{ checked: agreed }}
+          >
+            <View style={[styles.box, agreed && styles.boxChecked]}>
+              {agreed ? <Text style={styles.tick}>✓</Text> : null}
+            </View>
+            <Text style={styles.agreeText}>
+              I agree to the Terms of Service and Privacy Policy, and I will
+              only enter patient details I am allowed to keep.
+            </Text>
+          </TouchableOpacity>
+          {errors.terms ? (
+            <Text style={styles.termsError}>{errors.terms}</Text>
+          ) : null}
+
           <Button title="Create account" onPress={submit} loading={loading} />
           <Button
             title="I already have an account"
@@ -223,16 +246,24 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             disabled={loading}
           />
 
-          <TouchableOpacity
-            onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
-            accessibilityRole="link"
-            accessibilityLabel="Read the privacy policy"
-            style={styles.privacy}
-          >
-            <Text style={styles.privacyText}>
-              By creating an account you agree to our privacy policy.
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.links}>
+            <TouchableOpacity
+              onPress={() => Linking.openURL(TERMS_URL)}
+              accessibilityRole="link"
+              accessibilityLabel="Read the terms of service"
+              style={styles.linkButton}
+            >
+              <Text style={styles.privacyText}>Terms of Service</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
+              accessibilityRole="link"
+              accessibilityLabel="Read the privacy policy"
+              style={styles.linkButton}
+            >
+              <Text style={styles.privacyText}>Privacy Policy</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -256,11 +287,29 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   errorText: { color: COLORS.danger, fontSize: 14 },
-  privacy: {
-    marginTop: 16,
-    alignItems: 'center',
+  links: { flexDirection: 'row', justifyContent: 'center', marginTop: 8 },
+  linkButton: { minHeight: 44, justifyContent: 'center', marginHorizontal: 12 },
+  agree: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 8,
     minHeight: 44,
-    justifyContent: 'center',
   },
+  box: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.card,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+    marginTop: 2,
+  },
+  boxChecked: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
+  tick: { color: '#FFFFFF', fontWeight: '700' },
+  agreeText: { flex: 1, fontSize: 14, color: COLORS.text, lineHeight: 20 },
+  termsError: { color: COLORS.danger, fontSize: 13, marginBottom: 8 },
   privacyText: { color: COLORS.primary, fontSize: 13, textAlign: 'center' },
 });

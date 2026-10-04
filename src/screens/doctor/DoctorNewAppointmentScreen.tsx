@@ -30,7 +30,7 @@ import { syncReminders } from '../../services/reminders';
 import { getDoctorProfile } from '../../services/userService';
 import {
   filterFutureSlots,
-  formatTime12Hour,
+  formatTime,
   generateDoctorTimeSlots,
 } from '../../utils/timeSlotGenerator';
 import { formatDateWithDay } from '../../utils/dateHelpers';
@@ -144,7 +144,7 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
 
     Alert.alert(
       'Schedule appointment?',
-      `${patientName}\n${formatDateWithDay(slot.date)}, ${formatTime12Hour(
+      `${patientName}\n${formatDateWithDay(slot.date)}, ${formatTime(
         slot.startTime,
       )}`,
       [

@@ -24,7 +24,7 @@ import { Button } from '../../components/Button';
 import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay } from '../../utils/dateHelpers';
-import { formatTime12Hour } from '../../utils/timeSlotGenerator';
+import { formatTime } from '../../utils/timeSlotGenerator';
 
 type Bucket = 'upcoming' | 'past';
 
@@ -114,7 +114,7 @@ export const DoctorAppointmentsScreen: React.FC = () => {
           accessibilityRole="button"
           accessibilityLabel={`${who}, ${statusLabel(
             phase,
-          )}, ${formatDateWithDay(item.date)}, ${formatTime12Hour(
+          )}, ${formatDateWithDay(item.date)}, ${formatTime(
             item.startTime,
           )}. Open details`}
         >
@@ -126,8 +126,7 @@ export const DoctorAppointmentsScreen: React.FC = () => {
               </Text>
               <Text style={styles.when}>{formatDateWithDay(item.date)}</Text>
               <Text style={styles.time}>
-                {formatTime12Hour(item.startTime)} -{' '}
-                {formatTime12Hour(item.endTime)}
+                {formatTime(item.startTime)} - {formatTime(item.endTime)}
               </Text>
             </View>
             <StatusBadge phase={phase} />

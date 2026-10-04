@@ -209,9 +209,7 @@ describe('Reset password screen', () => {
   it('validates the code and both passwords before calling the server', () => {
     renderScreen();
     fireEvent.press(screen.getByRole('button', { name: 'Reset password' }));
-    expect(
-      screen.getByText('Enter the code from the email'),
-    ).toBeTruthy();
+    expect(screen.getByText('Enter the code from the email')).toBeTruthy();
     expect(screen.getByText('Use at least 6 characters')).toBeTruthy();
     fireEvent.changeText(screen.getByLabelText('Code'), '123456');
     fireEvent.changeText(screen.getByLabelText('New password'), 'new-secret');
@@ -292,9 +290,7 @@ describe('Confirm email screen', () => {
     });
     const store = renderScreen();
     fireEvent.press(screen.getByRole('button', { name: 'Confirm' }));
-    expect(
-      screen.getByText('Enter the code from the email'),
-    ).toBeTruthy();
+    expect(screen.getByText('Enter the code from the email')).toBeTruthy();
     expect(auth.verifyOtp).not.toHaveBeenCalled();
 
     fireEvent.changeText(screen.getByLabelText('Code'), '123456');
@@ -339,6 +335,11 @@ describe('links between the screens', () => {
     fireEvent.changeText(screen.getByLabelText('Specialization'), 'Cardiology');
     fireEvent.changeText(screen.getByLabelText('Password'), 'secret1');
     fireEvent.changeText(screen.getByLabelText('Confirm password'), 'secret1');
+    fireEvent.press(
+      screen.getByRole('checkbox', {
+        name: 'I agree to the Terms of Service and Privacy Policy',
+      }),
+    );
     await act(async () => {
       fireEvent.press(screen.getByRole('button', { name: 'Create account' }));
     });

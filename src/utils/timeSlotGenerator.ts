@@ -32,35 +32,35 @@ export const generateTimeSlotsFromRange = (
   dayOfWeek: string,
   timezone: string,
   date: string,
-  bookedSlots: HeldSlot[] = []
+  bookedSlots: HeldSlot[] = [],
 ): TimeSlot[] => {
   const slots: TimeSlot[] = [];
-  
+
   // Parse start and end times
   const start24h = parseTimeString(startTime);
   const end24h = parseTimeString(endTime);
-  
+
   // Create date objects for calculation
   const baseDate = new Date(date);
   let currentTime = parse(start24h, 'HH:mm', baseDate);
   const endTimeDate = parse(end24h, 'HH:mm', baseDate);
-  
+
   // Generate slots
   while (isBefore(currentTime, endTimeDate)) {
     const slotStart = format(currentTime, 'HH:mm');
     const nextTime = addMinutes(currentTime, SLOT_DURATION_MINUTES);
     const slotEnd = format(nextTime, 'HH:mm');
-    
+
     // Check if this slot is already booked
     const isBooked = bookedSlots.some(
       booking =>
         booking.doctorId === doctorId &&
         booking.date === date &&
-        booking.startTime === slotStart
+        booking.startTime === slotStart,
     );
-    
+
     const slotId = `${doctorId}-${date}-${slotStart}`;
-    
+
     slots.push({
       id: slotId,
       doctorId,
@@ -72,10 +72,10 @@ export const generateTimeSlotsFromRange = (
       timezone,
       isBooked,
     });
-    
+
     currentTime = nextTime;
   }
-  
+
   return slots;
 };
 
@@ -88,10 +88,10 @@ export const generateDoctorTimeSlots = (
   availabilities: DoctorAvailability[],
   startDate: Date,
   numberOfDays: number = 7,
-  bookedSlots: HeldSlot[] = []
+  bookedSlots: HeldSlot[] = [],
 ): TimeSlot[] => {
   const allSlots: TimeSlot[] = [];
-  
+
   // Group availabilities by day of week
   const availabilityByDay = availabilities.reduce((acc, avail) => {
     if (!acc[avail.day_of_week]) {
@@ -100,17 +100,17 @@ export const generateDoctorTimeSlots = (
     acc[avail.day_of_week].push(avail);
     return acc;
   }, {} as Record<string, DoctorAvailability[]>);
-  
+
   // Generate slots for each day
   for (let i = 0; i < numberOfDays; i++) {
     const currentDate = new Date(startDate);
     currentDate.setDate(startDate.getDate() + i);
-    
+
     const dayName = format(currentDate, 'EEEE');
     const dateStr = format(currentDate, 'yyyy-MM-dd');
-    
+
     const dayAvailabilities = availabilityByDay[dayName] || [];
-    
+
     dayAvailabilities.forEach(avail => {
       const slots = generateTimeSlotsFromRange(
         avail.available_at,
@@ -120,12 +120,12 @@ export const generateDoctorTimeSlots = (
         dayName,
         avail.timezone,
         dateStr,
-        bookedSlots
+        bookedSlots,
       );
       allSlots.push(...slots);
     });
   }
-  
+
   return allSlots;
 };
 
@@ -133,12 +133,25 @@ export const generateDoctorTimeSlots = (
  * Format time slot for display
  */
 /**
- * Format time in 12-hour format
+ * True when the phone is set to a 24-hour clock (most of Europe, Asia and Latin America)
  */
-export const formatTime12Hour = (time24: string): string => {
+export const deviceUses24HourClock = (): boolean => {
+  try {
+    return new Date(2020, 0, 1, 13)
+      .toLocaleTimeString([], { hour: 'numeric' })
+      .includes('13');
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * Format a time of day the way the phone is set to show it: "1:30 PM" or "13:30"
+ */
+export const formatTime = (time24: string): string => {
   try {
     const parsed = parse(time24, 'HH:mm', new Date());
-    return format(parsed, 'h:mm a');
+    return format(parsed, deviceUses24HourClock() ? 'HH:mm' : 'h:mm a');
   } catch {
     return time24;
   }
@@ -147,7 +160,14 @@ export const formatTime12Hour = (time24: string): string => {
 /**
  * Slots that have not started yet, judged in the doctor's time zone
  */
-export const filterFutureSlots = (slots: TimeSlot[], now: number = Date.now()): TimeSlot[] =>
+export const filterFutureSlots = (
+  slots: TimeSlot[],
+  now: number = Date.now(),
+): TimeSlot[] =>
   slots.filter(
-    slot => fromZonedTime(`${slot.date}T${slot.startTime}:00`, slot.timezone).getTime() > now
+    slot =>
+      fromZonedTime(
+        `${slot.date}T${slot.startTime}:00`,
+        slot.timezone,
+      ).getTime() > now,
   );
