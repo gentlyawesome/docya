@@ -1,7 +1,7 @@
-# Docya - App Store Metadata (iPhone)
+# Docya - App Store Metadata (iPhone and iPad)
 
 Copy these into App Store Connect. Docya ships as a universal iOS build (iPhone and iPad), because Apple does not allow an update to drop devices an earlier version supported. There is no Android version.
-Character limits are checked below. Last reviewed: September 29, 2026.
+Character limits are checked below. Last reviewed: October 4, 2026.
 
 ---
 
@@ -48,16 +48,11 @@ For doctors and clinicians. Patients do not need the app.
 doctor,appointment,booking,medical,health,schedule,calendar,clinic,healthcare,physician
 ```
 
-**What's New** (version 1.9)
+**What's New** (version 1.9.1)
 ```
-A fresh new look, and an easier start.
+Bug fixes and improvements.
+```
 
-• Clean new design with an ivory and evergreen palette and new icons
-• New doctors start with Monday to Friday, 9 to 5 working hours
-• A short welcome and a getting-started checklist on the dashboard
-• A user guide in Profile > About
-• Fixes and improvements
-```
 
 ---
 
@@ -121,7 +116,7 @@ Docya is an appointment book for doctors. Sign in with the demo account. Tap "Ne
 
 ---
 
-## Screenshots (iPhone only)
+## Screenshots (iPhone and iPad)
 
 **Done**: five screenshots, no transparency, taken from the app with invented patients and a clean status
 bar. `store/screenshots/iphone-6.9/` (1320 x 2868) fits the **6.9" Display** slot; `store/screenshots/iphone-6.5/`
@@ -154,22 +149,23 @@ Source: the 1024 x 1024 artwork in `ios/DoctoraAppointments/Images.xcassets/AppI
 - [x] App name, subtitle, description, keywords, promotional text
 - [x] Privacy policy written and published (GitHub Pages, built from `develop` /docs)
 - [x] App icon in the app (1024 x 1024, no alpha)
-- [x] Display name "Docya", iPhone only, encryption flag set
+- [x] Display name "Docya", iPhone and iPad, encryption flag set
 - [x] Account deletion in the app; reminders permission asked in context
 
 ### Still to do
-- [x] Bundle ID `org.reactjs.native.example.Docya` (matches the App Store Connect app; it still has the template prefix `org.reactjs.native.example`, so move to your own domain, for example `com.yourname.docya`, only if you create a new app record). Version 1.9, build 10 (1.8 is already approved, so the next upload needs a higher version); raise the build number for every upload
+- [x] Bundle ID `org.reactjs.native.example.Docya` (matches the App Store Connect app; it still has the template prefix `org.reactjs.native.example`, so move to your own domain, for example `com.yourname.docya`, only if you create a new app record). Version 1.9.1, build 11 (an approved version is closed to new builds, so every upload needs a higher version); raise the build number for every upload
 - [ ] Hosted Supabase: connect an email provider (SMTP), turn on the sign-up code and the two email templates (`docs/HOSTING.md`)
 - [ ] Decide who may register as a doctor (open sign-up today)
 - [ ] Legal review of the privacy policy
 - [ ] Demo account for App Review
 - [x] Screenshots (5, 6.9", in `store/screenshots/iphone-6.9/`)
-- [ ] Archive, upload with Xcode, TestFlight test on a real iPhone
-- [ ] Enter the App Privacy answers above in App Store Connect
+- [x] Archive, upload with Xcode (1.9 is live)
+- [ ] TestFlight test on a real iPhone
+- [ ] Enter the App Privacy answers above in App Store Connect (the live listing still says no data is collected, which is wrong)
 - [ ] Developer name / copyright line
 
 ### Version
-1.0 (build 1)
+1.9.1 (build 11). The live listing showed 1.9 with the old patient-app description and "no data collection" text until this release; update the description, keywords, screenshots and App Privacy answers in App Store Connect as listed above.
 
 ---
 
