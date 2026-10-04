@@ -28,7 +28,7 @@ import { WelcomeCards } from '../../components/WelcomeCards';
 import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay } from '../../utils/dateHelpers';
-import { formatTime12Hour } from '../../utils/timeSlotGenerator';
+import { formatTime } from '../../utils/timeSlotGenerator';
 
 const Stat: React.FC<{ label: string; value: number }> = ({ label, value }) => (
   <View
@@ -179,17 +179,14 @@ export const DoctorDashboardScreen: React.FC = () => {
             accessibilityRole="button"
             accessibilityLabel={`Next appointment: ${
               next.patientName ?? 'Patient'
-            }, ${formatDateWithDay(next.date)}, ${formatTime12Hour(
+            }, ${formatDateWithDay(next.date)}, ${formatTime(
               next.startTime,
             )}. Open details`}
           >
             <Text style={styles.heroWhen}>{formatDateWithDay(next.date)}</Text>
             <Text style={styles.heroTime}>
-              {formatTime12Hour(next.startTime)}
-              <Text style={styles.heroEnd}>
-                {' '}
-                - {formatTime12Hour(next.endTime)}
-              </Text>
+              {formatTime(next.startTime)}
+              <Text style={styles.heroEnd}> - {formatTime(next.endTime)}</Text>
             </Text>
             <View style={styles.heroPatient}>
               <Avatar name={next.patientName} dark />

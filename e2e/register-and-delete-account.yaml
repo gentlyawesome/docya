@@ -31,6 +31,14 @@ name: Register, edit profile, delete account
 - eraseText: 30
 - inputText: "Password123!"
 - pressKey: Enter
+# The terms must be accepted first
+- scrollUntilVisible:
+    element: "Create account"
+    centerElement: true
+- tapOn: "Create account"
+- assertVisible: "Agree to the Terms and Privacy Policy to continue"
+- tapOn: "I agree to the Terms of Service.*"
+- tapOn: "Create account"
 # Where sign-up needs an emailed code (the local Docker copy), confirm it with the code from the local mail
 # catcher. The hosted development project has email confirmation off and signs straight in.
 - runFlow:

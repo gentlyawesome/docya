@@ -25,7 +25,7 @@ import { Button } from '../../components/Button';
 import { FilterChip } from '../../components/FilterChip';
 import { FormField } from '../../components/FormField';
 import { COLORS, DAYS_OF_WEEK, RADIUS, CARD, FONTS } from '../../constants';
-import { formatTime12Hour } from '../../utils/timeSlotGenerator';
+import { formatTime } from '../../utils/timeSlotGenerator';
 
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -134,9 +134,7 @@ export const DoctorScheduleScreen: React.FC = () => {
   const remove = (w: AvailabilityWindow) => {
     Alert.alert(
       'Remove this window?',
-      `${w.dayOfWeek} ${formatTime12Hour(w.startTime)} - ${formatTime12Hour(
-        w.endTime,
-      )}`,
+      `${w.dayOfWeek} ${formatTime(w.startTime)} - ${formatTime(w.endTime)}`,
       [
         { text: 'Keep', style: 'cancel' },
         {
@@ -212,24 +210,23 @@ export const DoctorScheduleScreen: React.FC = () => {
             {d.windows.map(w => (
               <View key={w.id} style={styles.windowRow}>
                 <Text style={[styles.windowText, !w.isAvailable && styles.off]}>
-                  {formatTime12Hour(w.startTime)} -{' '}
-                  {formatTime12Hour(w.endTime)}
+                  {formatTime(w.startTime)} - {formatTime(w.endTime)}
                 </Text>
                 <Switch
                   value={w.isAvailable}
                   trackColor={{ true: COLORS.primary }}
                   onValueChange={value => toggle(w, value)}
-                  accessibilityLabel={`${d.name} ${formatTime12Hour(
+                  accessibilityLabel={`${d.name} ${formatTime(
                     w.startTime,
-                  )} to ${formatTime12Hour(w.endTime)} available`}
+                  )} to ${formatTime(w.endTime)} available`}
                 />
                 <TouchableOpacity
                   onPress={() => remove(w)}
                   style={styles.remove}
                   accessibilityRole="button"
-                  accessibilityLabel={`Remove ${d.name} ${formatTime12Hour(
+                  accessibilityLabel={`Remove ${d.name} ${formatTime(
                     w.startTime,
-                  )} to ${formatTime12Hour(w.endTime)}`}
+                  )} to ${formatTime(w.endTime)}`}
                 >
                   <Text style={styles.removeText}>Remove</Text>
                 </TouchableOpacity>

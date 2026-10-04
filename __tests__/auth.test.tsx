@@ -311,10 +311,24 @@ describe('register screen', () => {
     fireEvent.changeText(screen.getByLabelText('Password'), 'secret1');
     fireEvent.changeText(screen.getByLabelText('Confirm password'), 'secret1');
     fireEvent.press(screen.getByRole('button', { name: 'Create account' }));
+    expect(
+      screen.getByText('Agree to the Terms and Privacy Policy to continue'),
+    ).toBeTruthy();
+    expect(auth.signUp).not.toHaveBeenCalled();
+    fireEvent.press(
+      screen.getByRole('checkbox', {
+        name: 'I agree to the Terms of Service and Privacy Policy',
+      }),
+    );
+    fireEvent.press(screen.getByRole('button', { name: 'Create account' }));
     await waitFor(() => expect(auth.signUp).toHaveBeenCalledTimes(1));
     expect(auth.signUp.mock.calls[0][0]).toMatchObject({
       email: 'eve@example.test',
       password: 'secret1',
     });
+    // When the terms were accepted is kept with the account
+    expect(auth.signUp.mock.calls[0][0].options.data.terms_accepted_at).toMatch(
+      /^\d{4}-\d{2}-\d{2}T/,
+    );
   });
 });

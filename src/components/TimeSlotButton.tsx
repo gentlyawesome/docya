@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { TimeSlot } from '../types';
 import { COLORS } from '../constants';
-import { formatTime12Hour } from '../utils/timeSlotGenerator';
+import { formatTime } from '../utils/timeSlotGenerator';
 import { haptics } from '../utils/haptics';
 
 interface TimeSlotButtonProps {
@@ -28,13 +28,13 @@ export const TimeSlotButton: React.FC<TimeSlotButtonProps> = ({
       disabled={isBooked}
       activeOpacity={0.7}
       accessibilityRole="button"
-      accessibilityLabel={`${formatTime12Hour(slot.startTime)}${
+      accessibilityLabel={`${formatTime(slot.startTime)}${
         isBooked ? ', booked' : ', available'
       }`}
       accessibilityState={{ disabled: isBooked }}
     >
       <Text style={[styles.time, isBooked && styles.timeBooked]}>
-        {formatTime12Hour(slot.startTime)}
+        {formatTime(slot.startTime)}
       </Text>
       {isBooked && <Text style={styles.bookedLabel}>Booked</Text>}
     </TouchableOpacity>

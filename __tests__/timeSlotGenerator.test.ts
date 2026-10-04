@@ -1,7 +1,7 @@
 import {
   parseTimeString,
   generateTimeSlotsFromRange,
-  formatTime12Hour,
+  formatTime,
 } from '../src/utils/timeSlotGenerator';
 
 describe('timeSlotGenerator', () => {
@@ -102,12 +102,12 @@ describe('timeSlotGenerator', () => {
     });
   });
 
-  describe('formatTime12Hour', () => {
+  describe('formatTime', () => {
     it('should format 24-hour time to 12-hour format', () => {
-      expect(formatTime12Hour('09:00')).toBe('9:00 AM');
-      expect(formatTime12Hour('14:30')).toBe('2:30 PM');
-      expect(formatTime12Hour('00:00')).toBe('12:00 AM');
-      expect(formatTime12Hour('12:00')).toBe('12:00 PM');
+      expect(formatTime('09:00')).toBe('9:00 AM');
+      expect(formatTime('14:30')).toBe('2:30 PM');
+      expect(formatTime('00:00')).toBe('12:00 AM');
+      expect(formatTime('12:00')).toBe('12:00 PM');
     });
   });
 });

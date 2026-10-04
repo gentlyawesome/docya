@@ -3,6 +3,8 @@ export const SLOT_DURATION_MINUTES = 30;
 export const PRIVACY_POLICY_URL =
   'https://gentlyawesome.github.io/docya/privacy-policy.html';
 
+export const TERMS_URL = 'https://gentlyawesome.github.io/docya/terms.html';
+
 export const USER_GUIDE_URL =
   'https://gentlyawesome.github.io/docya/user-guide.html';
 
