@@ -219,21 +219,40 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             onSubmitEditing={submit}
           />
 
-          <TouchableOpacity
-            style={styles.agree}
-            onPress={() => setAgreed(!agreed)}
-            accessibilityRole="checkbox"
-            accessibilityLabel="I agree to the Terms of Service and Privacy Policy"
-            accessibilityState={{ checked: agreed }}
-          >
-            <View style={[styles.box, agreed && styles.boxChecked]}>
+          <View style={styles.agree}>
+            <TouchableOpacity
+              style={[styles.box, agreed && styles.boxChecked]}
+              onPress={() => setAgreed(!agreed)}
+              testID="terms-checkbox"
+              accessibilityRole="checkbox"
+              accessibilityLabel="I agree to the Terms of Service and Privacy Policy"
+              accessibilityState={{ checked: agreed }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               {agreed ? <Text style={styles.tick}>✓</Text> : null}
-            </View>
-            <Text style={styles.agreeText}>
-              I agree to the Terms of Service and Privacy Policy, and I will
-              only enter patient details I am allowed to keep.
+            </TouchableOpacity>
+            <Text style={styles.agreeText} onPress={() => setAgreed(!agreed)}>
+              I agree to the{' '}
+              <Text
+                style={styles.inlineLink}
+                onPress={() => Linking.openURL(TERMS_URL)}
+                accessibilityRole="link"
+                accessibilityLabel="Read the Terms of Service"
+              >
+                Terms of Service
+              </Text>{' '}
+              and{' '}
+              <Text
+                style={styles.inlineLink}
+                onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
+                accessibilityRole="link"
+                accessibilityLabel="Read the Privacy Policy"
+              >
+                Privacy Policy
+              </Text>
+              , and I will only enter patient details I am allowed to keep.
             </Text>
-          </TouchableOpacity>
+          </View>
           {errors.terms ? (
             <Text style={styles.termsError}>{errors.terms}</Text>
           ) : null}
@@ -245,25 +264,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             onPress={() => navigation.goBack()}
             disabled={loading}
           />
-
-          <View style={styles.links}>
-            <TouchableOpacity
-              onPress={() => Linking.openURL(TERMS_URL)}
-              accessibilityRole="link"
-              accessibilityLabel="Read the terms of service"
-              style={styles.linkButton}
-            >
-              <Text style={styles.privacyText}>Terms of Service</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
-              accessibilityRole="link"
-              accessibilityLabel="Read the privacy policy"
-              style={styles.linkButton}
-            >
-              <Text style={styles.privacyText}>Privacy Policy</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -287,8 +287,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   errorText: { color: COLORS.danger, fontSize: 14 },
-  links: { flexDirection: 'row', justifyContent: 'center', marginTop: 8 },
-  linkButton: { minHeight: 44, justifyContent: 'center', marginHorizontal: 12 },
   agree: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -309,7 +307,11 @@ const styles = StyleSheet.create({
   },
   boxChecked: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
   tick: { color: '#FFFFFF', fontWeight: '700' },
+  inlineLink: {
+    color: COLORS.primary,
+    textDecorationLine: 'underline',
+    fontWeight: '600',
+  },
   agreeText: { flex: 1, fontSize: 14, color: COLORS.text, lineHeight: 20 },
   termsError: { color: COLORS.danger, fontSize: 13, marginBottom: 8 },
-  privacyText: { color: COLORS.primary, fontSize: 13, textAlign: 'center' },
 });

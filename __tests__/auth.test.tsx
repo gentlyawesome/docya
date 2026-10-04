@@ -1,3 +1,4 @@
+import { Linking } from 'react-native';
 import React from 'react';
 import { Provider } from 'react-redux';
 import {
@@ -295,6 +296,18 @@ describe('register screen', () => {
     expect(screen.getByLabelText('Specialization')).toBeTruthy();
     fireEvent.press(screen.getByRole('button', { name: 'Create account' }));
     expect(screen.getByText('Enter your specialization')).toBeTruthy();
+  });
+
+  it('lets people read the Terms of Service and Privacy Policy from the agreement', () => {
+    const open = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+    renderScreen();
+    fireEvent.press(screen.getByLabelText('Read the Terms of Service'));
+    fireEvent.press(screen.getByLabelText('Read the Privacy Policy'));
+    expect(open).toHaveBeenCalledWith(expect.stringContaining('terms.html'));
+    expect(open).toHaveBeenCalledWith(
+      expect.stringContaining('privacy-policy.html'),
+    );
+    open.mockRestore();
   });
 
   it('registers with valid details', async () => {
