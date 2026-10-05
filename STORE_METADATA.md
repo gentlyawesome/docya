@@ -48,7 +48,7 @@ For doctors and clinicians. Patients do not need the app.
 doctor,appointment,booking,medical,health,schedule,calendar,clinic,healthcare,physician
 ```
 
-**What's New** (version 1.9.2)
+**What's New** (version 1.9.3)
 ```
 Bug fixes and improvements.
 ```
@@ -153,7 +153,7 @@ Source: the 1024 x 1024 artwork in `ios/DoctoraAppointments/Images.xcassets/AppI
 - [x] Account deletion in the app; reminders permission asked in context
 
 ### Still to do
-- [x] Bundle ID `org.reactjs.native.example.Docya` (matches the App Store Connect app; it still has the template prefix `org.reactjs.native.example`, so move to your own domain, for example `com.yourname.docya`, only if you create a new app record). Version 1.9.2, build 14 (an approved version is closed to new builds, so every upload needs a higher version); raise the build number for every upload
+- [x] Bundle ID `org.reactjs.native.example.Docya` (matches the App Store Connect app; it still has the template prefix `org.reactjs.native.example`, so move to your own domain, for example `com.yourname.docya`, only if you create a new app record). Version 1.9.3, build 15 (an approved version is closed to new builds, so every upload needs a higher version); raise the build number for every upload
 - [ ] Hosted Supabase: connect an email provider (SMTP), turn on the sign-up code and the two email templates (`docs/HOSTING.md`)
 - [ ] Decide who may register as a doctor (open sign-up today)
 - [ ] Legal review of the privacy policy
@@ -165,7 +165,7 @@ Source: the 1024 x 1024 artwork in `ios/DoctoraAppointments/Images.xcassets/AppI
 - [ ] Developer name / copyright line
 
 ### Version
-1.9.2 (build 14). The live listing showed 1.9 with the old patient-app description and "no data collection" text until this release; update the description, keywords, screenshots and App Privacy answers in App Store Connect as listed above.
+1.9.3 (build 15). The live listing showed 1.9 with the old patient-app description and "no data collection" text until this release; update the description, keywords, screenshots and App Privacy answers in App Store Connect as listed above.
 
 ---
 
