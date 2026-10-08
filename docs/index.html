@@ -3,37 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Docya - Appointment Book for Doctors</title>
+    <title>Docya - The simple appointment book for doctors</title>
+    <meta name="description" content="Set your working hours once, book patients into open 30-minute slots, and get a reminder before every visit. Free on iPhone and iPad. No ads, no tracking. Patients don't need the app.">
+    <meta name="theme-color" content="#1F4A43">
+    <link rel="icon" href="assets/icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Docya - The simple appointment book for doctors">
+    <meta property="og:description" content="Spend your day with patients, not your calendar. Free on iPhone and iPad.">
+    <meta property="og:image" content="https://gentlyawesome.github.io/docya/assets/og.png">
+    <meta property="og:url" content="https://gentlyawesome.github.io/docya/">
+    <meta name="twitter:card" content="summary_large_image">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; max-width: 720px; margin: 0 auto; padding: 24px; color: #333; }
-        h1 { color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px; }
-        h2 { color: #2c3e50; margin-top: 32px; }
-        .contact { background: #f5f5f5; padding: 15px 20px; border-radius: 6px; }
-        footer { margin-top: 40px; color: #666; font-size: 14px; text-align: center; }
+        :root {
+            --green: #1F4A43;
+            --green-deep: #14332E;
+            --green-soft: #E4EDE9;
+            --cream: #F6F4EF;
+            --ink: #1E2321;
+            --muted: #5D625F;
+            --line: #E4E0D6;
+            --serif: Georgia, "Times New Roman", serif;
+            --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--cream); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        a { color: var(--green); }
+        img { max-width: 100%; display: block; }
+        .wrap { width: min(1120px, 100% - 40px); margin-inline: auto; }
+        .skip { position: absolute; left: -999px; top: 8px; background: var(--green); color: #fff; padding: 8px 14px; border-radius: 8px; z-index: 20; }
+        .skip:focus { left: 8px; }
+
+        /* Navigation */
+        header { position: sticky; top: 0; z-index: 10; background: rgba(246, 244, 239, 0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+        .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+        .brand { display: flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 22px; color: var(--ink); text-decoration: none; }
+        .brand img { width: 30px; height: 30px; border-radius: 8px; }
+        .nav-links { display: flex; gap: 26px; align-items: center; }
+        .nav-links a { color: var(--muted); text-decoration: none; font-size: 15px; }
+        .nav-links a:hover { color: var(--ink); }
+        .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 14px; background: var(--green); color: #fff !important; font-weight: 600; text-decoration: none; border: 0; font-size: 16px; }
+        .btn:hover { background: var(--green-deep); }
+        .btn.small { min-height: 40px; padding: 0 16px; font-size: 14px; border-radius: 12px; }
+        .btn.light { background: #fff; color: var(--green) !important; }
+        .btn.light:hover { background: var(--green-soft); }
+        .btn.ghost { background: transparent; color: var(--green) !important; border: 1px solid var(--line); }
+        .btn.ghost:hover { background: #fff; }
+
+        /* Hero */
+        .hero { padding: 72px 0 40px; }
+        .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+        .pill { display: inline-block; background: var(--green-soft); color: var(--green); font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 999px; }
+        h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.12; margin: 0; }
+        h1 { font-size: clamp(38px, 5.4vw, 62px); margin: 18px 0 18px; letter-spacing: -0.5px; }
+        h2 { font-size: clamp(30px, 3.6vw, 44px); letter-spacing: -0.3px; }
+        .lead { font-size: 19px; color: var(--muted); max-width: 34em; }
+        .cta-row { display: flex; gap: 14px; flex-wrap: wrap; margin: 28px 0 22px; }
+        .points { display: flex; gap: 20px; flex-wrap: wrap; padding: 0; margin: 0; list-style: none; color: var(--muted); font-size: 14px; }
+        .points li::before { content: "\2713"; color: var(--green); font-weight: 700; margin-right: 6px; }
+        .phones { position: relative; height: 560px; }
+        .phone { position: absolute; border: 8px solid #17201E; border-radius: 40px; overflow: hidden; background: #17201E; box-shadow: 0 30px 60px rgba(30, 35, 33, 0.22); }
+        .phone img { width: 100%; height: auto; }
+        .phone.front { width: 250px; left: 4%; top: 28px; z-index: 2; }
+        .phone.back { width: 250px; right: 2%; top: -8px; }
+
+        /* Sections */
+        section { padding: 84px 0; }
+        .eyebrow { font-size: 12px; letter-spacing: 1.6px; font-weight: 700; color: var(--green); text-transform: uppercase; margin-bottom: 14px; }
+        .section-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-bottom: 52px; flex-wrap: wrap; }
+        .section-head p { max-width: 24em; color: var(--muted); margin: 0; }
+        .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-bottom: 72px; }
+        .feature.flip .feature-media { order: 2; }
+        .feature-media { background: var(--green-soft); border-radius: 28px; padding: 36px 24px 0; display: flex; justify-content: center; overflow: hidden; }
+        .feature-media .phone { position: relative; width: 270px; border-bottom: 0; border-radius: 36px 36px 0 0; margin-bottom: 0; }
+        .feature-media.dark { background: var(--green); }
+        .num { font-size: 13px; color: var(--green); font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; }
+        .feature h3 { font-size: clamp(28px, 3vw, 38px); margin-bottom: 14px; }
+        .feature p { color: var(--muted); font-size: 17px; }
+        .checks { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 10px; }
+        .checks li { padding-left: 28px; position: relative; }
+        .checks li::before { content: "\2713"; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+
+        /* Privacy */
+        .dark-band { background: var(--green-deep); color: #E9EFEC; }
+        .dark-band .eyebrow { color: #8FD1B5; }
+        .privacy-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+        .dark-band h2 { color: #fff; margin-bottom: 18px; }
+        .dark-band p { color: #BFCFC8; font-size: 18px; }
+        .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 34px; }
+        .fact strong { display: block; color: #fff; margin-bottom: 4px; }
+        .fact span { color: #AFC2BA; font-size: 15px; }
+        .dark-band .phone { position: relative; width: 270px; margin: 0 auto; border-color: #0C1B18; }
+
+        /* Steps */
+        .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; list-style: none; padding: 0; margin: 44px 0 0; counter-reset: step; }
+        .steps li { counter-increment: step; padding-top: 18px; border-top: 2px solid var(--line); }
+        .steps li::before { content: counter(step); display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--green-soft); color: var(--green); font-weight: 700; margin-bottom: 14px; }
+        .steps strong { display: block; font-size: 18px; margin-bottom: 6px; }
+        .steps span { color: var(--muted); font-size: 15px; }
+
+        /* CTA + support */
+        .cta { background: var(--green); color: #fff; border-radius: 32px; text-align: center; padding: 72px 24px; }
+        .cta h2 { color: #fff; margin-bottom: 14px; }
+        .cta p { color: #C9DAD3; font-size: 18px; margin: 0 0 28px; }
+        .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 28px; }
+        .card h3 { font-size: 24px; margin-bottom: 10px; }
+        .faq p { margin: 0 0 14px; color: var(--muted); }
+        .faq strong { color: var(--ink); }
+
+        footer { border-top: 1px solid var(--line); padding: 34px 0 48px; color: var(--muted); font-size: 14px; }
+        .foot { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; }
+        .foot nav { display: flex; gap: 22px; flex-wrap: wrap; }
+        .foot a { color: var(--muted); text-decoration: none; }
+        .foot a:hover { color: var(--ink); }
+
+        @media (max-width: 900px) {
+            .nav-links a:not(.btn) { display: none; }
+            .hero { padding-top: 40px; }
+            .hero-grid, .feature, .privacy-grid, .support-grid { grid-template-columns: 1fr; gap: 36px; }
+            .feature.flip .feature-media { order: 0; }
+            .phones { height: 500px; max-width: 460px; margin-inline: auto; width: 100%; }
+            .phone.front { width: 210px; left: 2%; }
+            .phone.back { width: 210px; right: 2%; }
+            .steps { grid-template-columns: 1fr 1fr; }
+            section { padding: 60px 0; }
+        }
+        @media (max-width: 520px) {
+            .steps, .facts { grid-template-columns: 1fr; }
+            .phones { height: 440px; }
+            .phone.front, .phone.back { width: 180px; }
+        }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
 </head>
 <body>
-    <h1>Docya</h1>
-    <p>A simple appointment book for doctors. Set your working hours, book patients into open 30-minute slots, get a reminder before each visit, and keep private notes. Patients do not need the app.</p>
+    <a class="skip" href="#main">Skip to content</a>
 
-    <p><a href="user-guide.html">Read the user guide</a> for a walk-through of setting up your hours and booking patients.</p>
+    <header>
+        <div class="wrap nav">
+            <a class="brand" href="./"><img src="assets/icon.png" alt="" width="30" height="30">Docya</a>
+            <nav class="nav-links" aria-label="Main">
+                <a href="#features">Features</a>
+                <a href="#how">How it works</a>
+                <a href="#privacy">Privacy</a>
+                <a href="#support">Support</a>
+                <a class="btn small" href="https://apps.apple.com/us/app/docya/id6760323264">Get the app</a>
+            </nav>
+        </div>
+    </header>
 
-    <h2>Support</h2>
-    <div class="contact">
-        <p>Questions, problems or a request to delete data? Email <a href="mailto:gentlyawesome@gmail.com">gentlyawesome@gmail.com</a> and include the email address you signed up with. We reply within a few working days.</p>
-        <p>You can also delete your account and all of its data yourself in the app: Profile &gt; Delete account.</p>
-    </div>
+    <main id="main">
+        <section class="hero" style="padding-bottom: 20px;">
+            <div class="wrap hero-grid">
+                <div>
+                    <span class="pill">An appointment book for doctors &middot; iPhone &amp; iPad</span>
+                    <h1>Spend your day with patients, not your calendar.</h1>
+                    <p class="lead">Set your weekly hours once. Book patients into open 30-minute slots, get a quiet reminder before each visit, and never double-book. No paper diary, nothing to set up.</p>
+                    <div class="cta-row">
+                        <a class="btn" href="https://apps.apple.com/us/app/docya/id6760323264">Download on the App Store</a>
+                        <a class="btn ghost" href="#how">See how it works</a>
+                    </div>
+                    <ul class="points">
+                        <li>Free</li>
+                        <li>No ads, no tracking</li>
+                        <li>Patients don't need the app</li>
+                    </ul>
+                </div>
+                <div class="phones" aria-hidden="false">
+                    <div class="phone back"><img src="assets/03-appointments.webp" alt="Docya appointments list with confirmed visits" width="640" height="1391"></div>
+                    <div class="phone front"><img src="assets/01-dashboard.webp" alt="Docya dashboard showing the next appointment" width="640" height="1391"></div>
+                </div>
+            </div>
+        </section>
 
-    <h2>Common questions</h2>
-    <p><strong>I cannot book a patient / there are no time slots.</strong> You need working hours first. Open the Schedule tab and add the days and hours you see patients. New accounts start with Monday to Friday, 9 to 5.</p>
-    <p><strong>Can I get a copy of my data?</strong> Yes. In the app open Profile &gt; Export my data. It gives you a text copy of your profile, working hours and appointments to save or send to yourself.</p>
-    <p><strong>I forgot my password.</strong> On the sign-in screen tap "Forgot password?". We email you a code to choose a new one.</p>
-    <p><strong>Do my patients see anything?</strong> No. Patients are not users; you type in their name and optional phone number, and only you can see them.</p>
-    <p><strong>I do not get reminders.</strong> Open Settings &gt; Notifications &gt; Docya on your iPhone and allow notifications, then check the reminder time on the Profile tab.</p>
+        <section id="features">
+            <div class="wrap">
+                <div class="section-head">
+                    <div>
+                        <div class="eyebrow">What Docya does</div>
+                        <h2>Everything a small practice needs. Nothing it doesn't.</h2>
+                    </div>
+                    <p>One doctor, one phone, one calm list of who's coming in next.</p>
+                </div>
 
-    <h2>Legal</h2>
-    <p><a href="terms.html">Terms of Service</a> &middot; <a href="privacy-policy.html">Privacy Policy</a></p>
+                <div class="feature">
+                    <div class="feature-media">
+                        <div class="phone"><img src="assets/02-new-appointment.webp" alt="Booking a patient: calendar and open time slots" width="640" height="1391" loading="lazy"></div>
+                    </div>
+                    <div>
+                        <div class="num">01</div>
+                        <h3>Book a patient in seconds.</h3>
+                        <p>Type a name and an optional phone number, tap a day, pick an open slot. Docya only offers times inside your working hours and crosses out the ones already taken, so a double booking can't happen.</p>
+                        <ul class="checks">
+                            <li>Calendar with open days marked</li>
+                            <li>30-minute slots in your time zone</li>
+                            <li>Private notes on every appointment</li>
+                        </ul>
+                    </div>
+                </div>
 
-    <footer>&copy; 2026 Docya</footer>
+                <div class="feature flip">
+                    <div class="feature-media dark">
+                        <div class="phone"><img src="assets/04-working-hours.webp" alt="Weekly working hours with a summary of hours and open slots" width="640" height="1391" loading="lazy"></div>
+                    </div>
+                    <div>
+                        <div class="num">02</div>
+                        <h3>Your hours, your rules.</h3>
+                        <p>Set a working window for each day of the week. Taking Friday off? Flip a switch. Docya turns your hours into bookable slots in your own time zone, and never offers a time you're not working.</p>
+                        <ul class="checks">
+                            <li>Weekly working-hours editor</li>
+                            <li>Turn a day on or off in one tap</li>
+                            <li>Times follow your phone's 12 or 24-hour clock</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="privacy" class="dark-band">
+            <div class="wrap privacy-grid">
+                <div>
+                    <div class="eyebrow">Privacy first</div>
+                    <h2>A reminder before every visit. Never a patient's name on your lock screen.</h2>
+                    <p>Get a nudge 15, 30 or 60 minutes before each appointment. Reminders are created on your phone and leave out patient names unless you choose otherwise.</p>
+                    <div class="facts">
+                        <div class="fact"><strong>Visible only to you</strong><span>Your appointments aren't shared with anyone.</span></div>
+                        <div class="fact"><strong>No ads, no tracking</strong><span>No analytics, no advertising identifiers.</span></div>
+                        <div class="fact"><strong>Made on your phone</strong><span>Reminders are local notifications.</span></div>
+                        <div class="fact"><strong>Yours to take or delete</strong><span>Export a copy or delete your account and data in the app.</span></div>
+                    </div>
+                </div>
+                <div class="phone"><img src="assets/05-reminders.webp" alt="Reminder settings: 15, 30 or 60 minutes before, patient names off by default" width="640" height="1391" loading="lazy"></div>
+            </div>
+        </section>
+
+        <section id="how">
+            <div class="wrap">
+                <div class="eyebrow">How it works</div>
+                <h2>Set up before your next patient walks in.</h2>
+                <ol class="steps">
+                    <li><strong>Create your account</strong><span>Sign up as a doctor with your email. No clinic setup, no IT department.</span></li>
+                    <li><strong>Set your working hours</strong><span>Choose a window for each weekday. Docya builds your 30-minute slots.</span></li>
+                    <li><strong>Book your patients</strong><span>Tap New appointment, enter a name, pick a day and an open slot.</span></li>
+                    <li><strong>Run your day</strong><span>See today and what's next on the dashboard, with a reminder before each visit.</span></li>
+                </ol>
+            </div>
+        </section>
+
+        <section style="padding-top: 0;">
+            <div class="wrap">
+                <div class="cta">
+                    <h2>Your appointment book, finally in your pocket.</h2>
+                    <p>Free on iPhone and iPad. No ads. Patients don't need the app.</p>
+                    <a class="btn light" href="https://apps.apple.com/us/app/docya/id6760323264">Download on the App Store</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="support" style="padding-top: 20px;">
+            <div class="wrap">
+                <div class="eyebrow">Support</div>
+                <h2 style="margin-bottom: 32px;">Questions? We reply within a few working days.</h2>
+                <div class="support-grid">
+                    <div class="card">
+                        <h3>Contact</h3>
+                        <p>Questions, problems or a request to delete data? Email <a href="mailto:gentlyawesome@gmail.com">gentlyawesome@gmail.com</a> and include the email address you signed up with.</p>
+                        <p>You can also export a copy of your data or delete your account in the app: Profile &gt; Export my data / Delete account.</p>
+                        <p><a href="user-guide.html">Read the user guide</a> &middot; <a href="support.html">More help</a></p>
+                    </div>
+                    <div class="card faq">
+                        <h3>Common questions</h3>
+                        <p><strong>Do my patients see anything?</strong><br>No. Patients aren't users. You type their name and optional phone number, and only you can see them.</p>
+                        <p><strong>I can't book, there are no time slots.</strong><br>Add your working hours in the Schedule tab. New accounts start with Monday to Friday, 9 to 5.</p>
+                        <p><strong>I don't get reminders.</strong><br>Allow notifications for Docya in your iPhone's Settings, then check the reminder time in the Profile tab.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="wrap foot">
+            <a class="brand" href="./"><img src="assets/icon.png" alt="" width="30" height="30">Docya</a>
+            <nav aria-label="Footer">
+                <a href="user-guide.html">User guide</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="privacy-policy.html">Privacy policy</a>
+                <a href="support.html">Support</a>
+                <a href="mailto:gentlyawesome@gmail.com">gentlyawesome@gmail.com</a>
+            </nav>
+            <span>&copy; 2026 Docya. Made for doctors.</span>
+        </div>
+    </footer>
 </body>
 </html>
