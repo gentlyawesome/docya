@@ -65,7 +65,7 @@ Bug fixes and improvements.
 | Age rating | 4+ (answer the questionnaire honestly: no medical or treatment advice, no user-to-user content) |
 | Price | Free |
 | Privacy Policy URL | https://gentlyawesome.github.io/docya/privacy-policy.html |
-| Support URL | https://gentlyawesome.github.io/docya/ (the page has the contact email) |
+| Support URL | https://gentlyawesome.github.io/docya/ (the landing page has a Support section with the contact email; `support.html` has the longer help page) |
 | Marketing URL (optional) | https://gentlyawesome.github.io/docya/ |
 | Support email | gentlyawesome@gmail.com |
 | Copyright | `2026 <your name or company>` |
