@@ -3,6 +3,7 @@ import {
   Alert,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -29,12 +30,18 @@ import { AvailabilityRow, toAvailabilities } from '../../services/mappers';
 import { syncReminders } from '../../services/reminders';
 import { getDoctorProfile } from '../../services/userService';
 import {
+  NO_SMS,
+  SmsSettings,
+  getSmsSettings,
+  leadText,
+} from '../../services/patientReminders';
+import {
   filterFutureSlots,
   formatTime,
   generateDoctorTimeSlots,
 } from '../../utils/timeSlotGenerator';
 import { formatDateWithDay } from '../../utils/dateHelpers';
-import { isValidPhone } from '../../utils/validation';
+import { isValidPhone, normalizePhMobile } from '../../utils/validation';
 import { FormField } from '../../components/FormField';
 import { DoctorCalendar } from '../../components/DoctorCalendar';
 import { TimeSlotButton } from '../../components/TimeSlotButton';
@@ -52,6 +59,9 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [nameError, setNameError] = useState<string | undefined>();
   const [phoneError, setPhoneError] = useState<string | undefined>();
+  // Patient text reminders: offered only to doctors the operator switched on
+  const [sms, setSms] = useState<SmsSettings>(NO_SMS);
+  const [consent, setConsent] = useState(false);
 
   const [availabilities, setAvailabilities] = useState<DoctorAvailability[]>(
     [],
@@ -74,9 +84,12 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
         getDoctorProfile(doctorId),
         listMyAvailability(doctorId),
         listMyAppointments(),
+        getSmsSettings(doctorId),
       ])
-        .then(([profile, windows, appointments]) => {
+        .then(([profile, windows, appointments, smsSettings]) => {
           if (!active) return;
+          setSms(smsSettings);
+          if (!smsSettings.allowed) setConsent(false);
           const tz = profile?.timezone ?? 'UTC';
           const rows: AvailabilityRow[] = windows.map(w => ({
             day_of_week: w.dayOfWeek,
@@ -137,16 +150,28 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
     if (slot.isBooked) return;
     const patientName = name.trim();
     setNameError(patientName ? undefined : "Enter the patient's name");
+    const textTo = consent ? normalizePhMobile(phone) : null;
+    const phoneOk = consent ? textTo !== null : isValidPhone(phone);
     setPhoneError(
-      isValidPhone(phone) ? undefined : 'Enter a valid phone number',
+      phoneOk
+        ? undefined
+        : consent
+        ? 'Enter a Philippine mobile number, for example 0917 123 4567'
+        : 'Enter a valid phone number',
     );
-    if (!patientName || !isValidPhone(phone)) return;
+    if (!patientName || !phoneOk) return;
 
     Alert.alert(
       'Schedule appointment?',
       `${patientName}\n${formatDateWithDay(slot.date)}, ${formatTime(
         slot.startTime,
-      )}`,
+      )}${
+        textTo
+          ? `\n\nA text reminder will be sent to ${textTo}, ${leadText(
+              sms.leadMinutes,
+            )}.`
+          : ''
+      }`,
       [
         { text: 'Back', style: 'cancel' },
         {
@@ -157,6 +182,7 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
               const created = await createAppointment(slot, {
                 name: patientName,
                 phone,
+                smsConsent: consent || undefined,
               });
               // Remind the doctor about it (and ask for notification permission at this natural moment)
               await syncReminders([...held, created]);
@@ -200,13 +226,32 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
         />
         <FormField
           ref={phoneRef}
-          label="Phone (optional)"
+          label={consent ? 'Patient mobile number' : 'Phone (optional)'}
           value={phone}
           onChangeText={setPhone}
           error={phoneError}
           keyboardType="phone-pad"
           autoComplete="tel"
         />
+        {sms.allowed ? (
+          <View style={styles.consentRow}>
+            <View style={styles.consentText}>
+              <Text style={styles.consentLabel}>
+                Patient agreed to a text reminder
+              </Text>
+              <Text style={styles.consentHint}>
+                Docya texts the patient your name, the day and the time,{' '}
+                {leadText(sms.leadMinutes)}. Turn this on only if they said yes.
+              </Text>
+            </View>
+            <Switch
+              trackColor={{ true: COLORS.primary }}
+              value={consent}
+              onValueChange={setConsent}
+              accessibilityLabel="Patient agreed to a text reminder"
+            />
+          </View>
+        ) : null}
 
         {loadError ? <Text style={styles.error}>{loadError}</Text> : null}
         <Text style={styles.sectionTitle} accessibilityRole="header">
@@ -266,6 +311,15 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     marginVertical: 12,
   },
+  consentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 4,
+  },
+  consentText: { flex: 1, marginRight: 12 },
+  consentLabel: { fontSize: 16, color: COLORS.text },
+  consentHint: { fontSize: 13, color: COLORS.textSecondary, marginTop: 2 },
   slots: { flexDirection: 'row', flexWrap: 'wrap' },
   disabled: { opacity: 0.5 },
   hoursButton: {

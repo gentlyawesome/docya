@@ -21,6 +21,18 @@ export interface TimeSlot {
 }
 
 export type BookingStatus = 'confirmed' | 'cancelled' | 'completed';
+
+// Where a patient text reminder stands (from the reminder_messages queue)
+export type SmsReminderStatus =
+  | 'pending'
+  | 'sending'
+  | 'sent'
+  | 'failed'
+  | 'skipped';
+export interface SmsReminder {
+  status: SmsReminderStatus;
+  skipReason?: string;
+}
 export type BookingPhase = 'upcoming' | 'completed' | 'cancelled';
 
 // An appointment as the app uses it (mapped from the `appointments` table)
@@ -38,6 +50,8 @@ export interface Booking {
   cancelledAt?: string; // ISO timestamp
   patientName?: string;
   patientPhone?: string;
+  patientConsentedSms?: boolean; // the patient agreed to a text reminder when booked
+  smsReminder?: SmsReminder; // the queued or finished text reminder, if any
   reason?: string;
   notes?: string;
   reminderId?: string; // scheduled local notification (device-only)

@@ -1,5 +1,11 @@
 import { format, parseISO } from 'date-fns';
-import { Booking, BookingStatus, DoctorAvailability } from '../types';
+import {
+  Booking,
+  BookingStatus,
+  DoctorAvailability,
+  SmsReminder,
+  SmsReminderStatus,
+} from '../types';
 
 // Postgres `time` values arrive as "HH:mm:ss"; the app works with "HH:mm"
 export const toHHmm = (time: string): string => time.slice(0, 5);
@@ -34,11 +40,19 @@ export const toAvailabilities = (
       available_until: to12Hour(row.end_time),
     }));
 
+export interface ReminderRow {
+  status: SmsReminderStatus;
+  skip_reason: string | null;
+}
+
 export interface AppointmentRow {
   id: string;
   doctor_id: string;
   patient_name: string;
   patient_phone: string | null;
+  patient_consented_sms?: boolean;
+  // One-to-one embed; PostgREST sends an object, or null when nothing was queued
+  reminder?: ReminderRow | ReminderRow[] | null;
   appointment_date: string;
   start_time: string;
   end_time: string;
@@ -51,6 +65,15 @@ export interface AppointmentRow {
     doctor_profiles?: { timezone: string } | null;
   } | null;
 }
+
+const toSmsReminder = (
+  reminder: AppointmentRow['reminder'],
+): SmsReminder | undefined => {
+  const row = Array.isArray(reminder) ? reminder[0] : reminder;
+  return row
+    ? { status: row.status, skipReason: row.skip_reason ?? undefined }
+    : undefined;
+};
 
 export const toBooking = (row: AppointmentRow): Booking => ({
   id: row.id,
@@ -66,5 +89,7 @@ export const toBooking = (row: AppointmentRow): Booking => ({
   cancelledAt: row.status === 'cancelled' ? row.updated_at : undefined,
   patientName: row.patient_name,
   patientPhone: row.patient_phone ?? undefined,
+  patientConsentedSms: row.patient_consented_sms ?? false,
+  smsReminder: toSmsReminder(row.reminder),
   notes: row.notes ?? undefined,
 });

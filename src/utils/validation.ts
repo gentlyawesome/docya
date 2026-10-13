@@ -24,3 +24,19 @@ export const isValidTimezone = (timezone: string): boolean => {
 // The emailed one-time code (6 digits locally; a hosted project may use up to 10)
 export const isValidCode = (code: string): boolean =>
   /^\d{6,10}$/.test(code.trim());
+
+// A Philippine mobile number as +639XXXXXXXXX, or null. Same rules as the database function
+// normalize_ph_mobile (09.., 9.., 639.., +639.. with spaces or dashes). Patient text reminders need one.
+export const normalizePhMobile = (phone: string): string | null => {
+  const digits = phone.replace(/[^0-9]/g, '');
+  if (/^639[0-9]{9}$/.test(digits)) {
+    return `+${digits}`;
+  }
+  if (/^09[0-9]{9}$/.test(digits)) {
+    return `+63${digits.slice(1)}`;
+  }
+  if (/^9[0-9]{9}$/.test(digits)) {
+    return `+63${digits}`;
+  }
+  return null;
+};
