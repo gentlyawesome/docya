@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docya Terms of Service</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 24px; color: #333; }
-        h1 { color: #1F4A43; border-bottom: 2px solid #1F4A43; padding-bottom: 10px; }
-        h2 { color: #2c3e50; margin-top: 30px; }
-        .last-updated { color: #666; font-style: italic; }
-        .contact { background: #f5f5f5; padding: 15px; border-radius: 5px; margin-top: 30px; }
-        footer { margin-top: 40px; color: #666; font-size: 14px; text-align: center; }
-    </style>
+    <link rel="stylesheet" href="docs.css">
 </head>
 <body>
+<header class="wrap">
+    <div class="top">
+        <a class="brand" href="index.html">Docya</a>
+        <div class="links">
+            <a href="index.html#support">Support</a>
+            <a href="user-guide.html">User guide</a>
+            <a href="privacy-policy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+            <a class="button" href="index.html">Join the pilot</a>
+        </div>
+    </div>
+</header>
+<div class="wrap layout">
+<nav class="toc" aria-label="On this page"><div class="label">On this page</div><ol id="toc"></ol></nav>
+<article>
     <h1>Terms of Service for Docya</h1>
     <p class="last-updated">Last updated: October 4, 2026</p>
 
@@ -51,7 +59,24 @@
     <div class="contact">
         <strong>Contact:</strong> <a href="mailto:gentlyawesome@gmail.com">gentlyawesome@gmail.com</a>
     </div>
-
-    <footer><a href="index.html">Support</a> &middot; <a href="privacy-policy.html">Privacy policy</a> &middot; <a href="user-guide.html">User guide</a></footer>
+</article>
+</div>
+<footer class="site">
+    <div class="wrap">
+        <span>&copy; 2026 Docya</span>
+        <span><a href="index.html#support">Support</a><a href="user-guide.html">User guide</a><a href="terms.html">Terms of Service</a><a href="privacy-policy.html">Privacy Policy</a></span>
+    </div>
+</footer>
+<script>
+(function () {
+    var toc = document.getElementById('toc');
+    document.querySelectorAll('article h2').forEach(function (h, i) {
+        h.id = h.id || 'section-' + (i + 1);
+        var li = document.createElement('li'), a = document.createElement('a');
+        a.href = '#' + h.id; a.textContent = h.textContent;
+        li.appendChild(a); toc.appendChild(li);
+    });
+})();
+</script>
 </body>
 </html>

@@ -4,43 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docya Privacy Policy</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            color: #4A90E2;
-            border-bottom: 2px solid #4A90E2;
-            padding-bottom: 10px;
-        }
-        h2 {
-            color: #2c3e50;
-            margin-top: 30px;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        li {
-            margin: 10px 0;
-        }
-        .last-updated {
-            color: #666;
-            font-style: italic;
-        }
-        .contact {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 30px;
-        }
-    </style>
+    <link rel="stylesheet" href="docs.css">
 </head>
 <body>
+<header class="wrap">
+    <div class="top">
+        <a class="brand" href="index.html">Docya</a>
+        <div class="links">
+            <a href="index.html#support">Support</a>
+            <a href="user-guide.html">User guide</a>
+            <a href="privacy-policy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+            <a class="button" href="index.html">Join the pilot</a>
+        </div>
+    </div>
+</header>
+<div class="wrap layout">
+<nav class="toc" aria-label="On this page"><div class="label">On this page</div><ol id="toc"></ol></nav>
+<article>
     <h1>Privacy Policy for Docya</h1>
     <p class="last-updated">Last updated: October 4, 2026</p>
 
@@ -110,5 +91,24 @@
         © 2026 Docya. All rights reserved.<br>
         This privacy policy is effective as of October 4, 2026.
     </p>
+</article>
+</div>
+<footer class="site">
+    <div class="wrap">
+        <span>&copy; 2026 Docya</span>
+        <span><a href="index.html#support">Support</a><a href="user-guide.html">User guide</a><a href="terms.html">Terms of Service</a><a href="privacy-policy.html">Privacy Policy</a></span>
+    </div>
+</footer>
+<script>
+(function () {
+    var toc = document.getElementById('toc');
+    document.querySelectorAll('article h2').forEach(function (h, i) {
+        h.id = h.id || 'section-' + (i + 1);
+        var li = document.createElement('li'), a = document.createElement('a');
+        a.href = '#' + h.id; a.textContent = h.textContent;
+        li.appendChild(a); toc.appendChild(li);
+    });
+})();
+</script>
 </body>
 </html>
