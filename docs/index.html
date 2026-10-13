@@ -31,6 +31,41 @@
         .card .row:first-of-type { border-top: 0; }
         .card .time { font-family: ui-monospace, Menlo, monospace; color: var(--muted); margin-right: 10px; }
         .pill { font-size: 12px; background: #e3f4e8; color: #1e6b3a; border-radius: 99px; padding: 2px 10px; white-space: nowrap; align-self: center; }
+        .phone { width: 230px; margin: 20px auto 0; background: var(--navy); border: 6px solid #24355a; border-radius: 32px; padding: 16px 14px 18px; box-shadow: 0 18px 40px rgba(15, 27, 51, 0.28); color: #fff; }
+        .phone::before { content: ""; display: block; width: 54px; height: 6px; border-radius: 99px; background: #24355a; margin: 0 auto 12px; }
+        .phone .from { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #9fb2d1; margin-bottom: 8px; }
+        .phone .bubble { background: #1d2d4f; border-radius: 16px 16px 16px 4px; padding: 10px 12px; font-size: 13px; line-height: 1.45; }
+        .phone .reply { background: var(--blue); color: var(--navy); border-radius: 16px 16px 4px 16px; padding: 6px 12px; font-size: 13px; font-weight: 700; width: max-content; margin: 8px 0 0 auto; }
+        .phone .done { font-size: 12px; color: #8fd3a8; margin-top: 10px; }
+        .button.ghost { background: transparent; border: 2px solid var(--navy); color: var(--ink); margin-left: 8px; padding: 12px 20px; }
+        .problem .n { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #6f86ad; display: block; margin-bottom: 6px; }
+        .bgrid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-top: 28px; }
+        .bgrid .big { grid-row: span 2; }
+        .bgrid .card { box-shadow: none; }
+        .bgrid .light { background: var(--tint); border-color: #cfe0f3; }
+        .bgrid .dark-card { background: var(--navy); border-color: var(--navy); color: #fff; }
+        .bgrid .dark-card p { color: #c4d0e4; }
+        .bgrid .dark-card a { color: #8fc2ff; }
+        .mini { list-style: none; margin: 16px 0 0; padding: 0; font-size: 14px; }
+        .mini li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid #eee; }
+        .mini .t { font-family: ui-monospace, Menlo, monospace; color: var(--muted); margin-right: 10px; }
+        .mini .s { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); white-space: nowrap; }
+        .step-tag { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
+        .steps li { position: relative; }
+        .steps li:not(:last-child)::after { content: ""; position: absolute; top: 16px; left: 44px; right: -12px; height: 2px; background: #b9cfe8; }
+        .badge { display: inline-block; font-family: ui-monospace, Menlo, monospace; font-size: 11px; background: var(--navy); color: #fff; border-radius: 99px; padding: 2px 10px; margin-left: 6px; vertical-align: middle; font-weight: 400; }
+        .shots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 28px; }
+        .shot { margin: 0; text-align: center; }
+        .shot .frame { background: var(--navy); border-radius: 26px; padding: 7px; box-shadow: 0 12px 28px rgba(15, 27, 51, 0.18); }
+        .shot img { display: block; width: 100%; height: auto; border-radius: 20px; }
+        .shot figcaption { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.4; }
+        .shot figcaption strong { display: block; color: var(--ink); font-size: 15px; }
+        .hero-art { position: relative; height: 520px; }
+        .hphone { position: absolute; width: 230px; }
+        .hphone .frame { background: var(--navy); border-radius: 30px; padding: 7px; box-shadow: 0 18px 40px rgba(15, 27, 51, 0.28); }
+        .hphone img { display: block; width: 100%; height: auto; border-radius: 24px; }
+        .hphone.back { right: 0; top: 40px; }
+        .hphone.front { left: 8%; top: 0; }
         .example { font-size: 12px; color: var(--muted); margin-top: 10px; }
         .status { background: var(--tint); border-left: 4px solid var(--blue); padding: 14px 18px; border-radius: 6px; margin-top: 28px; font-size: 15px; }
         section { padding: 72px 0; }
@@ -62,10 +97,17 @@
         @media (max-width: 800px) {
             .hero .grid, .problem, .faq { grid-template-columns: 1fr; }
             .benefits, .steps { grid-template-columns: 1fr 1fr; }
+            .hero-art { height: 480px; }
+            .hphone { width: 200px; }
+            .hphone.front { left: 0; }
+            .shots { grid-template-columns: repeat(3, 1fr); }
+            .bgrid { grid-template-columns: 1fr; }
+            .bgrid .big { grid-row: auto; }
+            .steps li::after { display: none; }
             nav .links a:not(.button) { display: none; }
             th, td { padding: 10px 8px; font-size: 14px; }
         }
-        @media (max-width: 520px) { .benefits, .steps { grid-template-columns: 1fr; } }
+        @media (max-width: 520px) { .benefits, .steps { grid-template-columns: 1fr; } .shots { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
@@ -73,6 +115,7 @@
         <nav>
             <a class="brand" href="index.html">Docya</a>
             <div class="links">
+                <a href="#app">The app</a>
                 <a href="#how">How it works</a>
                 <a href="#pricing">Pricing</a>
                 <a href="#faq">FAQ</a>
@@ -89,19 +132,16 @@
                     <div class="label">Appointment reminders for independent clinics</div>
                     <h1>Stop losing appointments to patients who forget</h1>
                     <p class="sub">Docya is the appointment book for independent doctors and small clinics. Book a patient, and they get a text reminder before the visit. No receptionist needed.</p>
-                    <p><a class="button" href="mailto:gentlyawesome@gmail.com?subject=Docya%20free%2030-day%20pilot&amp;body=Clinic%20name%3A%0ACity%3A%0AType%20of%20clinic%20(dental%2C%20physical%20therapy%2C%20other)%3A%0AAbout%20how%20many%20patients%20a%20week%3A">Join the free 30-day pilot</a></p>
+                    <p><a class="button" href="mailto:gentlyawesome@gmail.com?subject=Docya%20free%2030-day%20pilot&amp;body=Clinic%20name%3A%0ACity%3A%0AType%20of%20clinic%20(dental%2C%20physical%20therapy%2C%20other)%3A%0AAbout%20how%20many%20patients%20a%20week%3A">Join the free 30-day pilot</a><a class="button ghost" href="#how">See how it works</a></p>
                     <p class="fine">Free for the first 10 clinics. 30 days.</p>
                     <div class="status"><strong>Where Docya stands today.</strong> The iPhone app is live on the App Store as an appointment book for doctors. Patient text reminders are being built with the first pilot clinics.</div>
                 </div>
                 <div>
-                    <div class="card" aria-label="Example diary">
-                        <div class="label">Example: tomorrow's diary</div>
-                        <div class="row"><span><span class="time">09:00</span>Patient A, follow-up</span><span class="pill">Confirmed</span></div>
-                        <div class="row"><span><span class="time">09:30</span>Patient B, consultation</span><span class="pill">Confirmed</span></div>
-                        <div class="row"><span><span class="time">10:30</span>Patient C, check-up</span><span class="pill">Confirmed</span></div>
-                        <div class="row"><span><span class="time">11:00</span>Patient D, consultation</span><span class="pill" style="background:#fdf0d5;color:#8a5a00">Reminder sent</span></div>
+                    <div class="hero-art">
+                        <div class="hphone back"><div class="frame"><img src="images/02-new-appointment.jpg" alt="Docya new appointment screen" width="560" height="1217"></div></div>
+                        <div class="hphone front"><div class="frame"><img src="images/01-dashboard.jpg" alt="Docya dashboard with the next appointment" width="560" height="1217"></div></div>
                     </div>
-                    <p class="example">Illustration of the planned experience. Not real patients.</p>
+                    <p class="example">Screens from the live Docya app. The patients shown are invented.</p>
                 </div>
             </div>
         </div>
@@ -114,9 +154,9 @@
                     <p>Once for the empty chair. Again for the patient who wanted that time and could not get it.</p>
                 </div>
                 <ol>
-                    <li><h3>The chair sits empty</h3><p>A patient forgets, the slot passes, and the time you set aside earns nothing. Nobody else could take it because nobody knew it was free.</p></li>
-                    <li><h3>Calling to confirm takes time you do not have</h3><p>You are treating someone, so the confirmation call never happens.</p></li>
-                    <li><h3>Your phone calendar tells only you</h3><p>The patient has nothing in their pocket telling them they have a visit.</p></li>
+                    <li><span class="n">01</span><h3>The chair sits empty</h3><p>A patient forgets, the slot passes, and the time you set aside earns nothing. Nobody else could take it because nobody knew it was free.</p></li>
+                    <li><span class="n">02</span><h3>Calling to confirm takes time you do not have</h3><p>You are treating someone, so the confirmation call never happens.</p></li>
+                    <li><span class="n">03</span><h3>Your phone calendar tells only you</h3><p>The patient has nothing in their pocket telling them they have a visit.</p></li>
                 </ol>
             </div>
         </section>
@@ -125,10 +165,39 @@
             <div class="wrap">
                 <div class="label">What changes</div>
                 <h2>A diary that speaks up for itself</h2>
-                <div class="benefits">
-                    <div class="card"><h3>Reminders go out on their own</h3><p>You book the visit and Docya texts the patient. The plan: one reminder 24 hours before and one 2 hours before.</p></div>
-                    <div class="card"><h3>See who confirmed</h3><p>The plan is for patients to reply "C" to confirm, so you know who is coming before the day starts and can fill a slot you know will be empty.</p></div>
-                    <div class="card"><h3>Know what no-shows cost you</h3><p>Docya will count missed visits each month. One hematology clinic pilot saw no-shows fall from <a href="https://bmjopenquality.bmj.com/content/11/3/e001805">38.6% to 25.5%</a> with text reminders. Your result will depend on your clinic.</p></div>
+                <div class="bgrid">
+                    <div class="card big">
+                        <h3>Reminders go out on their own</h3>
+                        <p>You book the visit and Docya texts the patient. The plan: one reminder 24 hours before and one 2 hours before. No list to work through and no calls to make.</p>
+                        <ul class="mini" aria-label="Example reminders">
+                            <li><span><span class="t">09:00</span>Patient A, follow-up</span><span class="s">Reminder sent</span></li>
+                            <li><span><span class="t">09:30</span>Patient B, consultation</span><span class="s">Reminder sent</span></li>
+                            <li><span><span class="t">10:30</span>Patient C, check-up</span><span class="s">Reminder sent</span></li>
+                        </ul>
+                        <div class="phone" aria-label="Example reminder text message">
+                            <div class="from">Example text message (planned)</div>
+                            <div class="bubble">Hi, this is [Your clinic]. Your appointment is tomorrow at 10:30 AM. Reply C to confirm.</div>
+                            <div class="reply">C</div>
+                            <div class="done">&#10003; Confirmed. Diary updated.</div>
+                        </div>
+                    </div>
+                    <div class="card light"><h3>See who confirmed</h3><p>The plan is for patients to reply "C" to confirm, so you know who is coming before the day starts and can fill a slot you know will be empty.</p></div>
+                    <div class="card dark-card"><h3>Know what no-shows cost you</h3><p>Docya will count missed visits each month. One hematology clinic pilot saw no-shows fall from <a href="https://bmjopenquality.bmj.com/content/11/3/e001805">38.6% to 25.5%</a> with text reminders. Your result will depend on your clinic.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="app">
+            <div class="wrap">
+                <div class="label">The app</div>
+                <h2>The appointment book, on your iPhone today</h2>
+                <p class="sub">These are real screens from the live Docya app. The patients shown are invented.</p>
+                <div class="shots">
+                    <figure class="shot"><div class="frame"><img src="images/01-dashboard.jpg" alt="Docya dashboard showing the next appointment and counts for today and upcoming" width="560" height="1217" loading="lazy"></div><figcaption><strong>Dashboard</strong>Your next appointment at a glance.</figcaption></figure>
+                    <figure class="shot"><div class="frame"><img src="images/02-new-appointment.jpg" alt="New appointment screen with patient name, calendar and open time slots" width="560" height="1217" loading="lazy"></div><figcaption><strong>New appointment</strong>Type a name, pick an open slot.</figcaption></figure>
+                    <figure class="shot"><div class="frame"><img src="images/03-appointments.jpg" alt="Appointments list with upcoming and past visits" width="560" height="1217" loading="lazy"></div><figcaption><strong>Appointments</strong>Upcoming and past visits in one list.</figcaption></figure>
+                    <figure class="shot"><div class="frame"><img src="images/04-working-hours.jpg" alt="Schedule screen with weekly working hours" width="560" height="1217" loading="lazy"></div><figcaption><strong>Working hours</strong>Set the days and hours you see patients.</figcaption></figure>
+                    <figure class="shot"><div class="frame"><img src="images/05-reminders.jpg" alt="Profile screen with reminder settings for the doctor" width="560" height="1217" loading="lazy"></div><figcaption><strong>Your reminders</strong>The app reminds you before each visit. Patient reminders are the next step.</figcaption></figure>
                 </div>
             </div>
         </section>
@@ -138,10 +207,10 @@
                 <div class="label">How it works</div>
                 <h2>Four steps. You only do the first three.</h2>
                 <ol class="steps">
-                    <li><span class="num">1</span><h3>Download Docya</h3><p>Free on the App Store for iPhone.</p></li>
-                    <li><span class="num">2</span><h3>Set your hours</h3><p>Pick the days and times you see patients.</p></li>
-                    <li><span class="num">3</span><h3>Book a patient</h3><p>Type their name and mobile number.</p></li>
-                    <li><span class="num">4</span><h3>They get the reminder</h3><p>You see a confirmed or missed count at the end of the month.</p></li>
+                    <li><span class="num">1</span><span class="step-tag">You</span><h3>Download Docya</h3><p>Free on the App Store for iPhone.</p></li>
+                    <li><span class="num">2</span><span class="step-tag">You</span><h3>Set your hours</h3><p>Pick the days and times you see patients.</p></li>
+                    <li><span class="num">3</span><span class="step-tag">You</span><h3>Book a patient</h3><p>Type their name and mobile number.</p></li>
+                    <li><span class="num">4</span><span class="step-tag">Automatic</span><h3>They get the reminder</h3><p>You see a confirmed or missed count at the end of the month.</p></li>
                 </ol>
             </div>
         </section>
@@ -152,7 +221,7 @@
                 <h2>Free while we pilot. Simple after.</h2>
                 <p class="sub">Nothing is charged during the 30-day pilot. These are the monthly prices we plan to launch with, and they may change.</p>
                 <table>
-                    <tr><th scope="col">Compare plans</th><th scope="col">Diary<span class="price">Free</span></th><th scope="col" class="pick">Clinic<span class="price">$15 a month</span></th><th scope="col">Practice<span class="price">$39 a month</span></th></tr>
+                    <tr><th scope="col">Compare plans</th><th scope="col">Diary<span class="price">Free</span></th><th scope="col" class="pick">Clinic<span class="badge">Recommended</span><span class="price">$15 a month</span></th><th scope="col">Practice<span class="price">$39 a month</span></th></tr>
                     <tr><th scope="row">Appointment diary</th><td>Up to 30 appointments a month</td><td class="pick">Unlimited</td><td>Unlimited</td></tr>
                     <tr><th scope="row">Patient reminders</th><td>Not included</td><td class="pick">150 a month</td><td>600 a month</td></tr>
                     <tr><th scope="row">Confirm by reply</th><td>Not included</td><td class="pick">Included</td><td>Included</td></tr>
