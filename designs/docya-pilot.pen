@@ -1,0 +1,3938 @@
+{
+  "version": "2.20",
+  "children": [
+    {
+      "type": "frame",
+      "id": "Gszc1",
+      "x": 0,
+      "y": 0,
+      "name": "Docya Pilot Landing",
+      "clip": true,
+      "width": 1440,
+      "fill": "$paper",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "C1NFu",
+          "name": "Nav",
+          "width": "fill_container",
+          "padding": [
+            28,
+            120
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "vQjBu",
+              "name": "Wordmark",
+              "gap": 6,
+              "alignItems": "end",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "h0rDh",
+                  "name": "Docya",
+                  "fill": "$ink",
+                  "content": "Docya",
+                  "fontFamily": "$font-display",
+                  "fontSize": 28,
+                  "fontWeight": "600",
+                  "letterSpacing": -0.5
+                },
+                {
+                  "type": "frame",
+                  "id": "HdAgG",
+                  "name": "Dot Wrap",
+                  "padding": [
+                    0,
+                    0,
+                    9,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "qqj15",
+                      "name": "Dot",
+                      "fill": "$brand",
+                      "width": 8,
+                      "height": 8
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NkXo6",
+              "name": "Nav Links",
+              "gap": 40,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "AqI4i",
+                  "name": "How it works",
+                  "fill": "$ink-muted",
+                  "content": "How it works",
+                  "fontFamily": "$font-body",
+                  "fontSize": 15,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "lsTS1",
+                  "name": "Pricing",
+                  "fill": "$ink-muted",
+                  "content": "Pricing",
+                  "fontFamily": "$font-body",
+                  "fontSize": 15,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "AJYLY",
+                  "name": "FAQ",
+                  "fill": "$ink-muted",
+                  "content": "FAQ",
+                  "fontFamily": "$font-body",
+                  "fontSize": 15,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "frame",
+                  "id": "b43IH",
+                  "name": "Primary CTA",
+                  "fill": "$brand",
+                  "cornerRadius": 10,
+                  "gap": 10,
+                  "padding": [
+                    10,
+                    18
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ifaT3",
+                      "name": "Label",
+                      "fill": "$ink",
+                      "content": "Join the pilot",
+                      "fontFamily": "$font-body",
+                      "fontSize": 15,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dTpo9",
+          "name": "Hero",
+          "width": "fill_container",
+          "gap": 64,
+          "padding": [
+            64,
+            120,
+            120,
+            120
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "eYv9B",
+              "name": "Hero Copy",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 28,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "SIcl4",
+                  "name": "Eyebrow",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "c9985U",
+                      "name": "Eyebrow Dot",
+                      "fill": "$brand",
+                      "width": 8,
+                      "height": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "J3GZjW",
+                      "name": "Eyebrow Text",
+                      "fill": "$ink-muted",
+                      "content": "APPOINTMENT REMINDERS FOR INDEPENDENT CLINICS",
+                      "fontFamily": "$font-mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "letterSpacing": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "m8UjYO",
+                  "name": "Headline",
+                  "fill": "$ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Stop losing appointments to patients who forget.",
+                  "lineHeight": 1.05,
+                  "fontFamily": "$font-display",
+                  "fontSize": 68,
+                  "fontWeight": "500",
+                  "letterSpacing": -1.5
+                },
+                {
+                  "type": "text",
+                  "id": "ZQjjf",
+                  "name": "Subhead",
+                  "fill": "$ink-muted",
+                  "textGrowth": "fixed-width",
+                  "width": 520,
+                  "content": "Docya reminds every patient before their visit and asks them to confirm. You see who is coming, who needs a new time, and which slots just opened up.",
+                  "lineHeight": 1.5,
+                  "fontFamily": "$font-body",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "jqbas",
+                  "name": "CTA Row",
+                  "gap": 28,
+                  "padding": [
+                    8,
+                    0,
+                    0,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "FphC9",
+                      "name": "Primary CTA",
+                      "fill": "$brand",
+                      "cornerRadius": 10,
+                      "gap": 10,
+                      "padding": [
+                        18,
+                        28
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Xoe8u",
+                          "name": "Label",
+                          "fill": "$ink",
+                          "content": "Join the free 30-day pilot",
+                          "fontFamily": "$font-body",
+                          "fontSize": 17,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "q3nabz",
+                          "name": "Arrow",
+                          "width": 18,
+                          "height": 18,
+                          "icon": "arrow-right",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "xLgBy",
+                      "name": "Secondary Link",
+                      "fill": "$ink",
+                      "content": "See how it works",
+                      "fontFamily": "$font-body",
+                      "fontSize": 17,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "zHsme",
+                  "name": "Reassurance",
+                  "fill": "$ink-muted",
+                  "content": "Free for 30 days  ·  Planned plans start at $0",
+                  "fontFamily": "$font-mono",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "hOWrL",
+              "name": "Hero Visual",
+              "width": 580,
+              "height": 690,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "MIYhW",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Diary Card",
+                  "clip": true,
+                  "width": 500,
+                  "fill": "$surface",
+                  "cornerRadius": 16,
+                  "stroke": "$line",
+                  "strokeWidth": 1,
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0E1B2E1A",
+                    "offset": {
+                      "x": 0,
+                      "y": 24
+                    },
+                    "blur": 48
+                  },
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "uRXFm",
+                      "name": "Diary Header",
+                      "width": "fill_container",
+                      "padding": [
+                        22,
+                        24
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "wO1kT",
+                          "name": "Diary Title",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "DdfCk",
+                              "name": "Date",
+                              "fill": "$ink-muted",
+                              "content": "THU 15 OCT",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 12,
+                              "fontWeight": "normal",
+                              "letterSpacing": 1
+                            },
+                            {
+                              "type": "text",
+                              "id": "pQKEl",
+                              "name": "Title",
+                              "fill": "$ink",
+                              "content": "Tomorrow's diary",
+                              "fontFamily": "$font-display",
+                              "fontSize": 24,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "GGEK8",
+                          "name": "Summary",
+                          "fill": "$ink-muted",
+                          "content": "4 of 5 confirmed",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BqwAl",
+                      "name": "Row 09:00",
+                      "width": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "top": 1
+                      },
+                      "gap": 20,
+                      "padding": [
+                        14,
+                        24
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "fmfAG",
+                          "name": "Time",
+                          "fill": "$ink-muted",
+                          "content": "09:00",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "H0hISR",
+                          "name": "Patient",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "KBTYb",
+                              "name": "Name",
+                              "fill": "$ink",
+                              "content": "Ana Lim",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "uNTJB",
+                              "name": "Visit",
+                              "fill": "$ink-muted",
+                              "content": "Follow-up",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Cw3xB",
+                          "name": "Status",
+                          "fill": "$ok-tint",
+                          "cornerRadius": 999,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "STg6X",
+                              "name": "Status Label",
+                              "fill": "$ok",
+                              "content": "Confirmed",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "pa9cU",
+                      "name": "Row 09:30",
+                      "width": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "top": 1
+                      },
+                      "gap": 20,
+                      "padding": [
+                        14,
+                        24
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "fdjGB",
+                          "name": "Time",
+                          "fill": "$ink-muted",
+                          "content": "09:30",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "XDdtW",
+                          "name": "Patient",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "BmnRJ",
+                              "name": "Name",
+                              "fill": "$ink",
+                              "content": "Marco Santos",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "YF8d4",
+                              "name": "Visit",
+                              "fill": "$ink-muted",
+                              "content": "Consultation",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "A5AAv",
+                          "name": "Status",
+                          "fill": "$ok-tint",
+                          "cornerRadius": 999,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tMOYB",
+                              "name": "Status Label",
+                              "fill": "$ok",
+                              "content": "Confirmed",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "hoCOV",
+                      "name": "Row 10:30",
+                      "width": "fill_container",
+                      "fill": "$brand-tint",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "top": 1
+                      },
+                      "gap": 20,
+                      "padding": [
+                        14,
+                        24
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "CGbrL",
+                          "name": "Time",
+                          "fill": "$ink-muted",
+                          "content": "10:30",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "f6RfH",
+                          "name": "Patient",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "s974li",
+                              "name": "Name",
+                              "fill": "$ink",
+                              "content": "Priya Nair",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "PKVTP",
+                              "name": "Visit",
+                              "fill": "$ink-muted",
+                              "content": "Check-up",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "G5vIiu",
+                          "name": "Status",
+                          "fill": "$surface",
+                          "cornerRadius": 999,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "y2Zhhf",
+                              "name": "Status Label",
+                              "fill": "$ok",
+                              "content": "Confirmed just now",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "K58tpb",
+                      "name": "Row 11:00",
+                      "width": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "top": 1
+                      },
+                      "gap": 20,
+                      "padding": [
+                        14,
+                        24
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "PF4Dy",
+                          "name": "Time",
+                          "fill": "$ink-muted",
+                          "content": "11:00",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "kKTiv",
+                          "name": "Patient",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Vg3iT",
+                              "name": "Name",
+                              "fill": "$ink",
+                              "content": "Joseph Okafor",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "o7iXps",
+                              "name": "Visit",
+                              "fill": "$ink-muted",
+                              "content": "Consultation",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "wvDum",
+                          "name": "Status",
+                          "fill": "$wait-tint",
+                          "cornerRadius": 999,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "MzIby",
+                              "name": "Status Label",
+                              "fill": "$wait",
+                              "content": "Reminder sent",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "aLPy1",
+                      "name": "Row 11:30",
+                      "width": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "top": 1
+                      },
+                      "gap": 20,
+                      "padding": [
+                        14,
+                        24
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "zxntK",
+                          "name": "Time",
+                          "fill": "$ink-muted",
+                          "content": "11:30",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "DsDsy",
+                          "name": "Patient",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "cxlJz",
+                              "name": "Name",
+                              "fill": "$ink",
+                              "content": "Elena Cruz",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "tlH01",
+                              "name": "Visit",
+                              "fill": "$ink-muted",
+                              "content": "Follow-up",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "UadZa",
+                          "name": "Status",
+                          "fill": "$ok-tint",
+                          "cornerRadius": 999,
+                          "padding": [
+                            5,
+                            12
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "pRewO",
+                              "name": "Status Label",
+                              "fill": "$ok",
+                              "content": "Confirmed",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u7YH6M",
+                      "name": "Diary Footer",
+                      "width": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "top": 1
+                      },
+                      "gap": 8,
+                      "padding": [
+                        16,
+                        24,
+                        28,
+                        24
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "PrsUH",
+                          "name": "Bell",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "bell-ring",
+                          "library": "lucide",
+                          "fill": "$ink-muted"
+                        },
+                        {
+                          "type": "text",
+                          "id": "I7zPHw",
+                          "name": "Footer Note",
+                          "fill": "$ink-muted",
+                          "content": "Reminders sent automatically",
+                          "fontFamily": "$font-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZlSNA",
+                  "x": 250,
+                  "y": 428,
+                  "name": "Reminder Message",
+                  "width": 330,
+                  "fill": "$ink",
+                  "cornerRadius": 16,
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0E1B2E40",
+                    "offset": {
+                      "x": 0,
+                      "y": 20
+                    },
+                    "blur": 40
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "c8aNL",
+                      "name": "Message Header",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "o0j7k",
+                          "name": "Message Icon",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "message-circle",
+                          "library": "lucide",
+                          "fill": "$brand"
+                        },
+                        {
+                          "type": "text",
+                          "id": "h5Dm5L",
+                          "name": "Message Meta",
+                          "fill": "$on-navy-muted",
+                          "content": "REMINDER TO PRIYA NAIR",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ZgkMO",
+                      "name": "Clinic Bubble",
+                      "width": "fill_container",
+                      "fill": "$navy-raised",
+                      "cornerRadius": [
+                        12,
+                        12,
+                        12,
+                        2
+                      ],
+                      "padding": 14,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "WBSgP",
+                          "name": "Clinic Text",
+                          "fill": "$on-navy",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Hi Priya, this is Reyes Family Clinic. Your check-up is tomorrow at 10:30 AM. Reply 1 to confirm or 2 to change the time.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "$font-body",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "f5SK6J",
+                      "name": "Reply Row",
+                      "width": "fill_container",
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "e2fBsQ",
+                          "name": "Patient Bubble",
+                          "fill": "$brand",
+                          "cornerRadius": [
+                            12,
+                            12,
+                            2,
+                            12
+                          ],
+                          "padding": [
+                            10,
+                            18
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "lbiUB",
+                              "name": "Reply Text",
+                              "fill": "$ink",
+                              "content": "1",
+                              "fontFamily": "$font-body",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "UqMvF",
+                      "name": "Message Result",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "L0L2V",
+                          "name": "Check",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "#7FD1A3"
+                        },
+                        {
+                          "type": "text",
+                          "id": "u3bW6",
+                          "name": "Result Text",
+                          "fill": "#7FD1A3",
+                          "content": "Confirmed. Diary updated.",
+                          "fontFamily": "$font-body",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "LRctW",
+          "name": "Pain Points",
+          "width": "fill_container",
+          "fill": "$ink",
+          "gap": 96,
+          "padding": 120,
+          "children": [
+            {
+              "type": "frame",
+              "id": "BUVAA",
+              "name": "Pain Intro",
+              "width": 420,
+              "layout": "vertical",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "w8FrY",
+                  "name": "Eyebrow",
+                  "fill": "$brand",
+                  "content": "THE PROBLEM",
+                  "fontFamily": "$font-mono",
+                  "fontSize": 13,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "V4afv",
+                  "name": "Title",
+                  "fill": "$on-navy",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "A forgotten appointment costs you twice.",
+                  "lineHeight": 1.1,
+                  "fontFamily": "$font-display",
+                  "fontSize": 48,
+                  "fontWeight": "500",
+                  "letterSpacing": -1
+                },
+                {
+                  "type": "text",
+                  "id": "E6GLS",
+                  "name": "Body",
+                  "fill": "$on-navy-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Once for the empty chair. Again for the patient who wanted that time and could not get it.",
+                  "lineHeight": 1.55,
+                  "fontFamily": "$font-body",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "P4fiVb",
+              "name": "Pain List",
+              "width": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "e0aJQw",
+                  "name": "Pain 01",
+                  "width": "fill_container",
+                  "gap": 40,
+                  "padding": [
+                    0,
+                    0,
+                    36,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "sHqDZ",
+                      "name": "Number Wrap",
+                      "width": 48,
+                      "padding": [
+                        8,
+                        0,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "avfdB",
+                          "name": "Number",
+                          "fill": "$brand",
+                          "content": "01",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Z4Eg9",
+                      "name": "Pain Copy",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ddBO7",
+                          "name": "Pain Title",
+                          "fill": "$on-navy",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The chair sits empty.",
+                          "lineHeight": 1.2,
+                          "fontFamily": "$font-display",
+                          "fontSize": 30,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.4
+                        },
+                        {
+                          "type": "text",
+                          "id": "VNtNp",
+                          "name": "Pain Body",
+                          "fill": "$on-navy-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "A patient forgets, the slot passes, and the time you set aside earns nothing. Nobody else could take it because nobody knew it was free.",
+                          "lineHeight": 1.55,
+                          "fontFamily": "$font-body",
+                          "fontSize": 17,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "JPFTf",
+                  "name": "Pain 02",
+                  "width": "fill_container",
+                  "stroke": "#FFFFFF2E",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "gap": 40,
+                  "padding": [
+                    36,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "v0TqPA",
+                      "name": "Number Wrap",
+                      "width": 48,
+                      "padding": [
+                        8,
+                        0,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "M8MXj",
+                          "name": "Number",
+                          "fill": "$brand",
+                          "content": "02",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "f4MGt",
+                      "name": "Pain Copy",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ExIgI",
+                          "name": "Pain Title",
+                          "fill": "$on-navy",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Your front desk becomes a call centre.",
+                          "lineHeight": 1.2,
+                          "fontFamily": "$font-display",
+                          "fontSize": 30,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.4
+                        },
+                        {
+                          "type": "text",
+                          "id": "MEgaS",
+                          "name": "Pain Body",
+                          "fill": "$on-navy-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Someone spends the afternoon phoning tomorrow's list, leaving voicemails and waiting for calls back. Then does it all again the next day.",
+                          "lineHeight": 1.55,
+                          "fontFamily": "$font-body",
+                          "fontSize": 17,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Xs1X5",
+                  "name": "Pain 03",
+                  "width": "fill_container",
+                  "stroke": "#FFFFFF2E",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "gap": 40,
+                  "padding": [
+                    36,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "RRUrg",
+                      "name": "Number Wrap",
+                      "width": 48,
+                      "padding": [
+                        8,
+                        0,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "xtDst",
+                          "name": "Number",
+                          "fill": "$brand",
+                          "content": "03",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "X1Fu6",
+                      "name": "Pain Copy",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "z948be",
+                          "name": "Pain Title",
+                          "fill": "$on-navy",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "You find out too late.",
+                          "lineHeight": 1.2,
+                          "fontFamily": "$font-display",
+                          "fontSize": 30,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.4
+                        },
+                        {
+                          "type": "text",
+                          "id": "Kr6X0",
+                          "name": "Pain Body",
+                          "fill": "$on-navy-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Cancellations arrive at the door, or not at all. By then the patient who wanted that time has booked somewhere else.",
+                          "lineHeight": 1.55,
+                          "fontFamily": "$font-body",
+                          "fontSize": 17,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "rcpOh",
+          "name": "Benefits",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 64,
+          "padding": 120,
+          "children": [
+            {
+              "type": "frame",
+              "id": "jFmJy",
+              "name": "Benefits Header",
+              "width": 760,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ecuUZ",
+                  "name": "Eyebrow",
+                  "fill": "$ink-muted",
+                  "content": "WHAT CHANGES",
+                  "fontFamily": "$font-mono",
+                  "fontSize": 13,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "E8YQ6o",
+                  "name": "Title",
+                  "fill": "$ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "A diary that speaks up for itself.",
+                  "lineHeight": 1.1,
+                  "fontFamily": "$font-display",
+                  "fontSize": 48,
+                  "fontWeight": "500",
+                  "letterSpacing": -1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BMT62",
+              "name": "Benefits Grid",
+              "width": "fill_container",
+              "height": 576,
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "v2C2p2",
+                  "name": "Benefit 1",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": 20,
+                  "stroke": "$line",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 40,
+                  "padding": 48,
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "t5AlGQ",
+                      "name": "Benefit 1 Copy",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "y2o8vV",
+                          "name": "Benefit Title",
+                          "fill": "$ink",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Reminders go out on their own.",
+                          "lineHeight": 1.15,
+                          "fontFamily": "$font-display",
+                          "fontSize": 36,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.6
+                        },
+                        {
+                          "type": "text",
+                          "id": "Uq4xn",
+                          "name": "Benefit Body",
+                          "fill": "$ink-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 440,
+                          "content": "Every booked patient gets a message before their visit. No list to work through and no calls to make.",
+                          "lineHeight": 1.55,
+                          "fontFamily": "$font-body",
+                          "fontSize": 17,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Re8WM",
+                      "name": "Sent Log",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "q04IyD",
+                          "name": "Sent Ana Lim",
+                          "width": "fill_container",
+                          "stroke": "$line",
+                          "strokeWidth": {
+                            "top": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            18,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "IGTST",
+                              "name": "Sent Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "send",
+                              "library": "lucide",
+                              "fill": "$ink-muted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "RWd79",
+                              "name": "Sent Name",
+                              "fill": "$ink",
+                              "content": "Ana Lim",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "EL49q",
+                              "name": "Sent Visit",
+                              "fill": "$ink-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Follow-up, 09:00",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "liDJL",
+                              "name": "Sent State",
+                              "fill": "$ink-muted",
+                              "content": "Reminder sent",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "GQkLm",
+                          "name": "Sent Marco Santos",
+                          "width": "fill_container",
+                          "stroke": "$line",
+                          "strokeWidth": {
+                            "top": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            18,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "h0V3q",
+                              "name": "Sent Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "send",
+                              "library": "lucide",
+                              "fill": "$ink-muted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "mZUI2",
+                              "name": "Sent Name",
+                              "fill": "$ink",
+                              "content": "Marco Santos",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "qMs3I",
+                              "name": "Sent Visit",
+                              "fill": "$ink-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Consultation, 09:30",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZMb5B",
+                              "name": "Sent State",
+                              "fill": "$ink-muted",
+                              "content": "Reminder sent",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "m9X4UN",
+                          "name": "Sent Priya Nair",
+                          "width": "fill_container",
+                          "stroke": "$line",
+                          "strokeWidth": {
+                            "top": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            18,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "iR37G",
+                              "name": "Sent Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "send",
+                              "library": "lucide",
+                              "fill": "$ink-muted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "p4n1Na",
+                              "name": "Sent Name",
+                              "fill": "$ink",
+                              "content": "Priya Nair",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "luhrd",
+                              "name": "Sent Visit",
+                              "fill": "$ink-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Check-up, 10:30",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "uoHbm",
+                              "name": "Sent State",
+                              "fill": "$ink-muted",
+                              "content": "Reminder sent",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "O23B9f",
+                          "name": "Sent Joseph Okafor",
+                          "width": "fill_container",
+                          "stroke": "$line",
+                          "strokeWidth": {
+                            "top": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            18,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "r97vKU",
+                              "name": "Sent Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "send",
+                              "library": "lucide",
+                              "fill": "$ink-muted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "PZzp5",
+                              "name": "Sent Name",
+                              "fill": "$ink",
+                              "content": "Joseph Okafor",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "S3MZA",
+                              "name": "Sent Visit",
+                              "fill": "$ink-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Consultation, 11:00",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "oehBA",
+                              "name": "Sent State",
+                              "fill": "$ink-muted",
+                              "content": "Reminder sent",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Uwt3q",
+                          "name": "Sent Elena Cruz",
+                          "width": "fill_container",
+                          "stroke": "$line",
+                          "strokeWidth": {
+                            "top": 1
+                          },
+                          "gap": 14,
+                          "padding": [
+                            18,
+                            0
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "DOqZQ",
+                              "name": "Sent Icon",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "send",
+                              "library": "lucide",
+                              "fill": "$ink-muted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "z0Nrx",
+                              "name": "Sent Name",
+                              "fill": "$ink",
+                              "content": "Elena Cruz",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "lUwRa",
+                              "name": "Sent Visit",
+                              "fill": "$ink-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Follow-up, 11:30",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Rl3AA",
+                              "name": "Sent State",
+                              "fill": "$ink-muted",
+                              "content": "Reminder sent",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "CxDBb",
+                  "name": "Benefits Column",
+                  "width": 480,
+                  "layout": "vertical",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "KXWH0",
+                      "name": "Benefit 2",
+                      "width": "fill_container",
+                      "fill": "$brand-tint",
+                      "cornerRadius": 20,
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 40,
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "riPwf",
+                          "name": "Benefit Icon",
+                          "width": 28,
+                          "height": 28,
+                          "icon": "calendar-check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "n0ZoLX",
+                          "name": "Benefit Copy",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 12,
+                          "padding": [
+                            20,
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "IyLYu",
+                              "name": "Benefit Title",
+                              "fill": "$ink",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Know who is coming before you open.",
+                              "lineHeight": 1.2,
+                              "fontFamily": "$font-display",
+                              "fontSize": 28,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.4
+                            },
+                            {
+                              "type": "text",
+                              "id": "V8ReB",
+                              "name": "Benefit Body",
+                              "fill": "$ink-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Patients confirm with one reply, and your diary shows it the moment they do.",
+                              "lineHeight": 1.55,
+                              "fontFamily": "$font-body",
+                              "fontSize": 17,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "JjqjY",
+                      "name": "Benefit 3",
+                      "width": "fill_container",
+                      "fill": "$ink",
+                      "cornerRadius": 20,
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 40,
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "i2h9B",
+                          "name": "Benefit Icon",
+                          "width": 28,
+                          "height": 28,
+                          "icon": "rotate-ccw",
+                          "library": "lucide",
+                          "fill": "$on-navy"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "bWv1A",
+                          "name": "Benefit Copy",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 12,
+                          "padding": [
+                            20,
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ifX4i",
+                              "name": "Benefit Title",
+                              "fill": "$on-navy",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Get the slot back while you can still fill it.",
+                              "lineHeight": 1.2,
+                              "fontFamily": "$font-display",
+                              "fontSize": 28,
+                              "fontWeight": "500",
+                              "letterSpacing": -0.4
+                            },
+                            {
+                              "type": "text",
+                              "id": "dq5Ow",
+                              "name": "Benefit Body",
+                              "fill": "$on-navy-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "When someone cannot make it, you hear a day ahead instead of at the door.",
+                              "lineHeight": 1.55,
+                              "fontFamily": "$font-body",
+                              "fontSize": 17,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "NFP1K",
+          "name": "How It Works",
+          "width": "fill_container",
+          "fill": "$brand-tint",
+          "layout": "vertical",
+          "gap": 72,
+          "padding": 120,
+          "children": [
+            {
+              "type": "frame",
+              "id": "J4s2rT",
+              "name": "How Header",
+              "width": 760,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "SsDuD",
+                  "name": "Eyebrow",
+                  "fill": "$ink-muted",
+                  "content": "HOW IT WORKS",
+                  "fontFamily": "$font-mono",
+                  "fontSize": 13,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "TdtT9",
+                  "name": "Title",
+                  "fill": "$ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Four steps. You only do the first.",
+                  "lineHeight": 1.1,
+                  "fontFamily": "$font-display",
+                  "fontSize": 48,
+                  "fontWeight": "500",
+                  "letterSpacing": -1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "cUNOf",
+              "name": "Steps",
+              "width": "fill_container",
+              "gap": 32,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "H77qcp",
+                  "name": "Step 1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "NHyMm",
+                      "name": "Rail",
+                      "width": "fill_container",
+                      "gap": 16,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "My1fs",
+                          "name": "Badge",
+                          "width": 48,
+                          "height": 48,
+                          "fill": "$ink",
+                          "cornerRadius": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "BGuEg",
+                              "name": "Step Number",
+                              "fill": "$on-navy",
+                              "content": "1",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 16,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "YUG6G",
+                          "name": "Connector",
+                          "fill": "#0E1B2E40",
+                          "width": "fill_container",
+                          "height": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "kCrXf",
+                      "name": "Step Copy",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        16,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "xqomJ",
+                          "name": "Who",
+                          "fill": "$ink-muted",
+                          "content": "YOU",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "O1Vqcb",
+                          "name": "Step Title",
+                          "fill": "$ink",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Book as usual",
+                          "lineHeight": 1.2,
+                          "fontFamily": "$font-display",
+                          "fontSize": 26,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.3
+                        },
+                        {
+                          "type": "text",
+                          "id": "i5Hpyj",
+                          "name": "Step Body",
+                          "fill": "$ink-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Add the appointment to your Docya diary with the patient's mobile number.",
+                          "lineHeight": 1.55,
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cHkBs",
+                  "name": "Step 2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "DpjQm",
+                      "name": "Rail",
+                      "width": "fill_container",
+                      "gap": 16,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "v76Kxb",
+                          "name": "Badge",
+                          "width": 48,
+                          "height": 48,
+                          "fill": "$surface",
+                          "cornerRadius": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "cWRhu",
+                              "name": "Step Number",
+                              "fill": "$ink",
+                              "content": "2",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 16,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "P66jR",
+                          "name": "Connector",
+                          "fill": "#0E1B2E40",
+                          "width": "fill_container",
+                          "height": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Rdwws",
+                      "name": "Step Copy",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        16,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ojIpc",
+                          "name": "Who",
+                          "fill": "$ink-muted",
+                          "content": "AUTOMATIC",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "sQx7S",
+                          "name": "Step Title",
+                          "fill": "$ink",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Docya sends the reminder",
+                          "lineHeight": 1.2,
+                          "fontFamily": "$font-display",
+                          "fontSize": 26,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.3
+                        },
+                        {
+                          "type": "text",
+                          "id": "DAKvp",
+                          "name": "Step Body",
+                          "fill": "$ink-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The patient gets a message ahead of the visit with the date, the time and your clinic's name.",
+                          "lineHeight": 1.55,
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ukHvL",
+                  "name": "Step 3",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "TKOjo",
+                      "name": "Rail",
+                      "width": "fill_container",
+                      "gap": 16,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g17zQ",
+                          "name": "Badge",
+                          "width": 48,
+                          "height": 48,
+                          "fill": "$surface",
+                          "cornerRadius": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "DBTqv",
+                              "name": "Step Number",
+                              "fill": "$ink",
+                              "content": "3",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 16,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "uerir",
+                          "name": "Connector",
+                          "fill": "#0E1B2E40",
+                          "width": "fill_container",
+                          "height": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u4e36",
+                      "name": "Step Copy",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        16,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "u3i9X",
+                          "name": "Who",
+                          "fill": "$ink-muted",
+                          "content": "AUTOMATIC",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "ugwjI",
+                          "name": "Step Title",
+                          "fill": "$ink",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The patient replies",
+                          "lineHeight": 1.2,
+                          "fontFamily": "$font-display",
+                          "fontSize": 26,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.3
+                        },
+                        {
+                          "type": "text",
+                          "id": "aDMv1",
+                          "name": "Step Body",
+                          "fill": "$ink-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "One reply to confirm, or to ask for another time. No app to install and nothing to log in to.",
+                          "lineHeight": 1.55,
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "oSWHd",
+                  "name": "Step 4",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "wOQPd",
+                      "name": "Rail",
+                      "width": "fill_container",
+                      "gap": 16,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "eHbEJ",
+                          "name": "Badge",
+                          "width": 48,
+                          "height": 48,
+                          "fill": "$surface",
+                          "cornerRadius": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Kpbme",
+                              "name": "Step Number",
+                              "fill": "$ink",
+                              "content": "4",
+                              "fontFamily": "$font-mono",
+                              "fontSize": 16,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "QdT79",
+                          "name": "Connector",
+                          "fill": "#0E1B2E00",
+                          "width": "fill_container",
+                          "height": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fosii",
+                      "name": "Step Copy",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        16,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "RIo0d",
+                          "name": "Who",
+                          "fill": "$ink-muted",
+                          "content": "AUTOMATIC",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 12,
+                          "fontWeight": "normal",
+                          "letterSpacing": 1
+                        },
+                        {
+                          "type": "text",
+                          "id": "fsUkd",
+                          "name": "Step Title",
+                          "fill": "$ink",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Your diary updates",
+                          "lineHeight": 1.2,
+                          "fontFamily": "$font-display",
+                          "fontSize": 26,
+                          "fontWeight": "500",
+                          "letterSpacing": -0.3
+                        },
+                        {
+                          "type": "text",
+                          "id": "Uw8xt",
+                          "name": "Step Body",
+                          "fill": "$ink-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Confirmed, moved or freed up. You see it before the day begins.",
+                          "lineHeight": 1.55,
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "z8VYc",
+          "name": "Pricing",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 56,
+          "padding": 120,
+          "children": [
+            {
+              "type": "frame",
+              "id": "jeXLv",
+              "name": "Pricing Header",
+              "width": 900,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "itIps",
+                  "name": "Eyebrow",
+                  "fill": "$ink-muted",
+                  "content": "PLANNED PRICING",
+                  "fontFamily": "$font-mono",
+                  "fontSize": 13,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "U6OrOC",
+                  "name": "Title",
+                  "fill": "$ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Free while we pilot. Simple after.",
+                  "lineHeight": 1.1,
+                  "fontFamily": "$font-display",
+                  "fontSize": 48,
+                  "fontWeight": "500",
+                  "letterSpacing": -1
+                },
+                {
+                  "type": "text",
+                  "id": "TDJTP",
+                  "name": "Body",
+                  "fill": "$ink-muted",
+                  "textGrowth": "fixed-width",
+                  "width": 620,
+                  "content": "Nothing is charged during the 30-day pilot. These are the monthly prices we plan to launch with.",
+                  "lineHeight": 1.55,
+                  "fontFamily": "$font-body",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TVVsU",
+              "name": "Pricing Table",
+              "clip": true,
+              "width": "fill_container",
+              "fill": "$surface",
+              "cornerRadius": 20,
+              "stroke": "$line",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "zDPTN",
+                  "name": "Plan Row",
+                  "width": "fill_container",
+                  "height": 236,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "SkTST",
+                      "name": "Plan Row Label",
+                      "width": 300,
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "padding": [
+                        36,
+                        32
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "x8bzRV",
+                          "name": "Compare",
+                          "fill": "$ink-muted",
+                          "content": "Compare plans",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 13,
+                          "fontWeight": "normal",
+                          "letterSpacing": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LNBIE",
+                      "name": "Plan Diary",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": [
+                        36,
+                        32
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "NLntD",
+                          "name": "Plan Name Row",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "texmB",
+                              "name": "Plan Name",
+                              "fill": "$ink",
+                              "content": "Diary",
+                              "fontFamily": "$font-body",
+                              "fontSize": 17,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "XiW3B",
+                          "name": "Price",
+                          "gap": 8,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "R7HqO",
+                              "name": "Amount",
+                              "fill": "$ink",
+                              "content": "Free",
+                              "lineHeight": 1,
+                              "fontFamily": "$font-display",
+                              "fontSize": 52,
+                              "fontWeight": "500",
+                              "letterSpacing": -1
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "uuH6Y",
+                          "name": "Plan Summary",
+                          "fill": "$ink-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "A digital appointment diary for one doctor.",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$font-body",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "T5hm5G",
+                      "name": "Plan Clinic",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "$brand-tint",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": [
+                        36,
+                        32
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Kix5W",
+                          "name": "Plan Name Row",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Ftrky",
+                              "name": "Plan Name",
+                              "fill": "$ink",
+                              "content": "Clinic",
+                              "fontFamily": "$font-body",
+                              "fontSize": 17,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Mgq35",
+                              "name": "Tag",
+                              "fill": "$ink",
+                              "cornerRadius": 999,
+                              "padding": [
+                                4,
+                                10
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "XjkOL",
+                                  "name": "Tag Label",
+                                  "fill": "$on-navy",
+                                  "content": "Recommended",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 12,
+                                  "fontWeight": "500"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "TEKrJ",
+                          "name": "Price",
+                          "gap": 8,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "HOfl3",
+                              "name": "Amount",
+                              "fill": "$ink",
+                              "content": "$15",
+                              "lineHeight": 1,
+                              "fontFamily": "$font-display",
+                              "fontSize": 52,
+                              "fontWeight": "500",
+                              "letterSpacing": -1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "QQv8g",
+                              "name": "Period Wrap",
+                              "padding": [
+                                0,
+                                0,
+                                7,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "QIYUj",
+                                  "name": "Period",
+                                  "fill": "$ink-muted",
+                                  "content": "a month",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 15,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "u8SMb",
+                          "name": "Plan Summary",
+                          "fill": "$ink-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Automatic reminders for a single clinic.",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$font-body",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "NiKl6",
+                      "name": "Plan Practice",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": [
+                        36,
+                        32
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "HeSGv",
+                          "name": "Plan Name Row",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "rbLyD",
+                              "name": "Plan Name",
+                              "fill": "$ink",
+                              "content": "Practice",
+                              "fontFamily": "$font-body",
+                              "fontSize": 17,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "PzCAb",
+                          "name": "Price",
+                          "gap": 8,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tvDWq",
+                              "name": "Amount",
+                              "fill": "$ink",
+                              "content": "$39",
+                              "lineHeight": 1,
+                              "fontFamily": "$font-display",
+                              "fontSize": 52,
+                              "fontWeight": "500",
+                              "letterSpacing": -1
+                            },
+                            {
+                              "type": "frame",
+                              "id": "TKpVT",
+                              "name": "Period Wrap",
+                              "padding": [
+                                0,
+                                0,
+                                7,
+                                0
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "fYSUl",
+                                  "name": "Period",
+                                  "fill": "$ink-muted",
+                                  "content": "a month",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 15,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "pyz0A",
+                          "name": "Plan Summary",
+                          "fill": "$ink-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "For practices with several doctors and front-desk staff.",
+                          "lineHeight": 1.5,
+                          "fontFamily": "$font-body",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Pnbx6",
+                  "name": "Feature Appointment diary",
+                  "width": "fill_container",
+                  "height": 64,
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "HysT1",
+                      "name": "Feature Label Cell",
+                      "width": 300,
+                      "height": "fill_container",
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vI9YZ",
+                          "name": "Feature Label",
+                          "fill": "$ink",
+                          "content": "Appointment diary",
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "TiKBx",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "jCld4",
+                          "name": "Included",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "A332vT",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "$brand-tint",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "t3Jie",
+                          "name": "Included",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "XseL3",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "yrzEi",
+                          "name": "Included",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "qwiom",
+                  "name": "Feature Automatic reminders",
+                  "width": "fill_container",
+                  "height": 64,
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "sXNpf",
+                      "name": "Feature Label Cell",
+                      "width": 300,
+                      "height": "fill_container",
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "huQN0",
+                          "name": "Feature Label",
+                          "fill": "$ink",
+                          "content": "Automatic reminders",
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "cixG1",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "S6oua",
+                          "name": "Not Included",
+                          "fill": "$ink-muted",
+                          "content": "Not included",
+                          "fontFamily": "$font-body",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "pQBq0",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "$brand-tint",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "llviz",
+                          "name": "Included",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "NRQZS",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "xYIxI",
+                          "name": "Included",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ro6ls",
+                  "name": "Feature Patient confirmations",
+                  "width": "fill_container",
+                  "height": 64,
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "vBXvA",
+                      "name": "Feature Label Cell",
+                      "width": 300,
+                      "height": "fill_container",
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Hhj5j",
+                          "name": "Feature Label",
+                          "fill": "$ink",
+                          "content": "Patient confirmations",
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Q3LNcH",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "aKxwK",
+                          "name": "Not Included",
+                          "fill": "$ink-muted",
+                          "content": "Not included",
+                          "fontFamily": "$font-body",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "vJliY",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "$brand-tint",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "ngWf7",
+                          "name": "Included",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "F9Ea6I",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "ySt2l",
+                          "name": "Included",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "kbayq",
+                  "name": "Feature Doctors",
+                  "width": "fill_container",
+                  "height": 64,
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "fskXe",
+                      "name": "Feature Label Cell",
+                      "width": 300,
+                      "height": "fill_container",
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "L0cDiR",
+                          "name": "Feature Label",
+                          "fill": "$ink",
+                          "content": "Doctors",
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qGC03",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "CELBM",
+                          "name": "Value",
+                          "fill": "$ink",
+                          "content": "1",
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lJOUs",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "$brand-tint",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "nl1bk",
+                          "name": "Value",
+                          "fill": "$ink",
+                          "content": "1",
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "st0F9",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "IvRCE",
+                          "name": "Value",
+                          "fill": "$ink",
+                          "content": "Several",
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "uLFF6",
+                  "name": "Feature Front-desk staff access",
+                  "width": "fill_container",
+                  "height": 64,
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "TsaKV",
+                      "name": "Feature Label Cell",
+                      "width": 300,
+                      "height": "fill_container",
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "h5WUex",
+                          "name": "Feature Label",
+                          "fill": "$ink",
+                          "content": "Front-desk staff access",
+                          "fontFamily": "$font-body",
+                          "fontSize": 16,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fCZvO",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "K7VyL0",
+                          "name": "Not Included",
+                          "fill": "$ink-muted",
+                          "content": "Not included",
+                          "fontFamily": "$font-body",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "w2IrbF",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "fill": "$brand-tint",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "EdH4F",
+                          "name": "Not Included",
+                          "fill": "$ink-muted",
+                          "content": "Not included",
+                          "fontFamily": "$font-body",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "SwzO5",
+                      "name": "Cell",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "stroke": "$line",
+                      "strokeWidth": {
+                        "left": 1
+                      },
+                      "padding": [
+                        0,
+                        32
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "xKtMS",
+                          "name": "Included",
+                          "width": 20,
+                          "height": 20,
+                          "icon": "check",
+                          "library": "lucide",
+                          "fill": "$ink"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AE8Px",
+              "name": "Pricing CTA",
+              "width": "fill_container",
+              "gap": 28,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "I0VikL",
+                  "name": "Primary CTA",
+                  "fill": "$brand",
+                  "cornerRadius": 10,
+                  "gap": 10,
+                  "padding": [
+                    18,
+                    28
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "OVikc",
+                      "name": "Label",
+                      "fill": "$ink",
+                      "content": "Join the free 30-day pilot",
+                      "fontFamily": "$font-body",
+                      "fontSize": 17,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "icon",
+                      "id": "dusqn",
+                      "name": "Arrow",
+                      "width": 18,
+                      "height": 18,
+                      "icon": "arrow-right",
+                      "library": "lucide",
+                      "fill": "$ink"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "xGmyH",
+                  "name": "Pricing Note",
+                  "fill": "$ink-muted",
+                  "content": "Choose a plan when the pilot ends, or walk away.",
+                  "fontFamily": "$font-body",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "VoEDg",
+          "name": "FAQ",
+          "width": "fill_container",
+          "fill": "$surface",
+          "gap": 96,
+          "padding": 120,
+          "children": [
+            {
+              "type": "frame",
+              "id": "oIpJF",
+              "name": "FAQ Intro",
+              "width": 380,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "E4anaD",
+                  "name": "Eyebrow",
+                  "fill": "$ink-muted",
+                  "content": "FAQ",
+                  "fontFamily": "$font-mono",
+                  "fontSize": 13,
+                  "fontWeight": "normal",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "ABU1r",
+                  "name": "Title",
+                  "fill": "$ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Before you join.",
+                  "lineHeight": 1.1,
+                  "fontFamily": "$font-display",
+                  "fontSize": 48,
+                  "fontWeight": "500",
+                  "letterSpacing": -1
+                },
+                {
+                  "type": "text",
+                  "id": "iT8au",
+                  "name": "Body",
+                  "fill": "$ink-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Something we have not covered? Ask us and a person will reply.",
+                  "lineHeight": 1.55,
+                  "fontFamily": "$font-body",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "RrZfu",
+              "name": "FAQ List",
+              "width": "fill_container",
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "wbDrc",
+                  "name": "Question 1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    0,
+                    0,
+                    32,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "wzJgg",
+                      "name": "Question",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "What is the pilot?",
+                      "lineHeight": 1.25,
+                      "fontFamily": "$font-display",
+                      "fontSize": 26,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.3
+                    },
+                    {
+                      "type": "text",
+                      "id": "SxDPE",
+                      "name": "Answer",
+                      "fill": "$ink-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 620,
+                      "content": "A free 30-day run with a small group of independent clinics. You use Docya with your real appointments and tell us what works and what does not.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "$font-body",
+                      "fontSize": 17,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "X9AG2K",
+                  "name": "Question 2",
+                  "width": "fill_container",
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    32,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "qt1cX",
+                      "name": "Question",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "What happens after the 30 days?",
+                      "lineHeight": 1.25,
+                      "fontFamily": "$font-display",
+                      "fontSize": 26,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.3
+                    },
+                    {
+                      "type": "text",
+                      "id": "G2Oy3L",
+                      "name": "Answer",
+                      "fill": "$ink-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 620,
+                      "content": "You choose a plan or you stop. Nothing is billed during the pilot, and the prices on this page are the ones we plan to launch with.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "$font-body",
+                      "fontSize": 17,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "lZ3pB",
+                  "name": "Question 3",
+                  "width": "fill_container",
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    32,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "SLtoN",
+                      "name": "Question",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Do my patients need to install anything?",
+                      "lineHeight": 1.25,
+                      "fontFamily": "$font-display",
+                      "fontSize": 26,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.3
+                    },
+                    {
+                      "type": "text",
+                      "id": "M0qBr",
+                      "name": "Answer",
+                      "fill": "$ink-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 620,
+                      "content": "No. The reminder arrives as a message on the phone they already have, and they confirm by replying.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "$font-body",
+                      "fontSize": 17,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wuwIl",
+                  "name": "Question 4",
+                  "width": "fill_container",
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    32,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "t91SjZ",
+                      "name": "Question",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Do I have to change how I take bookings?",
+                      "lineHeight": 1.25,
+                      "fontFamily": "$font-display",
+                      "fontSize": 26,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.3
+                    },
+                    {
+                      "type": "text",
+                      "id": "iQ2xv",
+                      "name": "Answer",
+                      "fill": "$ink-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 620,
+                      "content": "No. Keep booking the way you do now and add each appointment to your Docya diary. The reminders follow from there.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "$font-body",
+                      "fontSize": 17,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Nxhe4",
+                  "name": "Question 5",
+                  "width": "fill_container",
+                  "stroke": "$line",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": [
+                    32,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "MBXhj",
+                      "name": "Question",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Which clinics is this for?",
+                      "lineHeight": 1.25,
+                      "fontFamily": "$font-display",
+                      "fontSize": 26,
+                      "fontWeight": "500",
+                      "letterSpacing": -0.3
+                    },
+                    {
+                      "type": "text",
+                      "id": "A86k0D",
+                      "name": "Answer",
+                      "fill": "$ink-muted",
+                      "textGrowth": "fixed-width",
+                      "width": 620,
+                      "content": "Independent clinics and solo practitioners who manage their own bookings, with or without front-desk staff.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "$font-body",
+                      "fontSize": 17,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Y0IrZ",
+          "name": "Final CTA",
+          "width": "fill_container",
+          "fill": "$ink",
+          "layout": "vertical",
+          "gap": 32,
+          "padding": [
+            136,
+            120
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "r3H3Ap",
+              "name": "Eyebrow",
+              "fill": "$brand",
+              "content": "FOR INDEPENDENT CLINICS",
+              "fontFamily": "$font-mono",
+              "fontSize": 13,
+              "fontWeight": "normal",
+              "letterSpacing": 1
+            },
+            {
+              "type": "text",
+              "id": "fu0MK",
+              "name": "CTA Title",
+              "fill": "$on-navy",
+              "content": "Join the free 30-day pilot.",
+              "lineHeight": 1.05,
+              "fontFamily": "$font-display",
+              "fontSize": 76,
+              "fontWeight": "500",
+              "letterSpacing": -2
+            },
+            {
+              "type": "text",
+              "id": "l9dBF",
+              "name": "CTA Body",
+              "fill": "$on-navy-muted",
+              "textGrowth": "fixed-width",
+              "width": 600,
+              "content": "Run Docya on your real appointments for a month. See how many patients turn up when someone reminds them.",
+              "lineHeight": 1.55,
+              "textAlign": "center",
+              "fontFamily": "$font-body",
+              "fontSize": 19,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "XGm8b",
+              "name": "CTA Button Wrap",
+              "padding": [
+                16,
+                0,
+                0,
+                0
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "RiUIY",
+                  "name": "Primary CTA",
+                  "fill": "$brand",
+                  "cornerRadius": 12,
+                  "gap": 12,
+                  "padding": [
+                    22,
+                    36
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vWx1F",
+                      "name": "Label",
+                      "fill": "$ink",
+                      "content": "Join the pilot",
+                      "fontFamily": "$font-body",
+                      "fontSize": 19,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "icon",
+                      "id": "Kbk6l",
+                      "name": "Arrow",
+                      "width": 20,
+                      "height": 20,
+                      "icon": "arrow-right",
+                      "library": "lucide",
+                      "fill": "$ink"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "mvap8",
+              "name": "CTA Note",
+              "fill": "$on-navy-muted",
+              "content": "Free for 30 days  ·  Nothing billed during the pilot",
+              "fontFamily": "$font-mono",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "i7p79",
+          "name": "Footer",
+          "width": "fill_container",
+          "fill": "$ink",
+          "stroke": "#FFFFFF2E",
+          "strokeWidth": {
+            "top": 1
+          },
+          "padding": [
+            32,
+            120
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "T2w5FA",
+              "name": "Footer Wordmark",
+              "fill": "$on-navy",
+              "content": "Docya",
+              "fontFamily": "$font-display",
+              "fontSize": 22,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "tjGQR",
+              "name": "Footer Links",
+              "gap": 32,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "D7OZV",
+                  "name": "Footer How it works",
+                  "fill": "$on-navy-muted",
+                  "content": "How it works",
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "RhRQW",
+                  "name": "Footer Pricing",
+                  "fill": "$on-navy-muted",
+                  "content": "Pricing",
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "UyjgV",
+                  "name": "Footer FAQ",
+                  "fill": "$on-navy-muted",
+                  "content": "FAQ",
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "Zu9Gd",
+                  "name": "Footer Contact",
+                  "fill": "$on-navy-muted",
+                  "content": "Contact",
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "Jr9Mk",
+              "name": "Copyright",
+              "fill": "$on-navy-muted",
+              "content": "© 2026 Docya",
+              "fontFamily": "$font-body",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "paper": {
+      "type": "color",
+      "value": "#F6F3EC"
+    },
+    "surface": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "ink": {
+      "type": "color",
+      "value": "#0E1B2E"
+    },
+    "ink-muted": {
+      "type": "color",
+      "value": "#4A5668"
+    },
+    "line": {
+      "type": "color",
+      "value": "#DAD5C9"
+    },
+    "brand": {
+      "type": "color",
+      "value": "#4A90E2"
+    },
+    "brand-tint": {
+      "type": "color",
+      "value": "#E6F0FB"
+    },
+    "on-navy": {
+      "type": "color",
+      "value": "#FFFFFF"
+    },
+    "on-navy-muted": {
+      "type": "color",
+      "value": "#A9B6C8"
+    },
+    "navy-raised": {
+      "type": "color",
+      "value": "#1B2B44"
+    },
+    "ok": {
+      "type": "color",
+      "value": "#1B6B43"
+    },
+    "ok-tint": {
+      "type": "color",
+      "value": "#E1F2E8"
+    },
+    "wait": {
+      "type": "color",
+      "value": "#7A5200"
+    },
+    "wait-tint": {
+      "type": "color",
+      "value": "#FBEFD6"
+    },
+    "moved": {
+      "type": "color",
+      "value": "#1F5FA8"
+    },
+    "font-display": {
+      "type": "string",
+      "value": "Fraunces"
+    },
+    "font-body": {
+      "type": "string",
+      "value": "DM Sans"
+    },
+    "font-mono": {
+      "type": "string",
+      "value": "DM Mono"
+    }
+  },
+  "fileToken": "01d6f170-e02c-4355-8700-215063c3ab76"
+}
