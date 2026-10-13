@@ -249,6 +249,7 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
               value={consent}
               onValueChange={setConsent}
               accessibilityLabel="Patient agreed to a text reminder"
+              testID="patient-consent-switch"
             />
           </View>
         ) : null}

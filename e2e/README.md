@@ -9,4 +9,5 @@ These drive the real app on a booted iOS simulator through accessibility labels.
 Notes
 - Every flow starts with `clearState`, so it wipes the app's data on that simulator.
 - Flows pick the first open slot, so they do not depend on the time of day. They do use the live doctor list.
-- Not covered: reminders (need the system permission dialog and a wait for the notification) and the offline banner.
+- `patient-reminders.yaml` needs the test doctor switched on for patient text reminders; `npm run e2e` does that for you (and switches everyone off again before the other flows). If you run it with `maestro test` directly, first run `update public.profiles set sms_reminders_allowed = true where email = 'maria.santos@doctora.test'`.
+- Not covered: the doctor's own on-phone reminders (they need the system permission dialog and a wait for the notification) and the offline banner.

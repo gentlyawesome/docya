@@ -44,6 +44,7 @@ const login = await fetch(`${target.url}/auth/v1/token?grant_type=password`, {
   body: JSON.stringify({ email: 'maria.santos@doctora.test', password: PASSWORD }),
 }).then(x => x.json());
 const doctorId = login.user.id;
+const originalTz = one(`select timezone from public.doctor_profiles where user_id = '${doctorId}'`);
 const tz = one("select name from pg_timezone_names where name like 'Etc/GMT%' and extract(hour from now() at time zone name) = 12 limit 1");
 sql(`delete from public.appointments; update public.profiles set sms_reminders_allowed = true, sms_daily_cap = 50, sms_monthly_cap = 20 where id = '${doctorId}'; update public.profiles set last_name = 'Santos', phone = '+639171234567' where id = '${doctorId}'; update public.doctor_profiles set timezone = '${tz}' where user_id = '${doctorId}'`);
 const d = new Date(); d.setDate(d.getDate() + 3); while ([0, 6].includes(d.getDay())) d.setDate(d.getDate() + 1);
@@ -108,6 +109,6 @@ if (mode === 'live') {
   server.close();
 }
 
-sql(`delete from public.appointments; update public.profiles set sms_reminders_allowed = false where id = '${doctorId}'; update public.doctor_profiles set timezone = 'Australia/Sydney' where user_id = '${doctorId}'`);
+sql(`delete from public.appointments; update public.profiles set sms_reminders_allowed = false where id = '${doctorId}'; update public.doctor_profiles set timezone = '${originalTz}' where user_id = '${doctorId}'`);
 console.log(failures === 0 ? `\nAll ${mode} checks passed.` : `\n${failures} ${mode} check(s) FAILED.`);
 process.exit(failures === 0 ? 0 : 1);
