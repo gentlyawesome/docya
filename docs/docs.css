@@ -34,3 +34,12 @@ footer.site a { color: #9fb2d1; text-decoration: none; margin-right: 16px; }
   .toc { position: static; }
   .top .links a:not(.button) { display: none; }
 }
+
+.guide-shot { margin: 24px 0 8px; width: 200px; }
+.guide-shot .frame { background: var(--navy); border-radius: 26px; padding: 7px; box-shadow: 0 12px 28px rgba(15, 27, 51, 0.18); }
+.guide-shot img { display: block; width: 100%; height: auto; border-radius: 20px; }
+.guide-shot figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.4; }
+.step { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 32px; align-items: start; }
+.step h2 { margin-top: 28px; }
+.step .guide-shot { margin-top: 44px; }
+@media (max-width: 800px) { .step { grid-template-columns: 1fr; gap: 0; } .step .guide-shot { margin-top: 8px; } }
