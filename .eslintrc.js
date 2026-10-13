@@ -2,6 +2,8 @@ module.exports = {
   root: true,
   extends: '@react-native',
   overrides: [
+    // Supabase Edge Functions run on Deno
+    { files: ['supabase/functions/**/*.ts'], globals: { Deno: 'readonly' } },
     // Jest's global `jest` in the shared test setup
     { files: ['jest.setup.js'], env: { jest: true } },
     // Maestro injects these into its E2E helper scripts

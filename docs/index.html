@@ -35,7 +35,6 @@
         .phone::before { content: ""; display: block; width: 54px; height: 6px; border-radius: 99px; background: #24355a; margin: 0 auto 12px; }
         .phone .from { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #9fb2d1; margin-bottom: 8px; }
         .phone .bubble { background: #1d2d4f; border-radius: 16px 16px 16px 4px; padding: 10px 12px; font-size: 13px; line-height: 1.45; }
-        .phone .reply { background: var(--blue); color: var(--navy); border-radius: 16px 16px 4px 16px; padding: 6px 12px; font-size: 13px; font-weight: 700; width: max-content; margin: 8px 0 0 auto; }
         .phone .done { font-size: 12px; color: #8fd3a8; margin-top: 10px; }
         .button.ghost { background: transparent; border: 2px solid var(--navy); color: var(--ink); margin-left: 8px; padding: 12px 20px; }
         .problem .n { font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #6f86ad; display: block; margin-bottom: 6px; }
@@ -168,7 +167,7 @@
                 <div class="bgrid">
                     <div class="card big">
                         <h3>Reminders go out on their own</h3>
-                        <p>You book the visit and Docya texts the patient. The plan: one reminder 24 hours before and one 2 hours before. No list to work through and no calls to make.</p>
+                        <p>You book the visit and Docya texts the patient. The plan: one reminder, 24 hours or 2 hours before, as you choose. No list to work through and no calls to make.</p>
                         <ul class="mini" aria-label="Example reminders">
                             <li><span><span class="t">09:00</span>Patient A, follow-up</span><span class="s">Reminder sent</span></li>
                             <li><span><span class="t">09:30</span>Patient B, consultation</span><span class="s">Reminder sent</span></li>
@@ -176,12 +175,11 @@
                         </ul>
                         <div class="phone" aria-label="Example reminder text message">
                             <div class="from">Example text message (planned)</div>
-                            <div class="bubble">Hi, this is [Your clinic]. Your appointment is tomorrow at 10:30 AM. Reply C to confirm.</div>
-                            <div class="reply">C</div>
-                            <div class="done">&#10003; Confirmed. Diary updated.</div>
+                            <div class="bubble">Reminder: appointment with Dr. [Name] on Wed, Oct 14 at 10:30 AM. To change it, call [clinic phone].</div>
+                            <div class="done">&#10003; Shown as Sent on the appointment</div>
                         </div>
                     </div>
-                    <div class="card light"><h3>See who confirmed</h3><p>The plan is for patients to reply "C" to confirm, so you know who is coming before the day starts and can fill a slot you know will be empty.</p></div>
+                    <div class="card light"><h3>See that it was sent</h3><p>Each appointment shows whether its reminder is scheduled, sent or failed, so you know the patient was told without calling them.</p></div>
                     <div class="card dark-card"><h3>Know what no-shows cost you</h3><p>Docya will count missed visits each month. One hematology clinic pilot saw no-shows fall from <a href="https://bmjopenquality.bmj.com/content/11/3/e001805">38.6% to 25.5%</a> with text reminders. Your result will depend on your clinic.</p></div>
                 </div>
             </div>
@@ -210,7 +208,7 @@
                     <li><span class="num">1</span><span class="step-tag">You</span><h3>Download Docya</h3><p>Free on the App Store for iPhone.</p></li>
                     <li><span class="num">2</span><span class="step-tag">You</span><h3>Set your hours</h3><p>Pick the days and times you see patients.</p></li>
                     <li><span class="num">3</span><span class="step-tag">You</span><h3>Book a patient</h3><p>Type their name and mobile number.</p></li>
-                    <li><span class="num">4</span><span class="step-tag">Automatic</span><h3>They get the reminder</h3><p>You see a confirmed or missed count at the end of the month.</p></li>
+                    <li><span class="num">4</span><span class="step-tag">Automatic</span><h3>They get the reminder</h3><p>You see on each appointment whether the reminder went out.</p></li>
                 </ol>
             </div>
         </section>
@@ -224,7 +222,7 @@
                     <tr><th scope="col">Compare plans</th><th scope="col">Diary<span class="price">Free</span></th><th scope="col" class="pick">Clinic<span class="badge">Recommended</span><span class="price">$15 a month</span></th><th scope="col">Practice<span class="price">$39 a month</span></th></tr>
                     <tr><th scope="row">Appointment diary</th><td>Up to 30 appointments a month</td><td class="pick">Unlimited</td><td>Unlimited</td></tr>
                     <tr><th scope="row">Patient reminders</th><td>Not included</td><td class="pick">150 a month</td><td>600 a month</td></tr>
-                    <tr><th scope="row">Confirm by reply</th><td>Not included</td><td class="pick">Included</td><td>Included</td></tr>
+                    <tr><th scope="row">Reminder status on each appointment</th><td>Not included</td><td class="pick">Included</td><td>Included</td></tr>
                     <tr><th scope="row">Doctors</th><td>1</td><td class="pick">1</td><td>Up to 5</td></tr>
                 </table>
                 <p class="fine">Pilot clinics who stay get $9 a month for the first 12 months.</p>
@@ -243,7 +241,7 @@
                     <details open><summary>Do my patients need to download anything?</summary><p>No. They get a text message on their regular phone number. They do not need an account.</p></details>
                     <details><summary>How are my patients' details protected?</summary><p>Each doctor can see only their own appointments, and you can delete your account from the app. Read the <a href="privacy-policy.html">privacy policy</a> before you add patient names. Docya has not had a legal review for medical data rules in your country, so enter only a name and a phone number.</p></details>
                     <details><summary>What does the pilot cost?</summary><p>Nothing for 30 days for the first 10 clinics. After that you choose a plan or go back to the free Diary.</p></details>
-                    <details><summary>What if my patients do not reply?</summary><p>Reminders still go out. The confirm reply is optional, and you see who did not answer.</p></details>
+                    <details><summary>What do the texts say?</summary><p>Only the doctor's name, the day and the time, and how to change it. They never say what the visit is for.</p></details>
                     <details><summary>Can I use it on Android?</summary><p>Not yet. Docya is on iPhone only.</p></details>
                 </div>
             </div>

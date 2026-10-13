@@ -51,6 +51,7 @@ jobs:
           eval "$(supabase status -o env)"
           printf 'SUPABASE_URL=%s\nSUPABASE_ANON_KEY=%s\n' "$API_URL" "$ANON_KEY" > .env
       - run: npm run backend:check
+      - run: npm run reminders:check
       - name: Show service logs if it failed
         if: failure()
         run: docker ps -a && docker logs supabase_auth_docya --tail 60 || true
