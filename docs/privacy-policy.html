@@ -23,10 +23,10 @@
 <nav class="toc" aria-label="On this page"><div class="label">On this page</div><ol id="toc"></ol></nav>
 <article>
     <h1>Privacy Policy for Docya</h1>
-    <p class="last-updated">Last updated: October 4, 2026</p>
+    <p class="last-updated">Last updated: October 14, 2026</p>
 
     <h2>1. Introduction</h2>
-    <p>Docya is an appointment book for doctors. Doctors create an account, set their working hours, and record appointments for their patients. Patients do not use the app. This policy explains what we collect, why, and the choices you have.</p>
+    <p>Docya is an appointment book for doctors and other clinicians in the Philippines. Doctors create an account, set their working hours, and record appointments for their patients. Patients do not use the app. This policy explains what we collect, why, and the choices you have. It is written with the Data Privacy Act of 2012 (Republic Act No. 10173) in mind.</p>
 
     <h2>2. What We Collect</h2>
     <p>A doctor creates an account with an email address and password. We store on our servers:</p>
@@ -34,18 +34,19 @@
         <li><strong>Doctor account and profile:</strong> email, first and last name, optional phone number, specialization and time zone</li>
         <li><strong>Working hours:</strong> the weekly schedule the doctor sets</li>
         <li><strong>Appointments:</strong> date and time, status (confirmed, cancelled, completed), and the patient's name and optional phone number, exactly as the doctor typed them, plus any private notes the doctor adds</li>
+        <li><strong>Text reminder records</strong> (only for doctors who have patient text reminders switched on): whether the patient agreed to a text, the patient's mobile number in the form +639XXXXXXXXX, when the text is due, whether it was sent, failed or skipped (and why), and the SMS provider's message reference</li>
     </ul>
-    <p>Notes may contain health information. Doctors should record only what they are permitted and need to keep.</p>
+    <p>Notes may contain health information, which the Data Privacy Act treats as sensitive personal information. Doctors should record only what they are permitted and need to keep.</p>
 
     <h2>3. Patient Information</h2>
-    <p>Patients do not have accounts and do not use Docya. A patient's name and phone number are entered by their doctor. The doctor is responsible for having a lawful basis to record and keep that information and for honouring the patient's rights over it (for example access and deletion requests). Docya stores it on the doctor's behalf and shows it only to that doctor.</p>
+    <p>Patients do not have accounts and do not use Docya. A patient's name and phone number are entered by their doctor. For these details the doctor is the personal information controller: the doctor decides what to record and why, is responsible for having a lawful basis to record and keep it (for a text reminder, the patient's consent), for telling patients how their details are used, and for honouring the patient's rights over it (for example access and deletion requests). Docya stores and handles it on the doctor's behalf as a personal information processor, uses it only to provide Docya to that doctor, and shows it only to that doctor. For the doctor's own account details, we are the controller.</p>
 
     <h2>4. Who Can See Your Data</h2>
     <ul>
         <li>A doctor sees only their own profile, working hours, and appointments. Other doctors cannot see them.</li>
         <li>We do not sell your data or share it for advertising.</li>
     </ul>
-    <p>Your sign-in session is stored on your device so you stay signed in. The app also remembers on your device whether you have seen the welcome cards and which of the getting-started steps you have finished; this stays on your device and is removed when you delete the app. If you use appointment reminders, the app also keeps your reminder choices and the list of reminders it scheduled on your device, and asks iOS to show you a notification before each appointment. Reminders are created and shown on your device only; they are not sent through our servers. By default a reminder shows the time and date but not the patient's name; you can choose to include the name, in which case it may be visible on your lock screen.</p>
+    <p>Your sign-in session is stored on your device so you stay signed in. The app also remembers on your device whether you have seen the welcome cards and which of the getting-started steps you have finished; this stays on your device and is removed when you delete the app. If you use appointment reminders, the app also keeps your reminder choices and the list of reminders it scheduled on your device, and asks iOS to show you a notification before each appointment. Those reminders are created and shown on your device only; they are not sent through our servers. By default a reminder shows the time and date but not the patient's name; you can choose to include the name, in which case it may be visible on your lock screen.</p>
 
     <h2>5. What We Don't Collect</h2>
     <ul>
@@ -56,30 +57,43 @@
 
     <h2>6. Service Providers</h2>
     <p>We use your email address only to run your account: to send the code that confirms your sign-up and the code that resets a forgotten password. Those emails are sent through an email delivery provider acting on our behalf. Accounts, database, and authentication are provided by Supabase, which processes and stores data on our behalf. Data is encrypted in transit and access is restricted by row-level security rules.</p>
+    <p>Patient text reminders are sent through an SMS provider, Semaphore, a Philippine SMS gateway. It receives the patient's mobile number and the text of the message in order to deliver it, and nothing else from us.</p>
 
-    <h2>7. Your Rights and Control</h2>
+    <h2>7. Patient Text Reminders</h2>
+    <ul>
+        <li>Text reminders are a pilot. They are available only to doctors we have switched on. If that is not you, no text is ever sent for you or your patients.</li>
+        <li>A text is sent only if the doctor confirms, when booking, that the patient agreed to receive it. Without that confirmation nothing is sent.</li>
+        <li>One text is sent per appointment (it is tried again only if the first attempt fails). It names the doctor, the day and the time, and says how to change the appointment. It never says what the visit is for, and it is never advertising.</li>
+        <li>Texts go only to Philippine mobile numbers, between 7:00 am and 8:00 pm in the doctor's time zone, and there are limits on how many texts a doctor can send and on how many texts one number can receive in a day.</li>
+        <li>If the doctor cancels the appointment before the text is sent, it is withdrawn. Docya does not receive replies to the text; a patient who wants to change or stop it should contact the clinic.</li>
+        <li>A patient who does not want a text can tell their doctor, or email us and we will pass the request on.</li>
+    </ul>
+
+    <h2>8. Your Rights and Control</h2>
+    <p>Under the Data Privacy Act you have the right to be informed about how your personal data is used, to access it, to correct it, to object to its processing, to have it erased or blocked in the cases the law provides, to receive a copy in a usable form, and to claim damages if you are harmed by its misuse. Within Docya:</p>
     <ul>
         <li><strong>Edit:</strong> update your profile and working hours any time from the app</li>
         <li><strong>Cancel:</strong> cancel an appointment from the Appointments list</li>
         <li><strong>Export:</strong> use "Export my data" in the Profile tab to get a copy of your profile, working hours and appointments</li>
-        <li><strong>Delete:</strong> use "Delete account" in the Profile tab to permanently delete your account, working hours, and every appointment (including the patient names and numbers in them). A patient who wants their details removed should ask their doctor, or email us and we will pass the request on.</li>
+        <li><strong>Delete:</strong> use "Delete account" in the Profile tab to permanently delete your account, working hours, and every appointment (including the patient names and numbers in them and the reminder records). A patient who wants their details removed should ask their doctor, or email us and we will pass the request on.</li>
     </ul>
 
-    <h2>8. Retention</h2>
-    <p>We keep your data while your account exists. When you delete your account, your profile, working hours and appointments are removed from our systems, except for routine backups that expire on their normal schedule.</p>
+    <h2>9. Retention</h2>
+    <p>We keep your data while your account exists. Reminder records are kept with the appointment they belong to and are deleted when that appointment or the account is deleted; we do not delete them sooner on a schedule. When you delete your account, your profile, working hours, appointments and reminder records are removed from our systems, except for routine backups that expire on their normal schedule.</p>
 
-    <h2>9. Children's Privacy</h2>
+    <h2>10. Children's Privacy</h2>
     <p>Docya is not directed at children under 13, and we do not knowingly collect their information. If you believe a child has created an account, contact us and we will delete it.</p>
 
-    <h2>10. Changes to This Policy</h2>
+    <h2>11. Changes to This Policy</h2>
     <p>We may update this policy. We will change the "Last updated" date and, for significant changes, notify you in the app. Continued use means you accept the updated policy.</p>
 
-    <h2>11. International Users</h2>
-    <p>Docya is available worldwide. Our database and sign-in service are hosted by Supabase in the Asia-Pacific region (Seoul, South Korea), so your data, and your patients' details that you enter, are processed and stored outside your own country if you live elsewhere. By using Docya you consent to this transfer. Doctors are responsible for making sure that recording their patients' details in Docya is permitted where they practise.</p>
+    <h2>12. Transfers Abroad and the Data Privacy Act</h2>
+    <p>Docya is built for doctors in the Philippines. Our database and sign-in service are hosted by Supabase in the Asia-Pacific region (Seoul, South Korea), so your data, and your patients' details that you enter, are stored and processed outside the Philippines. We remain responsible for the personal data we hold, including data handled for us by our providers, and we protect it with encryption in transit and access controls. By using Docya you agree to this transfer. Doctors are responsible for making sure that recording their patients' details in Docya is permitted where they practise.</p>
+    <p>If a personal data breach happens that affects you, we will tell the affected doctors and the National Privacy Commission as the law requires. You also have the right to complain to the <a href="https://privacy.gov.ph">National Privacy Commission</a>; we would be glad to hear from you first so we can put things right.</p>
 
     <div class="contact">
-        <h2>12. Contact Us</h2>
-        <p>If you have any questions about this privacy policy or Docya's privacy practices, please contact us:</p>
+        <h2>13. Contact Us</h2>
+        <p>If you have any questions about this privacy policy, want to use any of your rights, or want to raise a privacy concern, please contact us:</p>
         <ul>
             <li><strong>Email:</strong> gentlyawesome@gmail.com</li>
             <li><strong>GitHub:</strong> <a href="https://github.com/gentlyawesome/docya">github.com/gentlyawesome/docya</a></li>
@@ -88,8 +102,8 @@
 
     <hr style="margin-top: 40px; border: none; border-top: 1px solid #ddd;">
     <p style="text-align: center; color: #666; font-size: 14px;">
-        © 2026 Docya. All rights reserved.<br>
-        This privacy policy is effective as of October 4, 2026.
+        &copy; 2026 Docya. All rights reserved.<br>
+        This privacy policy is effective as of October 14, 2026.
     </p>
 </article>
 </div>
