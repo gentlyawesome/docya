@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docya: leaflet for clinic visits</title>
+<!--
+  Print on A4 at 100% scale, or "Fit to A5" (148 x 210 mm). Two per A4 sheet: print "2 pages per sheet".
+  To change the name, email or the line for your mobile number, edit the "Who" block below.
+  The price is left off on purpose: the clinic conversations (research/CLINIC-INTERVIEWS.md, question 17) test the
+  price, and a printed price would bias that.
+-->
+<style>
+  @page { size: A5 portrait; margin: 0; }
+  :root { --cream: #f6f2ea; --navy: #0f1b33; --blue: #4A90E2; --tint: #e6eff9; --ink: #1b2437; --muted: #5b6577; --line: #d9d4c8; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #ddd; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 148mm; height: 210mm; margin: 0 auto; background: var(--cream); display: flex; flex-direction: column; overflow: hidden; }
+  .top { background: var(--navy); color: #fff; padding: 6mm 10mm 5mm; }
+  .brand { font-family: Georgia, 'Times New Roman', serif; font-size: 6mm; font-weight: 700; letter-spacing: .2px; }
+  .top p { margin: 1mm 0 0; font-size: 3.1mm; color: #b9c7e0; }
+  .body { padding: 5mm 10mm 0; flex: 1; }
+  h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 8.4mm; line-height: 1.12; margin: 0 0 3mm; font-weight: 600; }
+  .lead { font-size: 3.8mm; line-height: 1.4; color: var(--muted); margin: 0 0 4.5mm; }
+  ul { list-style: none; margin: 0 0 3.5mm; padding: 0; }
+  li { display: flex; gap: 2.5mm; margin-bottom: 3mm; font-size: 3.7mm; line-height: 1.35; }
+  li .dot { flex: none; width: 5mm; height: 5mm; border-radius: 50%; background: var(--blue); color: var(--navy); font-weight: 700; font-size: 3mm; display: flex; align-items: center; justify-content: center; margin-top: .3mm; }
+  li strong { display: block; }
+  .text { background: var(--navy); color: #fff; border-radius: 3.5mm; padding: 3mm 3.5mm; margin: 0 0 4.5mm; }
+  .text .label { font-family: ui-monospace, Menlo, monospace; font-size: 2.3mm; letter-spacing: .06em; text-transform: uppercase; color: #9fb2d1; margin-bottom: 1.5mm; }
+  .text .bubble { background: #1d2d4f; border-radius: 3mm 3mm 3mm 1mm; padding: 2.5mm 3mm; font-size: 3.4mm; line-height: 1.35; }
+  .text .note { font-size: 2.6mm; color: #9fb2d1; margin-top: 1.5mm; }
+  .offer { background: var(--tint); border-left: 1.3mm solid var(--blue); border-radius: 1.5mm; padding: 3mm 3.5mm; font-size: 3.6mm; line-height: 1.35; }
+  .offer strong { font-family: Georgia, serif; font-size: 4mm; }
+  .who { padding: 3mm 10mm 5mm; border-top: .3mm solid var(--line); margin-top: 3mm; font-size: 3.1mm; line-height: 1.5; }
+  .who .name { font-weight: 700; font-size: 3.5mm; }
+  .who .line { display: inline-block; width: 38mm; border-bottom: .3mm solid var(--ink); vertical-align: bottom; }
+  .fine { font-size: 2.6mm; color: var(--muted); margin-top: 1mm; }
+  @media screen { .page { margin: 8mm auto; box-shadow: 0 4px 20px rgba(0,0,0,.25); } }
+  @media print { html, body { background: none; } .page { margin: 0; box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <div class="brand">Docya</div>
+    <p>An appointment book for doctors and dentists, on your iPhone.</p>
+  </div>
+
+  <div class="body">
+    <h1>Fewer missed appointments, without a single call.</h1>
+    <p class="lead">Patients forget. I'm building a way for the diary to remind them for you, and I'd like your honest opinion before I go further.</p>
+
+    <ul>
+      <li><span class="dot">1</span><span><strong>An appointment book that fits in your pocket</strong>Set your hours, book a patient in seconds. Live on the App Store today.</span></li>
+      <li><span class="dot">2</span><span><strong>A text reminder to the patient</strong>Sent automatically before the visit, only to patients who agreed to it. Being tried with the first clinics.</span></li>
+      <li><span class="dot">3</span><span><strong>Your patients' details stay yours</strong>Only you can see them. You can export or delete everything in the app.</span></li>
+    </ul>
+
+    <div class="text">
+      <div class="label">What the patient receives (one text per appointment)</div>
+      <div class="bubble">Reminder: appointment with Dr. [Name] on Wed, Oct 14 at 10:30 AM. To change it, call [clinic phone].</div>
+      <div class="note">It names the doctor, the day and the time. It never says what the visit is for, and it is never advertising.</div>
+    </div>
+
+    <div class="offer"><strong>Free for 30 days</strong> for the first 10 clinics. Nothing to pay and nothing to sign. I'll show you how it works in 10 minutes, and you tell me what is wrong with it.</div>
+  </div>
+
+  <div class="who">
+    <div class="name">Arc Angelo Ibalio</div>
+    <div>Developer of Docya &middot; gentlyawesome@gmail.com</div>
+    <div>Mobile / Viber: <span class="line"></span></div>
+    <div class="fine">Works on iPhone. Privacy and terms: gentlyawesome.github.io/docya</div>
+  </div>
+</div>
+</body>
+</html>
