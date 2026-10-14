@@ -79,9 +79,9 @@ if (mode === 'live') {
     req.on('data', c => (body += c));
     req.on('end', () => {
       received.push(Object.fromEntries(new URLSearchParams(body)));
-      if (respondWith === 'ok') {
+      if (respondWith === 'ok' || respondWith === 'failed-status') {
         res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify([{ message_id: 987654, status: 'Pending' }]));
+        res.end(JSON.stringify([{ message_id: 987654, status: respondWith === 'ok' ? 'Pending' : 'Failed' }]));
       } else {
         res.statusCode = 500; res.end('boom');
       }
@@ -106,6 +106,14 @@ if (mode === 'live') {
   check('a gateway error is counted as failed', r.status === 200 && r.json.failed === 1 && r.json.sent === 0, JSON.stringify(r));
   const f = state(b);
   check('the reminder goes back to pending for a retry', f?.[0] === 'pending' && f?.[2] === '1', JSON.stringify(f));
+
+  respondWith = 'failed-status';
+  const c = await book('11:00', '11:30', '09175550003');
+  makeDue(c);
+  r = await run();
+  check('a 200 answer whose status is Failed is counted as failed, not sent', r.status === 200 && r.json.failed === 1 && r.json.sent === 0, JSON.stringify(r));
+  const g = state(c);
+  check('that reminder goes back to pending for a retry', g?.[0] === 'pending' && g?.[3] === '', JSON.stringify(g));
   server.close();
 }
 

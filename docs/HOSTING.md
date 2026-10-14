@@ -136,10 +136,16 @@ until you switch a doctor on** and a dry run (nothing is texted) until you set `
    the schedule runs. It refuses the production project.
 7. **On production** nobody is switched on, so `select count(*) from reminder_messages` must stay 0.
 8. **Stop it at any time**: `select cron.unschedule('send-reminders');` (the function does nothing without a call).
-9. **Going live** (later, after the legal review and a Semaphore account): `supabase secrets set SMS_LIVE=true
-   SEMAPHORE_API_KEY=<key>`, try it on Docya Dev with your own number first, then switch on one vetted doctor
-   (`update profiles set sms_reminders_allowed = true where email = '...'`). Release an app build with the reminder
-   screens only after the migration is on production.
+9. **Going live** (later, after the legal review): see `legal/SEMAPHORE.md`. In short: the Semaphore account needs an
+   API key **and a registered sender name** (Semaphore errors without one). Put the key in `supabase/functions/.env`
+   (git-ignored; names are listed in `.env.example`), upload it with `supabase secrets set --env-file
+   supabase/functions/.env --project-ref <ref>`, set `SMS_LIVE=true` on Docya Dev only, run
+   `CRON_SECRET=<dev secret> TEST_PHONE=<your own number> node supabase/tests/hosted-live-test.mjs
+   --yes-send-one-real-text`, then `supabase secrets unset SMS_LIVE`. Only then switch on one vetted doctor on
+   production (`update profiles set sms_reminders_allowed = true where email = '...'`). Release an app build with
+   the reminder screens only after the migration is on production.
+10. **Redeploy after changing the function**: `supabase functions deploy send-reminders --project-ref <ref>
+    --no-verify-jwt` on each project. Deploying does not touch the secrets or the schedule.
 
 ## The development project
 
