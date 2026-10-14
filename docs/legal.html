@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philippine Law and Docya</title>
+    <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="wrap">
+    <div class="top">
+        <a class="brand" href="index.html">Docya</a>
+        <div class="links">
+            <a href="index.html#support">Support</a>
+            <a href="user-guide.html">User guide</a>
+            <a href="privacy-policy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+            <a class="button" href="index.html">Join the pilot</a>
+        </div>
+    </div>
+</header>
+<div class="wrap layout">
+<nav class="toc" aria-label="On this page"><div class="label">On this page</div><ol id="toc"></ol></nav>
+<article>
+    <h1>Philippine Law and Docya</h1>
+    <p class="last-updated">Last updated: October 14, 2026</p>
+
+    <p>Docya is built for doctors and clinics in the Philippines. This page says in plain words which Philippine laws matter for an appointment book and how Docya deals with them. It is a summary to help you understand us, not legal advice. Our <a href="privacy-policy.html">Privacy Policy</a> and <a href="terms.html">Terms of Service</a> are the binding documents.</p>
+
+    <h2>1. Who is responsible for what</h2>
+    <p>Under the Data Privacy Act of 2012 (Republic Act No. 10173), the person who decides what to collect and why is the "personal information controller". For your patients' details, that is you, the doctor. Docya stores and handles those details on your behalf, as a "personal information processor", and uses them only to run Docya for you. For your own account details, Docya is the controller.</p>
+
+    <h2>2. Health information is sensitive</h2>
+    <p>The Data Privacy Act treats health information as sensitive personal information, which needs more care. So Docya keeps what it holds small: a patient's name and optional phone number, the date and time, and the private notes you choose to write. It holds no payment details, no location, and no analytics or tracking. Each doctor sees only their own data, and we ask you to enter only what you need and are allowed to keep.</p>
+
+    <h2>3. Patient text reminders</h2>
+    <ul>
+        <li><strong>Consent first.</strong> A text is sent only if you confirm, when booking, that the patient agreed to receive it. Ask the patient before you turn it on.</li>
+        <li><strong>Appointment-only.</strong> One text per appointment. It names the doctor, the day and the time and how to change it. It never says what the visit is for, and it is never advertising.</li>
+        <li><strong>Considerate.</strong> Texts go only to Philippine mobile numbers, between 7:00 am and 8:00 pm, and there are daily limits per doctor and per number.</li>
+        <li><strong>Honest sender.</strong> We send through a Philippine SMS provider and never disguise who a text is from. The SIM Registration Act (Republic Act No. 11934) makes spoofing a sender an offence.</li>
+        <li><strong>Stop or change it.</strong> If the appointment is cancelled before the text is sent, it is withdrawn. A patient who does not want a text should tell the clinic. Docya does not receive replies.</li>
+        <li><strong>Pilot.</strong> Text reminders are available only to doctors we have switched on.</li>
+    </ul>
+
+    <h2>4. Your patients' rights, and yours</h2>
+    <p>The Data Privacy Act gives people the right to be informed, to see their data, to correct it, to object, to have it erased or blocked, to receive a copy, and to claim damages if misuse harms them. In Docya you can export and delete all your data from the Profile tab. A patient who wants their details corrected or removed should ask their doctor, or email us and we will pass the request on to the doctor.</p>
+
+    <h2>5. Where the data is kept</h2>
+    <p>Our database and sign-in service are hosted by Supabase in the Asia-Pacific region (Seoul, South Korea), so data is stored outside the Philippines. We stay responsible for the data we hold, including what our providers handle for us.</p>
+
+    <h2>6. If something goes wrong</h2>
+    <p>If a personal data breach affects you, we will tell the affected doctors and the National Privacy Commission as the law requires. You can also complain to the <a href="https://privacy.gov.ph">National Privacy Commission</a>, and we would like the chance to put things right first. Write to <a href="mailto:gentlyawesome@gmail.com">gentlyawesome@gmail.com</a>.</p>
+
+    <h2>7. Your professional duties</h2>
+    <p>Doctors and dentists in the Philippines are licensed by the Professional Regulation Commission and bound by professional confidentiality. Docya is for licensed clinicians and is only a scheduling tool, not a medical record system and not medical advice. Using Docya does not change your professional duties to your patients.</p>
+
+    <h2>8. Paying for Docya</h2>
+    <p>The 30-day pilot is free and paid plans are not available yet. When they are, prices will be shown in Philippine pesos before you subscribe, and taxes, if any, are added where the law requires.</p>
+</article>
+</div>
+<footer class="site">
+    <div class="wrap">
+        <span>&copy; 2026 Docya</span>
+        <span><a href="index.html#support">Support</a><a href="user-guide.html">User guide</a><a href="terms.html">Terms of Service</a><a href="privacy-policy.html">Privacy Policy</a><a href="legal.html">Philippine law</a></span>
+    </div>
+</footer>
+<script>
+(function () {
+    var toc = document.getElementById('toc');
+    document.querySelectorAll('article h2').forEach(function (h, i) {
+        h.id = h.id || 'section-' + (i + 1);
+        var li = document.createElement('li'), a = document.createElement('a');
+        a.href = '#' + h.id; a.textContent = h.textContent;
+        li.appendChild(a); toc.appendChild(li);
+    });
+})();
+</script>
+</body>
+</html>
