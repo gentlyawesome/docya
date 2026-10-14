@@ -95,6 +95,7 @@ describe('profile screen: one form, one Save button', () => {
     expect(screen.queryByLabelText(/fee/i)).toBeNull();
     expect(screen.queryByText('Contact support')).toBeNull();
     expect(screen.getByText('Privacy policy')).toBeTruthy();
+    expect(screen.getByText('Philippine law')).toBeTruthy();
     expect(screen.getByText(doctorUser.email)).toBeTruthy();
   });
 

@@ -22,6 +22,7 @@ import {
   RADIUS,
   CARD,
   FONTS,
+  LEGAL_URL,
   PRIVACY_POLICY_URL,
   TERMS_URL,
   USER_GUIDE_URL,
@@ -64,6 +65,14 @@ export const AboutSection: React.FC = () => (
       accessibilityLabel="Terms of service"
     >
       <Text style={styles.linkText}>Terms of service</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.linkRow}
+      onPress={() => Linking.openURL(LEGAL_URL)}
+      accessibilityRole="link"
+      accessibilityLabel="Philippine law"
+    >
+      <Text style={styles.linkText}>Philippine law</Text>
     </TouchableOpacity>
   </Section>
 );

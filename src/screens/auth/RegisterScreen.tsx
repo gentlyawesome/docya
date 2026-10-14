@@ -250,7 +250,8 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
               >
                 Privacy Policy
               </Text>
-              , and I will only enter patient details I am allowed to keep.
+              , and I will only enter patient details I am allowed to keep under
+              Philippine law (the Data Privacy Act of 2012).
             </Text>
           </View>
           {errors.terms ? (

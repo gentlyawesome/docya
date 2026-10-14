@@ -10,6 +10,7 @@ import {
 } from '../../components/AccountSections';
 import { ProfileForm } from '../../components/ProfileForm';
 import { ReminderSettings } from '../../components/ReminderSettings';
+import { PatientReminderSettings } from '../../components/PatientReminderSettings';
 import { Avatar } from '../../components/Avatar';
 import { COLORS, RADIUS, CARD, FONTS } from '../../constants';
 
@@ -44,6 +45,7 @@ export const DoctorProfileScreen: React.FC = () => {
         </View>
         <ProfileForm user={user} />
         <ReminderSettings />
+        <PatientReminderSettings userId={user.id} />
         <AboutSection />
         <AccountActionsSection />
       </ScrollView>

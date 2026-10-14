@@ -12,6 +12,7 @@ import { Button } from '../../components/Button';
 import { FormField } from '../../components/FormField';
 import { StatusBadge } from '../../components/StatusBadge';
 import { COLORS } from '../../constants';
+import { describeReminder } from '../../services/patientReminders';
 import { getBookingPhase } from '../../utils/bookingPhases';
 import { formatDateWithDay, formatTimezone } from '../../utils/dateHelpers';
 import { formatTime } from '../../utils/timeSlotGenerator';
@@ -87,6 +88,7 @@ export const DoctorAppointmentDetailScreen: React.FC<Props> = ({ route }) => {
   }
 
   const phase = getBookingPhase(appointment);
+  const reminder = describeReminder(appointment);
 
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
@@ -102,6 +104,21 @@ export const DoctorAppointmentDetailScreen: React.FC<Props> = ({ route }) => {
           </Text>
           {appointment.patientPhone ? (
             <Text style={styles.sub}>{appointment.patientPhone}</Text>
+          ) : null}
+
+          {reminder ? (
+            <>
+              <Text style={styles.label}>Text reminder</Text>
+              <Text
+                style={[
+                  styles.reminder,
+                  reminder.tone === 'good' && styles.reminderGood,
+                  reminder.tone === 'warn' && styles.reminderWarn,
+                ]}
+              >
+                {reminder.text}
+              </Text>
+            </>
           ) : null}
 
           <Text style={styles.label}>When</Text>
@@ -162,6 +179,9 @@ const styles = StyleSheet.create({
   label: { fontSize: 13, color: COLORS.textSecondary, marginTop: 14 },
   value: { fontSize: 17, color: COLORS.text, marginTop: 2 },
   sub: { fontSize: 15, color: COLORS.textSecondary, marginTop: 2 },
+  reminder: { fontSize: 15, color: COLORS.textSecondary, marginTop: 2 },
+  reminderGood: { color: COLORS.successDark },
+  reminderWarn: { color: COLORS.danger },
   time: {
     fontSize: 16,
     color: COLORS.primary,

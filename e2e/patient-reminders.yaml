@@ -1,0 +1,59 @@
+# Patient text reminders, from the doctor's side: the settings card, the consent switch, the check on the number,
+# the confirmation that says where the text will go, and the reminder line on the appointment.
+# Nothing is sent: this only checks what the app shows. `npm run e2e` switches the test doctor on first.
+appId: org.reactjs.native.example.Docya
+name: Patient text reminders
+---
+- launchApp:
+    clearState: true
+- runFlow: subflows/login-doctor.yaml
+# The settings card
+- tapOn: "Profile, tab.*"
+- scrollUntilVisible:
+    element: "Patient text reminders"
+    centerElement: true
+- assertVisible: "24 hours before.*"
+- assertVisible: "2 hours before.*"
+# The consent switch is offered, and starts off
+- tapOn: "Appointments, tab.*"
+- tapOn: "New appointment"
+- assertVisible: "Phone \\(optional\\)"
+- assertVisible: "Patient agreed to a text reminder"
+- tapOn: "Patient name"
+- inputText: "Pat Patient"
+- pressKey: Enter
+- inputText: "+1 415 555 0100"
+- pressKey: Enter
+# With consent on, a number outside the Philippines is refused
+- tapOn:
+    id: "patient-consent-switch"
+- assertVisible: "Patient mobile number"
+- scrollUntilVisible:
+    element: ".*, available"
+    centerElement: true
+- tapOn: ".*, available"
+- assertVisible: "Enter a Philippine mobile number.*"
+# Back up to the form to fix the number (swipe twice: the page was scrolled down to the slots)
+- swipe:
+    start: 50%, 25%
+    end: 50%, 85%
+- swipe:
+    start: 50%, 25%
+    end: 50%, 85%
+# A Philippine number is accepted, and the confirmation says where the text will go
+- tapOn: "Patient mobile number"
+- eraseText: 30
+- inputText: "0917 555 0001"
+- pressKey: Enter
+- scrollUntilVisible:
+    element: ".*, available"
+    centerElement: true
+- tapOn: ".*, available"
+- assertVisible: "(?s).*A text reminder will be sent to \\+639175550001, 24 hours before.*"
+- tapOn: "Yes, schedule"
+- assertVisible: "Appointment scheduled.*"
+- tapOn: "OK"
+# The appointment shows what happened to the reminder (a slot within half an hour is too late to remind)
+- tapOn: "Pat Patient.*Open details"
+- assertVisible: "Text reminder"
+- assertVisible: "(Scheduled|Not sent: booked too close).*"

@@ -9,6 +9,9 @@ import { sql, target } from '../supabase/tools/target.mjs';
 // These flows read a code from an email, which only the local mail catcher can show
 const NEEDS_MAIL_CATCHER = ['password-reset.yaml'];
 
+// Flows that need the test doctor switched on for patient text reminders (everyone else stays off, as in production)
+const SMS_ON = ['patient-reminders.yaml'];
+
 const only = process.argv[2];
 const flows = readdirSync(new URL('.', import.meta.url))
   .filter(f => f.endsWith('.yaml') && (!only || f.includes(only)))
@@ -21,7 +24,10 @@ const reset = () => {
     // Emails are caught by the local Mailpit (never sent anywhere); start each flow with an empty inbox
     spawnSync('curl', ['-s', '-X', 'DELETE', 'http://127.0.0.1:54324/api/v1/messages'], { stdio: 'ignore' });
   }
-  sql("delete from public.appointments; delete from auth.users where email like 'e2e-%@doctora.test'");
+  sql(
+    "delete from public.appointments; update public.profiles set sms_reminders_allowed = false, sms_reminder_lead_minutes = 1440; " +
+      "delete from auth.users where email like 'e2e-%@doctora.test'",
+  );
 };
 
 const results = [];
@@ -32,6 +38,9 @@ for (const flow of flows) {
     continue;
   }
   reset();
+  if (SMS_ON.includes(flow)) {
+    sql("update public.profiles set sms_reminders_allowed = true where email = 'maria.santos@doctora.test'");
+  }
   const started = Date.now();
   const run = spawnSync('maestro', ['test', `e2e/${flow}`], { stdio: 'inherit' });
   results.push({ flow, ok: run.status === 0, seconds: Math.round((Date.now() - started) / 1000) });

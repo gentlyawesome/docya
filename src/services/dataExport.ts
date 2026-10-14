@@ -35,6 +35,13 @@ export const buildDataExport = async (user: User): Promise<string> => {
         status: a.status ?? 'confirmed',
         patientName: a.patientName ?? null,
         patientPhone: a.patientPhone ?? null,
+        patientAgreedToTextReminder: a.patientConsentedSms ?? false,
+        textReminder: a.smsReminder
+          ? {
+              status: a.smsReminder.status,
+              note: a.smsReminder.skipReason ?? null,
+            }
+          : null,
         notes: a.notes ?? null,
         timeZone: a.timezone,
         bookedAt: a.bookedAt,

@@ -5,9 +5,10 @@ import { mapSupabaseError } from './supabaseErrors';
 import { dropReminder, syncReminders } from './reminders';
 
 const SELECT =
-  'id, doctor_id, patient_name, patient_phone, appointment_date, start_time, end_time, status, notes, ' +
-  'created_at, updated_at, ' +
-  'doctor:profiles!doctor_id(full_name, doctor_profiles(timezone))';
+  'id, doctor_id, patient_name, patient_phone, patient_consented_sms, appointment_date, start_time, end_time, ' +
+  'status, notes, created_at, updated_at, ' +
+  'doctor:profiles!doctor_id(full_name, doctor_profiles(timezone)), ' +
+  'reminder:reminder_messages(status, skip_reason)';
 
 const fail = (error: unknown): never => {
   throw new Error(mapSupabaseError(error));
@@ -17,6 +18,8 @@ const fail = (error: unknown): never => {
 export interface PatientDetails {
   name: string;
   phone?: string;
+  // The patient agreed to a text reminder. Only offered to doctors who were switched on for it.
+  smsConsent?: boolean;
 }
 
 export const createAppointment = async (
@@ -29,6 +32,7 @@ export const createAppointment = async (
       doctor_id: slot.doctorId,
       patient_name: patient.name.trim(),
       patient_phone: patient.phone?.trim() || null,
+      ...(patient.smsConsent ? { patient_consented_sms: true } : {}),
       appointment_date: slot.date,
       start_time: slot.startTime,
       end_time: slot.endTime,
