@@ -116,6 +116,31 @@ Use a real address you can read:
   public (for example disable sign-ups in Authentication > Sign In / Providers and invite doctors).
 - Changing a migration after it is applied: add a new migration, never edit an old one.
 
+## 7. Patient text reminders (dry run first)
+
+Reminders are queued by the database and sent by the `send-reminders` Edge Function every 5 minutes. They are **off
+until you switch a doctor on** and a dry run (nothing is texted) until you set `SMS_LIVE=true`. Do these steps on
+**Docya Dev first**, then on production.
+
+1. **Check what is pending**: `supabase link --project-ref <ref>`, then `supabase migration list`. Read any pending
+   migration before pushing. On production take a backup first (`supabase db dump`); the free plan has none.
+2. **Apply**: `supabase db push` (production) or `npm run dev:reset` (Docya Dev only, it wipes it).
+3. **Deploy the function**: `supabase functions deploy send-reminders --project-ref <ref> --no-verify-jwt`.
+4. **Secret**: make a long random value, put it in a private file as `CRON_SECRET=<value>`, then
+   `supabase secrets set --env-file <file> --project-ref <ref>`. Use a different value per project. Do **not** set
+   `SMS_LIVE` or `SEMAPHORE_API_KEY` yet.
+5. **Schedule**: store the same value in Vault and run `supabase/tools/schedule-reminders.sql` (its header says how)
+   with `<ref>` replaced. Keep the filled-in copy out of git.
+6. **Check (Docya Dev only)**: `CRON_SECRET=<value> node supabase/tests/hosted-reminders-check.mjs` (about 6 minutes).
+   It books a consented appointment and expects `skipped / dry_run`, both when it calls the function and when only
+   the schedule runs. It refuses the production project.
+7. **On production** nobody is switched on, so `select count(*) from reminder_messages` must stay 0.
+8. **Stop it at any time**: `select cron.unschedule('send-reminders');` (the function does nothing without a call).
+9. **Going live** (later, after the legal review and a Semaphore account): `supabase secrets set SMS_LIVE=true
+   SEMAPHORE_API_KEY=<key>`, try it on Docya Dev with your own number first, then switch on one vetted doctor
+   (`update profiles set sms_reminders_allowed = true where email = '...'`). Release an app build with the reminder
+   screens only after the migration is on production.
+
 ## The development project
 
 Development and tests never touch the production project. A second, free project, **Docya Dev**, stands in
