@@ -84,3 +84,7 @@ supabase/.env
 
 # Extra Xcode build outputs (release/device builds)
 ios/build-*/
+
+# oh-my-claudecode keeps its working state here; only project skills under .omc/skills/ are meant to be committed
+**/.omc/*
+!**/.omc/skills/
