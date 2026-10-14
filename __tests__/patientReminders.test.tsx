@@ -204,22 +204,18 @@ describe('settings and saving', () => {
   });
 
   it('puts the consent and the reminder status in the data export', async () => {
-    jest
-      .spyOn(users, 'getDoctorProfile')
-      .mockResolvedValue({
-        userId: 'doctor-1',
-        specialization: 'X',
-        timezone: 'UTC',
-      });
+    jest.spyOn(users, 'getDoctorProfile').mockResolvedValue({
+      userId: 'doctor-1',
+      specialization: 'X',
+      timezone: 'UTC',
+    });
     jest.spyOn(availability, 'listMyAvailability').mockResolvedValue([]);
-    jest
-      .spyOn(appointments, 'listMyAppointments')
-      .mockResolvedValue([
-        booking({
-          patientConsentedSms: true,
-          smsReminder: { status: 'skipped', skipReason: 'dry_run' },
-        }),
-      ]);
+    jest.spyOn(appointments, 'listMyAppointments').mockResolvedValue([
+      booking({
+        patientConsentedSms: true,
+        smsReminder: { status: 'skipped', skipReason: 'dry_run' },
+      }),
+    ]);
     const out = JSON.parse(await buildDataExport(doctorUser));
     expect(out.appointments[0].patientAgreedToTextReminder).toBe(true);
     expect(out.appointments[0].textReminder).toEqual({
@@ -258,13 +254,11 @@ describe('New appointment screen: text reminder consent', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
     jest.spyOn(Alert, 'alert').mockImplementation(() => {});
-    jest
-      .spyOn(users, 'getDoctorProfile')
-      .mockResolvedValue({
-        userId: 'doctor-1',
-        specialization: 'X',
-        timezone: 'UTC',
-      });
+    jest.spyOn(users, 'getDoctorProfile').mockResolvedValue({
+      userId: 'doctor-1',
+      specialization: 'X',
+      timezone: 'UTC',
+    });
     jest.spyOn(availability, 'listMyAvailability').mockResolvedValue(everyDay);
     jest.spyOn(appointments, 'listMyAppointments').mockResolvedValue([]);
     createSpy = jest
@@ -298,6 +292,9 @@ describe('New appointment screen: text reminder consent', () => {
     const toggle = screen.getByLabelText('Patient agreed to a text reminder');
     expect(toggle.props.value).toBe(false);
     expect(screen.getByText(/24 hours before/)).toBeTruthy();
+    // The doctor is told what to ask the patient, and that the number is used for nothing else
+    expect(screen.getByText(/May we text you a reminder/)).toBeTruthy();
+    expect(screen.getByText(/uses the number for nothing else/)).toBeTruthy();
   });
 
   it('needs a Philippine mobile number once consent is on', async () => {

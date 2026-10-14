@@ -240,8 +240,10 @@ export const DoctorNewAppointmentScreen: React.FC = () => {
                 Patient agreed to a text reminder
               </Text>
               <Text style={styles.consentHint}>
-                Docya texts the patient your name, the day and the time,{' '}
-                {leadText(sms.leadMinutes)}. Turn this on only if they said yes.
+                Ask first: "May we text you a reminder about this appointment on
+                this number?" Turn this on only if they said yes. Docya texts
+                your name, the day and the time, {leadText(sms.leadMinutes)},
+                and uses the number for nothing else.
               </Text>
             </View>
             <Switch

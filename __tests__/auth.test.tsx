@@ -310,6 +310,11 @@ describe('register screen', () => {
     open.mockRestore();
   });
 
+  it('says the patient details are kept under Philippine law', () => {
+    renderScreen();
+    expect(screen.getByText(/Data Privacy Act of 2012/)).toBeTruthy();
+  });
+
   it('registers with valid details', async () => {
     auth.signUp.mockResolvedValue({
       data: { user: { id: 'u9' }, session: { access_token: 't' } },

@@ -5,6 +5,8 @@ export const PRIVACY_POLICY_URL =
 
 export const TERMS_URL = 'https://gentlyawesome.github.io/docya/terms.html';
 
+export const LEGAL_URL = 'https://gentlyawesome.github.io/docya/legal.html';
+
 export const USER_GUIDE_URL =
   'https://gentlyawesome.github.io/docya/user-guide.html';
 
