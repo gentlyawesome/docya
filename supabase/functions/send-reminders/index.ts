@@ -4,7 +4,8 @@
 // Secrets (supabase secrets set ...):
 //   CRON_SECRET             shared with the schedule; requests without it are refused
 //   SEMAPHORE_API_KEY       needed when SMS_LIVE=true
-//   SEMAPHORE_SENDER_NAME   optional, must be approved by Semaphore; leave unset to use the default sender
+//   SEMAPHORE_SENDER_NAME   optional. If unset, Semaphore uses the account's default registered sender name, and
+//                           it throws an error when the account has none, so register one first
 //   SEMAPHORE_API_URL      optional; only for tests against a fake gateway
 //   SMS_LIVE                "true" to really send. ANYTHING ELSE is a dry run: reminders are claimed and logged
 //                           but not sent, and recorded as skipped (dry_run). Safe by default.
@@ -60,6 +61,11 @@ const sendSms = async (toE164: string, message: string): Promise<string> => {
   const first = Array.isArray(json) ? json[0] : null;
   if (!first?.message_id) {
     throw new Error('Semaphore returned no message id');
+  }
+  // The documented statuses are Queued, Pending, Sent, Failed and Refunded. A text Semaphore already marks as
+  // failed or refunded was not delivered, so it must be retried, not recorded as sent.
+  if (first.status === 'Failed' || first.status === 'Refunded') {
+    throw new Error(`Semaphore reported ${first.status}`);
   }
   return String(first.message_id);
 };
